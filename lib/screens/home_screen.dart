@@ -1,18 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/mood': (context) => const MoodSelectScreen(),
-      },
-    ),
-  );
-}
-
 class HomeScreen extends StatefulWidget{
   const HomeScreen({super.key});
   @override
@@ -20,79 +7,109 @@ class HomeScreen extends StatefulWidget{
 }
 
 class _CreateHomeScreen extends State<HomeScreen>{
+  double _opacity1 = 0.0;
+  double _opacity2 = 0.0;
+  double _opacity3 = 0.0;
+  double _opacity4 = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration(milliseconds: 200), (){
+      setState(() {
+        _opacity1 = 1.0;
+      });
+    });
+
+    Future.delayed(Duration(milliseconds: 900), (){
+      setState(() {
+        _opacity2 = 1.0;
+      });
+    });
+
+    Future.delayed(Duration(milliseconds: 1400), (){
+      setState(() {
+        _opacity3 = 1.0;
+      });
+    });
+
+    Future.delayed(Duration(milliseconds: 2100), (){
+      setState(() {
+        _opacity4 = 1.0;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap:(){
-          print('Tap on!');
-          Navigator.of(context).pushNamed("/mood");
-        },
-        child:
+          onTap:(){
+            print('Tap on!');
+            Navigator.of(context).pushNamed("/mood");
+          },
+          child:
           Container(
-          width: double.maxFinite,
-          height: double.maxFinite,
-          decoration:  BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors:
-                  [
-                    Colors.purpleAccent,
-                    Colors.blueAccent,
-                  ]
-              )
+            width: double.maxFinite,
+            height: double.maxFinite,
+            decoration:  BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors:
+                    [
+                      Color.fromARGB(178, 7, 174, 239),
+                      Color.fromARGB(90, 0, 42, 255),
+                    ]
+                )
             ),
             child:
             SafeArea(
-                child: Column(
+                child:
+                Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Center(
-                      child:
-                      const Text("Привет!", style: TextStyle(color: Colors.white, fontSize: 30)),
+                      const SizedBox(height: 240,),
+                     AnimatedOpacity(
+                       opacity: _opacity1,
+                       duration: const Duration(milliseconds: 600),
+                       child: Text("Hello there,", style: TextStyle(color: Colors.white, fontSize: 40))
+                     ),
+                     AnimatedOpacity(
+                       opacity: _opacity2,
+                       duration: const Duration(milliseconds: 800),
+                       child: Text("I'm Moodora", style: TextStyle(color: Colors.white, fontSize: 40)),
+                     ),
+                     AnimatedOpacity(
+                       opacity: _opacity3,
+                       duration: const Duration(milliseconds: 900),
+                       child: Text('A quiet space for your thoughts', style: TextStyle(color: Colors.white54, fontSize: 15),),
                     ),
-                    Center(
+                    const SizedBox(height: 280,),
+                    AnimatedOpacity(
+                      opacity: _opacity4,
+                      duration: const Duration(milliseconds: 900),
                       child:
-                      const Text("Как проходит твой день?", style: TextStyle(color: Colors.white, fontSize: 30)),
-                    ),
-                    const SizedBox(height: 40,),
+                      ElevatedButton(
+                        onPressed: (){
+                          setState(() {
+
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                            fixedSize: const Size(220, 60),
+                            backgroundColor: Colors.white,
+                            foregroundColor: Color.fromARGB(90, 0, 42, 255)
+                        ),
+                        child: const Text("continue",),
+                      ),
+                    )
                   ],
-                )
+                ),
             ),
-          )
-
-      ),
-      floatingActionButton:
-      FloatingActionButton(
-        onPressed: (){
-
-        },
-        backgroundColor: Colors.white,
-        child: const Icon(
-          Icons.add,
-          color: Colors.blueAccent,
-          size: 30,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
-  }
-
-}
-
-class MoodSelectScreen extends StatelessWidget{
-  const MoodSelectScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child:
-        const Text("In this space Smile", style: TextStyle(fontSize: 30, color: Colors.black),)
+          ),
       ),
     );
   }
 }
-
