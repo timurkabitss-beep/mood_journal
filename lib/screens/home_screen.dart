@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'gradient_background.dart';
 class HomeScreen extends StatefulWidget{
   const HomeScreen({super.key});
   @override
@@ -44,70 +44,42 @@ class _CreateHomeScreen extends State<HomeScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-          onTap:(){
-            print('Tap on!');
-            Navigator.of(context).pushNamed("/mood");
-          },
+      body: GradientBackground(
           child:
-          Container(
-            width: double.maxFinite,
-            height: double.maxFinite,
-            decoration:  BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors:
-                    [
-                      Color.fromARGB(178, 7, 174, 239),
-                      Color.fromARGB(90, 0, 42, 255),
-                    ]
-                )
-            ),
-            child:
-            SafeArea(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 240,),
+              AnimatedOpacity(
+                  opacity: _opacity1,
+                  duration: const Duration(milliseconds: 600),
+                  child: Text("Hello there,", style: TextStyle(color: Colors.white, fontSize: 40))
+              ),
+              AnimatedOpacity(
+                opacity: _opacity2,
+                duration: const Duration(milliseconds: 800),
+                child: Text("I'm Moodora", style: TextStyle(color: Colors.white, fontSize: 40)),
+              ),
+              AnimatedOpacity(
+                opacity: _opacity3,
+                duration: const Duration(milliseconds: 900),
+                child: Text('A quiet space for your thoughts', style: TextStyle(color: Colors.white54, fontSize: 15),),
+              ),
+              const SizedBox(height: 280,),
+              AnimatedOpacity(
+                opacity: _opacity4,
+                duration: const Duration(milliseconds: 900),
                 child:
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                      const SizedBox(height: 240,),
-                     AnimatedOpacity(
-                       opacity: _opacity1,
-                       duration: const Duration(milliseconds: 600),
-                       child: Text("Hello there,", style: TextStyle(color: Colors.white, fontSize: 40))
-                     ),
-                     AnimatedOpacity(
-                       opacity: _opacity2,
-                       duration: const Duration(milliseconds: 800),
-                       child: Text("I'm Moodora", style: TextStyle(color: Colors.white, fontSize: 40)),
-                     ),
-                     AnimatedOpacity(
-                       opacity: _opacity3,
-                       duration: const Duration(milliseconds: 900),
-                       child: Text('A quiet space for your thoughts', style: TextStyle(color: Colors.white54, fontSize: 15),),
-                    ),
-                    const SizedBox(height: 280,),
-                    AnimatedOpacity(
-                      opacity: _opacity4,
-                      duration: const Duration(milliseconds: 900),
-                      child:
-                      ElevatedButton(
-                        onPressed: (){
-                          setState(() {
-
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(220, 60),
-                            backgroundColor: Colors.white,
-                            foregroundColor: Color.fromARGB(90, 0, 42, 255)
-                        ),
-                        child: const Text("continue",),
-                      ),
-                    )
-                  ],
+                ElevatedButton(
+                  onPressed: (){
+                    setState(() {
+                      Navigator.of(context).pushNamed('/name_input');
+                    });
+                  },
+                  child: const Text("continue",),
                 ),
-            ),
+              )
+            ],
           ),
       ),
     );
