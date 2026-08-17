@@ -1,30 +1,24 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
-import 'screens/mood_select_screen.dart';
-import 'screens/name_input_screen.dart';
+import 'package:mood_journal/routes/routes.dart';
+import 'package:mood_journal/ui/theme/theme.dart';
+import 'features/name/view/name_input_screen.dart';
 
 void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
-      theme:
-      ThemeData(
-        scaffoldBackgroundColor: Colors.transparent,
-        elevatedButtonTheme:
-        ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            fixedSize: const Size(220, 60),
-            backgroundColor: Colors.white,
-            foregroundColor: const Color.fromARGB(255, 47, 136, 177),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-          )
-        )
-      ),
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/mood': (context) => const MoodSelectScreen(),
-        '/name_input': (context) => const NameInputScreen(),
+      theme: basicTheme,
+      routes: routes,
+      onGenerateRoute: (settings) {
+        if (settings.name == '/name_input'){
+          return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => const NameInputScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: animation, child: child,);
+              },
+          );
+        }
       },
     ),
   );

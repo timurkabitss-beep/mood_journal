@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'gradient_background.dart';
+import '../../../ui/backgroundtheme/gradient_background.dart';
+import 'package:mood_journal/ui/fonts/font.dart';
+
+
 class HomeScreen extends StatefulWidget{
   const HomeScreen({super.key});
   @override
@@ -53,12 +56,12 @@ class _CreateHomeScreen extends State<HomeScreen>{
               AnimatedOpacity(
                   opacity: _opacity1,
                   duration: const Duration(milliseconds: 600),
-                  child: Text("Hello there,", style: TextStyle(color: Colors.white, fontSize: 40))
+                  child: Text("Hello there,", style: style)
               ),
               AnimatedOpacity(
                 opacity: _opacity2,
                 duration: const Duration(milliseconds: 800),
-                child: Text("I'm Moodora", style: TextStyle(color: Colors.white, fontSize: 40)),
+                child: Text("I'm Moodora", style: style),
               ),
               AnimatedOpacity(
                 opacity: _opacity3,
