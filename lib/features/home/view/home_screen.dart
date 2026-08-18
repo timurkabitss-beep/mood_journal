@@ -66,9 +66,9 @@ class _CreateHomeScreen extends State<HomeScreen>{
               AnimatedOpacity(
                 opacity: _opacity3,
                 duration: const Duration(milliseconds: 900),
-                child: Text('A quiet space for your thoughts', style: TextStyle(color: Colors.white54, fontSize: 15),),
+                child: Text('A quiet space for your thoughts', style: style1),
               ),
-              const SizedBox(height: 280,),
+              const SizedBox(height: 240,),
               AnimatedOpacity(
                 opacity: _opacity4,
                 duration: const Duration(milliseconds: 900),
@@ -79,9 +79,26 @@ class _CreateHomeScreen extends State<HomeScreen>{
                       Navigator.of(context).pushNamed('/name_input');
                     });
                   },
-                  child: const Text("continue",),
+                  child: const Text("Hello, Moodora", style: TextStyle(fontSize: 16)),
                 ),
-              )
+              ),
+              const SizedBox(height: 15,),
+              AnimatedOpacity(
+                opacity: _opacity4,
+                duration: const Duration(milliseconds: 900),
+                child:
+                ElevatedButton(
+                  onPressed: (){
+                    setState(() {
+                      Navigator.of(context).pushNamed('/n');
+                    });
+                  },
+                  child: const Text("I have a account", style: TextStyle(color: Colors.white54, fontSize: 16)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white.withOpacity(0.14)
+                  ),
+                ),
+              ),
             ],
           ),
       ),
