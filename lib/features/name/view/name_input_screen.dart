@@ -30,6 +30,20 @@ class _NameInputScreenState extends State<NameInputScreen> {
         _opacity = 1.0;
       });
     });
+    _controller.addListener(_validateName);
+  }
+
+  void _validateName(){
+    final text = _controller.text.trim();
+    final regExp = RegExp(r'^[a-zA-Zа-яА-ЯёЁ]+$');
+
+    final bool isValid = text.isNotEmpty && regExp.hasMatch(text);
+
+    if (isValid != isName){
+      setState(() {
+        isName = isValid;
+      });
+    }
   }
 
 
@@ -102,12 +116,11 @@ class _NameInputScreenState extends State<NameInputScreen> {
                         duration: const Duration(milliseconds: 400),
                         child:
                         ElevatedButton(
-                          onPressed: (){
-                            setState(() {
+                          onPressed: isName ? (){
+                              name = _controller.text.trim();
                               Navigator.of(context).pushNamed('/mood');
-                            });
-                          },
-                          child: const Text("continue",),
+                          } : null ,
+                          child: const Text("continue"),
                         ),
                       )
                      ],
