@@ -1,1 +1,1 @@
-export 'home_fonts.dart';
+export 'all_fonts.dart';

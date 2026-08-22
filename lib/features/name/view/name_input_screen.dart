@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
+import '../model/user_data.dart';
+import 'package:mood_journal/ui/fonts/font.dart';
 
 class NameInputScreen extends StatefulWidget {
   const NameInputScreen({super.key});
@@ -11,7 +13,6 @@ class NameInputScreen extends StatefulWidget {
 
 class _NameInputScreenState extends State<NameInputScreen> {
   bool isName = false;
-  String? name;
   double _opacity = 0.0;
   final TextEditingController _controller = TextEditingController();
 
@@ -50,6 +51,7 @@ class _NameInputScreenState extends State<NameInputScreen> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      resizeToAvoidBottomInset: false,
       body: GradientBackground(
           child: Stack(
             children: [
@@ -61,7 +63,7 @@ class _NameInputScreenState extends State<NameInputScreen> {
                       opacity: _opacity,
                       duration: const Duration(milliseconds: 400),
                       child: IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white,),
+                        icon: Icon(Icons.arrow_back, color: Colors.white.withOpacity(0.2),),
                         onPressed: (){
                            Navigator.of(context).pop();
                         },
@@ -82,11 +84,7 @@ class _NameInputScreenState extends State<NameInputScreen> {
                           duration: const Duration(milliseconds: 400),
                           child: Text("So nice to meet you!\n What is your name?",
                                  textAlign: TextAlign.center,
-                                 style: TextStyle(
-                                     color: Colors.white,
-                                     fontSize: 26,
-                                     // fontWeight: FontWeight.w500
-                                 )
+                                 style: style3
                               ) ,
                       ),
                       const SizedBox(height: 200,),
@@ -99,7 +97,7 @@ class _NameInputScreenState extends State<NameInputScreen> {
                             style: TextStyle(color: Colors.white, fontSize: 22),
                             decoration: InputDecoration(
                                 hintText: "Your nickname...",
-                                hintStyle: const TextStyle(color: Colors.white54, fontSize: 22),
+                                hintStyle: style4,
                                 filled: true,
                                 fillColor: Colors.white.withOpacity(0.15),
                                 contentPadding: const EdgeInsets.symmetric(vertical: 22),
@@ -117,12 +115,12 @@ class _NameInputScreenState extends State<NameInputScreen> {
                         child:
                         ElevatedButton(
                           onPressed: isName ? (){
-                              name = _controller.text.trim();
-                              Navigator.of(context).pushNamed('/mood');
+                              globalUserName = _controller.text.trim();
+                              Navigator.of(context).pushNamed('/background');
                           } : null ,
-                          child: const Text("continue"),
+                          child: Text("CONTINUE", style: style5),
                         ),
-                      )
+                      ),
                      ],
                     ),
                   ),

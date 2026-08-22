@@ -79,7 +79,7 @@ class _CreateHomeScreen extends State<HomeScreen>{
                       Navigator.of(context).pushNamed('/name_input');
                     });
                   },
-                  child: const Text("Hello, Moodora", style: TextStyle(fontSize: 16)),
+                  child: Text("HELLO, MOODORA", style: style2),
                 ),
               ),
               const SizedBox(height: 15,),
@@ -93,7 +93,7 @@ class _CreateHomeScreen extends State<HomeScreen>{
                       Navigator.of(context).pushNamed('/n');
                     });
                   },
-                  child: const Text("I have a account", style: TextStyle(color: Colors.white54, fontSize: 16)),
+                  child: Text("I HAVE A ACCOUNT", style: style2_1),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white.withOpacity(0.14)
                   ),

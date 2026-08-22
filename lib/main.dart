@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/routes/routes.dart';
 import 'package:mood_journal/ui/theme/theme.dart';
-import 'features/name/view/name_input_screen.dart';
+import 'features/name/view/view.dart';
+import 'features/backgr/view/view.dart';
 
 void main() {
   runApp(
@@ -20,7 +21,17 @@ void main() {
             transitionDuration: const Duration(milliseconds: 400)
           );
         }
+        else if(settings.name == '/background'){
+          return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => const BackgroundChoiceScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: animation, child: child,);
+              },
+              transitionDuration: const Duration(milliseconds: 400)
+          );
+        }
       },
+
     ),
   );
 }
