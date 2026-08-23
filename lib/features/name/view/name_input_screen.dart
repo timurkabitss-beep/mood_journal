@@ -36,7 +36,7 @@ class _NameInputScreenState extends State<NameInputScreen> {
 
   void _validateName(){
     final text = _controller.text.trim();
-    final regExp = RegExp(r'^[a-zA-Zа-яА-ЯёЁ]+$');
+    final regExp = RegExp(r'^[a-zA-Z\u0410-\u044f\u0401\u0451]+$');
 
     final bool isValid = text.isNotEmpty && regExp.hasMatch(text);
 

@@ -16,6 +16,8 @@ class BackgroundChoiceScreen extends StatefulWidget {
 class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
   AppThemeModel _appThemeModel = backThemes[0];
   double _opacity = 0.0;
+  Offset _screenOffset = Offset.zero;
+  double _leaveOpacity = 1.0;
 
   @override
   void initState(){
@@ -30,10 +32,16 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GradientBackground(
-        colors: _appThemeModel.colors,
-        child: Stack(
-          children: [
+      body: AnimatedSlide(
+        offset: _screenOffset,
+        duration: const Duration(milliseconds: 500),
+        child: AnimatedOpacity(
+          opacity: _leaveOpacity,
+          duration: const Duration(milliseconds: 500),
+          child: GradientBackground(
+          colors: _appThemeModel.colors,
+          child: Stack(
+           children: [
             Positioned(
                 top: 20,
                 left: 20,
@@ -120,9 +128,14 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
                             foregroundColor: _appThemeModel.colors[0],
                         ),
                         onPressed:  (){
-                          Navigator.of(context).pushNamed('/background');
+                          setState(() {
+                            _screenOffset = const Offset(0.0, -1.0);
+                            _leaveOpacity = 0.0;
+                          });
+                           globalSelectedTheme = _appThemeModel;
+                           Navigator.of(context).pushNamed('/dashboard');
                         },
-                        child: Text("NEXT", style: style5),
+                        child: Text("SAVE", style: style5),
                       ),
                     )
                   ],
@@ -130,8 +143,10 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
               ),
             ),
           ],
-        )
-      ),
+         ),
+        ),
+        ),
+       ),
     );
   }
 }
