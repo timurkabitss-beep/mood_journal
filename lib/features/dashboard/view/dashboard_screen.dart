@@ -16,9 +16,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   AppThemeModel _appThemeModel = globalSelectedTheme;
   bool _isFirstLaunch = true;
 
+
+
   @override
   void initState(){
-    Future.delayed(Duration(milliseconds:1000), (){
+    Future.delayed(Duration(milliseconds:400), (){
       setState(() {
         _opacity = 1.0;
       });
@@ -30,6 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       backgroundColor: Colors.transparent,
       body: AnimatedContainer(
           duration: const Duration(milliseconds: 500),
@@ -47,7 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     AnimatedAlign(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOutCubic,
-                      alignment: _isFirstLaunch ? const Alignment(0.0, -0.2): const Alignment(0.0, 0.35),
+                      alignment: _isFirstLaunch ? const Alignment(0.0, -0.2): const Alignment(0.0, 0.45),
                       child:
                         AnimatedOpacity(
                           opacity: _opacity,
@@ -84,7 +87,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                 ),
 
-                                const SizedBox(height: 18),
+                                const SizedBox(height: 36),
 
                                 Text(
                                   _isFirstLaunch
@@ -149,22 +152,99 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOutCubic,
-                  bottom: _isFirstLaunch ? -110 : 0,
+                  bottom: _isFirstLaunch ? -120 : 0,
                   left: 0,
                   right: 0,
-                  child: BottomAppBar(
-                    color: Colors.white,
-                    shape: const CircularNotchedRectangle(),
-                    notchMargin: 8.0,
-                    child: Row(
-                      
-                    ),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                    child: BottomAppBar(
+                        color: Colors.white,
+                        notchMargin: 8.0,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16,),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.wb_sunny_outlined, color: Colors.black38),
+                                onPressed: () {
+
+                                },
+                              ),
+                              const SizedBox(width: 24),
+                              IconButton(
+                                icon: const Icon(Icons.format_quote_outlined, color: Colors.black38,),
+                                onPressed:  (){
+
+                                },
+                              ),
+                              const Spacer(),
+                              IconButton(
+                                icon: const Icon(Icons.show_chart_rounded, color: Colors.black38),
+                                onPressed: () {
+
+                                },
+                              ),
+                              const SizedBox(width: 24),
+                              IconButton(
+                                icon: const Icon(Icons.emoji_people_outlined, color: Colors.black38),
+                                onPressed: (){
+
+                                },
+                              )
+                            ],
+                          ),
+                        )
+                    ) ,
                   )
-                )
+                ),
+                AnimatedPositioned(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOutCubic,
+                    bottom: _isFirstLaunch ? -80 : 10,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.of(context).pushNamed('/');
+                        },
+                        child: 
+                        Container(
+                          width: 70,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(28),
+                            gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: _appThemeModel.colors
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: _appThemeModel.colors[0].withOpacity(0.15),
+                                  blurRadius: 14,
+                                  offset: Offset(0, 6)
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child:  Icon(Icons.add, color: Colors.white, size: 30)
+                          ),
+                        ),
+                      ),
+                    ),
+                ),
                ],
               ),
           ),
       ),
+      bottomNavigationBar: const BottomAppBar(
+        color: Colors.white,
+        elevation: 0,
+        height: 20,
+      ),
+
     );
   }
 }
