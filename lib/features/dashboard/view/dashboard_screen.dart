@@ -20,7 +20,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState(){
-    Future.delayed(Duration(milliseconds:400), (){
+    Future.delayed(Duration(milliseconds:500), (){
       setState(() {
         _opacity = 1.0;
       });
@@ -161,33 +161,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         color: Colors.white,
                         notchMargin: 8.0,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16,),
+                          padding: const EdgeInsets.only(
+                            left: 8.0,
+                            right: 8.0,
+                            top: 8.0,
+                            bottom: 24.0,
+                          ),
+
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.wb_sunny_outlined, color: Colors.black38),
+                                icon: const Icon(Icons.wb_sunny_outlined, color: Colors.black38, size: 30,),
                                 onPressed: () {
 
                                 },
                               ),
                               const SizedBox(width: 24),
                               IconButton(
-                                icon: const Icon(Icons.format_quote_outlined, color: Colors.black38,),
+                                icon: const Icon(Icons.format_quote_outlined, color: Colors.black38, size: 30,),
                                 onPressed:  (){
 
                                 },
                               ),
                               const Spacer(),
                               IconButton(
-                                icon: const Icon(Icons.show_chart_rounded, color: Colors.black38),
+                                icon: const Icon(Icons.show_chart_rounded, color: Colors.black38, size: 30,),
                                 onPressed: () {
 
                                 },
                               ),
                               const SizedBox(width: 24),
                               IconButton(
-                                icon: const Icon(Icons.emoji_people_outlined, color: Colors.black38),
+                                icon: const Icon(Icons.emoji_people_outlined, color: Colors.black38, size: 30,),
                                 onPressed: (){
 
                                 },
@@ -201,18 +207,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 AnimatedPositioned(
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.easeInOutCubic,
-                    bottom: _isFirstLaunch ? -80 : 10,
+                    bottom: _isFirstLaunch ? -80 : 20,
                     left: 0,
                     right: 0,
                     child: Center(
                       child: GestureDetector(
                         onTap: (){
-                          Navigator.of(context).pushNamed('/');
+                          Navigator.of(context).pushNamed('/mood_screen');
                         },
                         child: 
                         Container(
                           width: 70,
-                          height: 60,
+                          height: 65,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(28),
                             gradient: LinearGradient(
@@ -229,7 +235,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                           ),
                           child: Center(
-                            child:  Icon(Icons.add, color: Colors.white, size: 30)
+                            child:  Icon(Icons.add, color: Colors.white, size: 30,)
                           ),
                         ),
                       ),
@@ -242,7 +248,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       bottomNavigationBar: const BottomAppBar(
         color: Colors.white,
         elevation: 0,
-        height: 20,
+        height: 10,
       ),
 
     );

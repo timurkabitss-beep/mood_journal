@@ -6,47 +6,50 @@ class AppThemeModel{
 
   const AppThemeModel({required this.id, required this.colors});
 }
-
 final List<AppThemeModel> backThemes = [
+  // Плотный черничный и приглушенный сине-лиловый
   const AppThemeModel(
-      id: 'original',
-      colors:
-      [
-        Color.fromARGB(255, 86, 0, 168),
-        Color.fromARGB(255, 47, 136, 177)
+      id: 'velvet_dusk',
+      colors: [
+        Color(0xFF4A5568),
+        Color(0xFF6366F1),
+        Color(0xFF5B21B6),
       ]
   ),
 
   const AppThemeModel(
-    id: 'pink',
+    id: 'lemon_mousse',
     colors: [
-      Color(0xFFE94057),
-      Color(0xFFF27121),
-    ],
-  ),
-const AppThemeModel(
-    id: 'mint',
-    colors: [
-      Color(0xFF0F2027),
-      Color(0xFF203A43),
-      Color(0xFF2C5364),
-
+      Color(0xFFDCAE1D), // Плотный лимонный крем (дает контраст белому тексту)
+      Color(0xFFEAA97E), // Нежный персиковый сорбет
+      Color(0xFFAB87FF), // Мягкий черничный йогурт для красивого перелива
     ],
   ),
 
   const AppThemeModel(
-    id: 'neon_mint',
+    id: 'purpur',
     colors: [
-      Color(0xFF00B4DB),
-      Color(0xFF0083B0),
+      Color(0xDF9D6AD3),
+      Color(0xFFD38787),
+      Color(0xFFC6769A),
     ],
   ),
 
   const AppThemeModel(
-    id: 'cyber_green',
+    id: 'deep_sage',
     colors: [
-      Color(0xFF11998E),
-      Color(0xFF38EF7D),
+      Color(0xFF2E6551),
+      Color(0xFF1E463E),
+      Color(0xFF4D7C0F),
+    ],
+  ),
+
+  const AppThemeModel(
+    id: 'ocean_mist',
+    colors: [
+      Color(0xFF0F766E),
+      Color(0xFF1E3A8A),
+      Color(0xFF3B82F6),
     ],
   ),
 ];

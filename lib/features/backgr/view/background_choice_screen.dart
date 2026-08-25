@@ -21,7 +21,7 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
 
   @override
   void initState(){
-    Future.delayed(Duration(milliseconds:300), (){
+    Future.delayed(Duration(milliseconds:500), (){
       setState(() {
         _opacity = 1.0;
       });
@@ -47,7 +47,7 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
                 left: 20,
                 child: AnimatedOpacity(
                     opacity: _opacity,
-                    duration: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 500),
                     child: IconButton(
                       icon: Icon(Icons.arrow_back,  color:  Colors.white.withOpacity(0.2),),
                       onPressed: (){
@@ -67,7 +67,7 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
                     const SizedBox(height: 100),
                     AnimatedOpacity(
                       opacity: _opacity,
-                      duration: const Duration(milliseconds: 400),
+                      duration: const Duration(milliseconds: 500),
                       child: Text("Topics, ${globalUserName}!\n Which topic do you like?",
                           textAlign: TextAlign.center,
                           style: style3
@@ -76,7 +76,7 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
                     const SizedBox(height: 200,),
                     AnimatedOpacity(
                       opacity: _opacity,
-                      duration: const Duration(milliseconds: 400),
+                      duration: const Duration(milliseconds: 500),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         clipBehavior: Clip.none,
@@ -92,7 +92,7 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
                                 child: AnimatedContainer(
                                     height: 90,
                                     width: 90,
-                                    duration: Duration(milliseconds: 400),
+                                    duration: Duration(milliseconds: 500),
                                     margin: const EdgeInsets.symmetric(horizontal: 14),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
@@ -121,7 +121,7 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
                     const SizedBox(height: 200,),
                     AnimatedOpacity(
                       opacity: _opacity,
-                      duration: const Duration(milliseconds: 400),
+                      duration: const Duration(milliseconds: 500),
                       child:
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(

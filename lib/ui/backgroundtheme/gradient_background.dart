@@ -9,8 +9,9 @@ class GradientBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     final List<Color> currentColors = colors ?? [
-      const Color.fromARGB(255, 86, 0, 168),
-      const Color.fromARGB(255, 47, 136, 177),
+      const Color(0xFF4A5568),
+      const Color(0xFF6366F1),
+      const Color(0xFF5B21B6),
     ];
 
     return AnimatedContainer(
