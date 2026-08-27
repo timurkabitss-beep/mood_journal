@@ -4,7 +4,7 @@ import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/fonts/all_fonts.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
 import 'package:mood_journal/ui/theme/theme.dart';
-import '../../name/model/user_data.dart';
+import '../../name/data/user_data.dart';
 
 class BackgroundChoiceScreen extends StatefulWidget {
   const BackgroundChoiceScreen({super.key});
@@ -126,6 +126,7 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             foregroundColor: _appThemeModel.colors[0],
+                            minimumSize: const Size(220, 54),
                         ),
                         onPressed:  (){
                           setState(() {

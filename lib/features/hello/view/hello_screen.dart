@@ -3,13 +3,13 @@ import '../../../ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 
 
-class HomeScreen extends StatefulWidget{
-  const HomeScreen({super.key});
+class HelloScreen extends StatefulWidget{
+  const HelloScreen({super.key});
   @override
-  State<HomeScreen> createState() => _CreateHomeScreen();
+  State<HelloScreen> createState() => _CreateHelloScreen();
 }
 
-class _CreateHomeScreen extends State<HomeScreen>{
+class _CreateHelloScreen extends State<HelloScreen>{
   double _opacity1 = 0.0;
   double _opacity2 = 0.0;
   double _opacity3 = 0.0;
@@ -79,6 +79,9 @@ class _CreateHomeScreen extends State<HomeScreen>{
                       Navigator.of(context).pushNamed('/name_input');
                     });
                   },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(220, 54),
+                  ),
                   child: Text("HELLO, MOODORA", style: style2),
                 ),
               ),
@@ -95,7 +98,8 @@ class _CreateHomeScreen extends State<HomeScreen>{
                   },
                   child: Text("I HAVE A ACCOUNT", style: style2_1),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(0.14)
+                    backgroundColor: Colors.transparent,
+                    minimumSize: const Size(220, 54),
                   ),
                 ),
               ),

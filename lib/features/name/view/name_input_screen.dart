@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
-import '../model/user_data.dart';
+import '../data/user_data.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 
 class NameInputScreen extends StatefulWidget {
@@ -118,6 +118,9 @@ class _NameInputScreenState extends State<NameInputScreen> {
                               globalUserName = _controller.text.trim();
                               Navigator.of(context).pushNamed('/background');
                           } : null ,
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(220, 54),
+                          ),
                           child: Text("CONTINUE", style: style5),
                         ),
                       ),
