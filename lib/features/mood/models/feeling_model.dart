@@ -1,6 +1,7 @@
 
-enum ActivityModel {
-
+enum FeelingModel {
+  //Todo:
+   // ЗАГЛУШКИ, СДЕЛАТЬ НОВЫЕ В ФИГМЕ
   relationship('assets/svg/activity_svg/relationship.svg', 'Relationship'),
   friends('assets/svg/activity_svg/friends.svg', 'Friends'),
   travel('assets/svg/activity_svg/travel.svg', 'Travel'),
@@ -16,11 +17,12 @@ enum ActivityModel {
   music('assets/svg/activity_svg/music.svg', 'Music'),
   sleep('assets/svg/activity_svg/sleep.svg', 'Sleep'),
   weather('assets/svg/activity_svg/weather.svg', 'Weather');
-
+  //Todo:
+  // ЗАГЛУШКИ, СДЕЛАТЬ НОВЫЕ В ФИГМЕ
 
 
   final String assetPath;
   final String label;
 
-  const ActivityModel(this.assetPath, this.label);
+  const FeelingModel(this.assetPath, this.label);
 }

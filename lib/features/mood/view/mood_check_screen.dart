@@ -21,8 +21,8 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
   MoodModel _currentMood = MoodModel.neutral;
   double _sliderValue = 2.0;
   bool _isMoodChanged = false;
-  int _currentStep = 1;
-  final List<ActivityModel> _selectedActivities = [];
+
+
 
 
   @override
@@ -79,7 +79,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                           const SizedBox(height: 140,),
                           AnimatedOpacity(
                             opacity: _opacity,
-                            duration: const Duration(milliseconds: 500),
+                            duration: const Duration(milliseconds: 900),
                             child: SvgPicture.asset(
                                 _currentMood.assetsPath,
                                 width: 120,
@@ -105,7 +105,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                                 min: 0,
                                 max: 4,
                                 activeColor: Colors.white,
-                                inactiveColor: Colors.white.withOpacity(0.15),
+                                inactiveColor: Colors.white.withOpacity(0.1),
                                 onChanged: (newValue){
                                   setState(() {
                                     _isMoodChanged = true;
@@ -124,7 +124,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                 right: 0,
                 child: AnimatedOpacity(
                   opacity: _opacity * (_isMoodChanged ? 1.0 : 0.25),
-                  duration: const Duration(milliseconds: 700),
+                  duration: const Duration(milliseconds: 500),
                   child: Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -135,7 +135,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                       onPressed: () {
                         if (_isMoodChanged) {
                           setState(() {
-                            _currentStep = 2;
+                            Navigator.of(context).pushNamed('/activity_check_screen', arguments: _currentMood);
                           });
                         }
                       },
