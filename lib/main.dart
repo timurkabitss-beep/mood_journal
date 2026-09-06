@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/features/dashboard/view/dashboard_screen.dart';
-import 'package:mood_journal/features/mood/models/mood_model.dart';
-import 'package:mood_journal/features/mood/view/mood_check_screen.dart';
-import 'package:mood_journal/features/mood/view/activity_check_screen.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mood_journal/routes/routes.dart';
 import 'package:mood_journal/ui/theme/theme.dart';
-import 'features/name/view/view.dart';
-import 'features/backgr/view/view.dart';
 
-void main() {
+
+void main() async {
+  await Hive.initFlutter();
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,

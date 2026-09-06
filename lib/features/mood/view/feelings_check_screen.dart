@@ -129,7 +129,7 @@ class _FeelingsCheckScreenState extends State<FeelingsCheckScreen> {
                                 child: GridView.builder(
                                     padding: const EdgeInsets.only(left: 25, right: 15),
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: ActivityModel.values.length,
+                                    itemCount: FeelingModel.values.length,
                                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
                                       crossAxisSpacing: 15,

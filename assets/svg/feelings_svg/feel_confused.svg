@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <!-- Один глаз обычный, второй удивленный большой -->
+    <circle cx="7.5" cy="10" r="1" fill="white"/>
+    <circle cx="16" cy="10" r="2.5"/>
+    <circle cx="16" cy="10" r="0.7" fill="white"/>
+    <!-- Волнистый недоумевающий рот -->
+    <path d="M8 15.5c1.5-1 2.5 1 4 0s2.5-1 4 0"/>
+</svg>
