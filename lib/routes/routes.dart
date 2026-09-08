@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/features/dashboard/view/view.dart';
+import 'package:mood_journal/features/mood/models/feelings_screen_arguments.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
 import 'package:mood_journal/features/mood/view/view.dart';
 import '../features/backgr/view/view.dart';
@@ -89,10 +90,12 @@ class AppRoutes {
       );
     }
     else if (settings.name == '/feelings_check_screen') {
-
+      final args = settings.arguments as FeelingsScreenArguments;
       return PageRouteBuilder(
         opaque: false,
-        pageBuilder: (context, animation, secondaryAnimation) => FeelingsCheckScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) => FeelingsCheckScreen(
+          chosenMood: args.mood, chosenActivities: args.activities,
+        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(
             opacity: animation,
@@ -102,5 +105,24 @@ class AppRoutes {
         transitionDuration: const Duration(milliseconds: 500),
       );
     }
+    else if (settings.name == '/mood_summary_screen') {
+
+      final entryModel = settings.arguments as MoodEntryModel;
+
+      return PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (context, animation, secondaryAnimation) => MoodSummaryScreen(
+          entryModel: entryModel,
+        ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      );
+    }
+
   }
 }

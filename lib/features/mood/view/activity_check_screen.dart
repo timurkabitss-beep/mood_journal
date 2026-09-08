@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
+import 'package:mood_journal/features/mood/models/feelings_screen_arguments.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
 import 'package:mood_journal/features/name/data/user_data.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
@@ -47,33 +48,25 @@ class _ActivityCheckScreenState extends State<ActivityCheckScreen> {
               Positioned(
                 top: 20,
                 right: 20 ,
-                child: AnimatedOpacity(
-                  opacity: _opacity,
-                  duration: const Duration(milliseconds: 500),
-                  child: IconButton(
+                child:  IconButton(
                     icon: Icon(Icons.close, color: Colors.white.withOpacity(0.2),),
                     onPressed: (){
                       setState(() {
                         Navigator.of(context).pushNamed('/dashboard');
                       });
                     },
-                  ) ,
                 ),
               ),
               Positioned(
                 top: 20,
                 left: 20 ,
-                child: AnimatedOpacity(
-                  opacity: _opacity,
-                  duration: const Duration(milliseconds: 500),
-                  child: IconButton(
+                child:  IconButton(
                     icon: Icon(Icons.arrow_back, color: Colors.white.withOpacity(0.2),),
                     onPressed: (){
                       setState(() {
                         Navigator.of(context).pop();
                       });
                     },
-                  ) ,
                 ),
               ),
               const SizedBox(height: 200,),
@@ -213,7 +206,14 @@ class _ActivityCheckScreenState extends State<ActivityCheckScreen> {
                       onPressed: () {
                         if (_isActivityChanged) {
                           setState(() {
-                            Navigator.of(context).pushNamed('/feelings_check_screen');
+                            Navigator.of(context).pushNamed(
+                                '/feelings_check_screen',
+                                arguments:
+                                FeelingsScreenArguments(
+                                    mood: widget.chosenMood,
+                                    activities: _selectedActivities.toList()
+                                )
+                            );
                           });
                         }
                       },

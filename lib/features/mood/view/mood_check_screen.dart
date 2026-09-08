@@ -124,7 +124,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                 right: 0,
                 child: AnimatedOpacity(
                   opacity: _opacity * (_isMoodChanged ? 1.0 : 0.25),
-                  duration: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 10),
                   child: Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(

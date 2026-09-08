@@ -45,15 +45,11 @@ class _BackgroundChoiceScreenState extends State<BackgroundChoiceScreen> {
             Positioned(
                 top: 20,
                 left: 20,
-                child: AnimatedOpacity(
-                    opacity: _opacity,
-                    duration: const Duration(milliseconds: 500),
-                    child: IconButton(
+                child: IconButton(
                       icon: Icon(Icons.arrow_back,  color:  Colors.white.withOpacity(0.2),),
                       onPressed: (){
                         Navigator.of(context).pop();
                       },
-                    ),
                 ),
             ),
             Positioned.fill(
