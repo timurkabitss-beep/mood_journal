@@ -85,7 +85,7 @@ class _ActivityCheckScreenState extends State<ActivityCheckScreen> {
                           opacity: _opacity,
                           duration: const Duration(milliseconds: 500),
                           child: Text(
-                            "What’s making your day so ${widget.chosenMood.label.toLowerCase()}?", // Берем настроение из конструктора!
+                            "What’s making your day so ${widget.chosenMood.label.toLowerCase()}?",
                             textAlign: TextAlign.center,
                             style: style3,
                           ),

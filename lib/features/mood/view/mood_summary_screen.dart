@@ -22,6 +22,15 @@ class MoodSummaryScreen extends StatefulWidget {
 
 class _MoodSummaryScreenState extends State<MoodSummaryScreen> {
   double _opacity = 0.0;
+  final TextEditingController _titlecontroller = TextEditingController();
+  final TextEditingController _notescontroller = TextEditingController();
+
+  @override
+  void dispose(){
+    _titlecontroller.dispose();
+    _notescontroller.dispose();
+    super.dispose();
+  }
 
 
   @override
@@ -43,65 +52,90 @@ class _MoodSummaryScreenState extends State<MoodSummaryScreen> {
           colors: globalSelectedTheme.colors,
           child:
           Stack(
-            children: [
+           children: [
+             Positioned.fill(
+               child: AnimatedOpacity(
+                 opacity: _opacity,
+                 duration: const Duration(milliseconds: 500),
+                 child: SingleChildScrollView(
+                     padding: const EdgeInsets.only(
+                       top: 100,
+                       bottom: 10,
+                       left: 16,
+                       right: 16,
+                     ),
+                     child: Column(
+                       children: [
+                         Text(
+                           DateFormat(
+                               'MMMM: d,  hh:mm a').format(widget.entryModel.date),
+                           style: style1.copyWith(color: Colors.white),
+                         ),
+                         const SizedBox(height: 340),
+                         TextField(
+                           controller: _titlecontroller,
+                           textAlign: TextAlign.left,
+                           style: style1.copyWith(color: Colors.white),
+                           decoration: InputDecoration(
+                               hintText: "Title...",
+                               hintStyle: style1,
+                               filled: true,
+                               fillColor: Colors.white.withOpacity(0.15),
+                               contentPadding: const EdgeInsets.symmetric(vertical: 22),
+                               border: OutlineInputBorder(
+                                   borderRadius: BorderRadius.circular(16),
+                                   borderSide: BorderSide.none
+                               )
+                           ),
+                         ),
+                         const SizedBox(height: 30,),
+                         TextField(
+                           controller: _notescontroller,
+                           textAlign: TextAlign.left,
+                           minLines: 3,
+                           maxLines: null,
+                           style: style1.copyWith(color: Colors.white),
+                           decoration: InputDecoration(
+                               hintText: "Add some notes...",
+                               hintStyle: style1,
+                               filled: true,
+                               fillColor: Colors.white.withOpacity(0.15),
+                               contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                               border: OutlineInputBorder(
+                                   borderRadius: BorderRadius.circular(16),
+                                   borderSide: BorderSide.none
+                               )
+                           ),
+                         ),
+                       ],
+                     )
+                 ),
+               ),
+             ),
             Positioned(
             top: 20,
             right: 20 ,
             child: IconButton(
                 icon: Icon(Icons.close, color: Colors.white.withOpacity(0.2),),
                 onPressed: (){
-                  setState(() {
-                    Navigator.of(context).pushNamed('/dashboard');
-                  });
+                  Navigator.of(context).pushNamed('/dashboard');
                 },
+              ),
             ),
-          ),
-          Positioned(
-            top: 20,
-            left: 20 ,
-            child: IconButton(
+            Positioned(
+             top: 20,
+             left: 20 ,
+             child: IconButton(
                 icon: Icon(Icons.arrow_back, color: Colors.white.withOpacity(0.2),),
                 onPressed: (){
-                  setState(() {
                     Navigator.of(context).pop();
-                  });
                 },
-            ),
-          ),
-          const SizedBox(height: 200,),
-          Expanded(
-              child: AnimatedOpacity(
-                  opacity: _opacity,
-                  duration: const Duration(milliseconds: 500),
+              ),
+             ),
 
-              )
-          ),
-          // Positioned.fill(
-          //       top: 0,
-          //       left: 0,
-          //       right: 0,
-          //       bottom: 200,
-          //       child: Column(
-          //           mainAxisAlignment: MainAxisAlignment.start,
-          //           children: [
-          //             const SizedBox(height: 100),
-          //             Padding(
-          //               padding: const EdgeInsets.symmetric(horizontal: 32),
-          //               child: AnimatedOpacity(
-          //                 opacity: _opacity,
-          //                 duration: const Duration(milliseconds: 500),
-          //                 child: Text(
-          //                   DateFormat('MMMM d, h:mm, a').format(widget.entryModel.date).toUpperCase()  ,
-          //                   textAlign: TextAlign.center,
-          //                   style: style3,
-          //                 ),
-          //               ),
-          //             ),
-          //           ]
-          //       )
-          //    ),
-              const SizedBox(height: 120,),
-              Positioned(
+
+             const SizedBox(height: 120,),
+             Positioned(
                 bottom: 70,
                 left: 0,
                 right: 0,
@@ -118,16 +152,16 @@ class _MoodSummaryScreenState extends State<MoodSummaryScreen> {
                       onPressed: () {
                         },
                       child: Text(
-                        "CONTINUE",
+                        "COMPLETE CHECK-IN",
                         style: style5.copyWith(color: globalSelectedTheme.colors[0]),
                       ),
                     ),
                   ),
                 ),
               ),
-          ]
+             ]
+          )
         )
-     )
     );
   }
 }
