@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mood_journal/features/dashboard/view/view.dart';
 import 'package:mood_journal/features/mood/models/feelings_screen_arguments.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
+import 'package:mood_journal/features/mood/view/check_in_flow_screen.dart';
 import 'package:mood_journal/features/mood/view/view.dart';
 import '../features/backgr/view/view.dart';
 import '../features/hello/view/view.dart';
@@ -73,12 +74,12 @@ class AppRoutes {
         },
       );
     }
-    else if (settings.name == '/mood_screen') {
+    else if (settings.name == '/check_in_flow_screen') {
       return PageRouteBuilder(
         opaque: false,
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: (context, animation, secondaryAnimation) => const MoodCheckScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) => const CheckInFlowScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           final fadeAnimation = CurvedAnimation(
             parent: animation,
@@ -93,76 +94,76 @@ class AppRoutes {
         },
       );
     }
-    else if (settings.name == '/activity_check_screen') {
-      final chosenMood = settings.arguments as MoodModel;
-
-      return PageRouteBuilder(
-        opaque: false,
-        transitionDuration: const Duration(milliseconds: 600),
-        reverseTransitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: (context, animation, secondaryAnimation) => ActivityCheckScreen(
-          chosenMood: chosenMood,),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          final fadeAnimation = CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeIn,
-            reverseCurve: Curves.easeOut,
-          );
-
-          return FadeTransition(
-            opacity: fadeAnimation,
-            child: child,
-          );
-        },
-      );
-    }
-    else if (settings.name == '/feelings_check_screen') {
-      final args = settings.arguments as FeelingsScreenArguments;
-      return PageRouteBuilder(
-        opaque: false,
-        transitionDuration: const Duration(milliseconds: 600),        // Скорость появления вперед
-        reverseTransitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: (context, animation, secondaryAnimation) => FeelingsCheckScreen(
-          chosenMood: args.mood, chosenActivities: args.activities,
-        ),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          final fadeAnimation = CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeIn,
-            reverseCurve: Curves.easeOut,
-          );
-
-          return FadeTransition(
-            opacity: fadeAnimation,
-            child: child,
-          );
-        },
-      );
-    }
-    else if (settings.name == '/mood_summary_screen') {
-      final entryModel = settings.arguments as MoodEntryModel;
-
-      return PageRouteBuilder(
-        opaque: false,
-        transitionDuration: const Duration(milliseconds: 600),
-        reverseTransitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: (context, animation, secondaryAnimation) => MoodSummaryScreen(
-          entryModel: entryModel,
-        ),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          final fadeAnimation = CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeIn,
-            reverseCurve: Curves.easeOut,
-          );
-
-          return FadeTransition(
-            opacity: fadeAnimation,
-            child: child,
-          );
-        },
-      );
-    }
+    // else if (settings.name == '/activity_check_screen') {
+    //   final chosenMood = settings.arguments as MoodModel;
+    //
+    //   return PageRouteBuilder(
+    //     opaque: false,
+    //     transitionDuration: const Duration(milliseconds: 600),
+    //     reverseTransitionDuration: const Duration(milliseconds: 600),
+    //     pageBuilder: (context, animation, secondaryAnimation) => ActivityCheckStep(
+    //       chosenMood: chosenMood,),
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       final fadeAnimation = CurvedAnimation(
+    //         parent: animation,
+    //         curve: Curves.easeIn,
+    //         reverseCurve: Curves.easeOut,
+    //       );
+    //
+    //       return FadeTransition(
+    //         opacity: fadeAnimation,
+    //         child: child,
+    //       );
+    //     },
+    //   );
+    // }
+    // else if (settings.name == '/feelings_check_screen') {
+    //   final args = settings.arguments as FeelingsScreenArguments;
+    //   return PageRouteBuilder(
+    //     opaque: false,
+    //     transitionDuration: const Duration(milliseconds: 600),        // Скорость появления вперед
+    //     reverseTransitionDuration: const Duration(milliseconds: 600),
+    //     pageBuilder: (context, animation, secondaryAnimation) => FeelingsCheckStep(
+    //       chosenMood: args.mood, chosenActivities: args.activities,
+    //     ),
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       final fadeAnimation = CurvedAnimation(
+    //         parent: animation,
+    //         curve: Curves.easeIn,
+    //         reverseCurve: Curves.easeOut,
+    //       );
+    //
+    //       return FadeTransition(
+    //         opacity: fadeAnimation,
+    //         child: child,
+    //       );
+    //     },
+    //   );
+    // }
+    // else if (settings.name == '/mood_summary_screen') {
+    //   final entryModel = settings.arguments as MoodEntryModel;
+    //
+    //   return PageRouteBuilder(
+    //     opaque: false,
+    //     transitionDuration: const Duration(milliseconds: 600),
+    //     reverseTransitionDuration: const Duration(milliseconds: 600),
+    //     pageBuilder: (context, animation, secondaryAnimation) => MoodSummaryStep(
+    //       entryModel: entryModel,
+    //     ),
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       final fadeAnimation = CurvedAnimation(
+    //         parent: animation,
+    //         curve: Curves.easeIn,
+    //         reverseCurve: Curves.easeOut,
+    //       );
+    //
+    //       return FadeTransition(
+    //         opacity: fadeAnimation,
+    //         child: child,
+    //       );
+    //     },
+    //   );
+    // }
 
   }
 }

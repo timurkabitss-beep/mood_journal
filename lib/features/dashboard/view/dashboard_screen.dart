@@ -213,7 +213,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Center(
                       child: GestureDetector(
                         onTap: (){
-                          Navigator.of(context).pushNamed('/mood_screen');
+                          Navigator.of(context).pushNamed('/check_in_flow_screen');
                         },
                         child: 
                         Container(

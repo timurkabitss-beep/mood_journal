@@ -6,20 +6,20 @@ import 'package:mood_journal/features/mood/models/mood_model.dart';
 import 'package:mood_journal/features/name/data/user_data.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
-import '../../mood/models/activity_model.dart';
-import '../../../ui/fonts/all_fonts.dart';
+import '../../models/activity_model.dart';
+import '../../../../ui/fonts/all_fonts.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-class ActivityCheckScreen extends StatefulWidget {
+class ActivityCheckStep extends StatefulWidget {
   final MoodModel chosenMood;
-
-  const ActivityCheckScreen({super.key, required this.chosenMood});
+  final Function(List<ActivityModel>) onNext;
+  const ActivityCheckStep({super.key, required this.chosenMood, required this.onNext});
 
   @override
-  State<ActivityCheckScreen> createState() => _ActivityCheckScreenState();
+  State<ActivityCheckStep> createState() => _ActivityCheckStepState();
 }
 
-class _ActivityCheckScreenState extends State<ActivityCheckScreen> {
+class _ActivityCheckStepState extends State<ActivityCheckStep> {
   AppThemeModel _appThemeModel = globalSelectedTheme;
   double _opacity = 0.0;
   final List<ActivityModel> _selectedActivities = [];
@@ -39,36 +39,9 @@ class _ActivityCheckScreenState extends State<ActivityCheckScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GradientBackground(
-          colors: globalSelectedTheme.colors,
-          child:
+    return
           Stack(
             children: [
-              Positioned(
-                top: 20,
-                right: 20 ,
-                child:  IconButton(
-                    icon: Icon(Icons.close, color: Colors.white.withOpacity(0.2),),
-                    onPressed: (){
-                      setState(() {
-                        Navigator.of(context).pushNamed('/dashboard');
-                      });
-                    },
-                ),
-              ),
-              Positioned(
-                top: 20,
-                left: 20 ,
-                child:  IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white.withOpacity(0.2),),
-                    onPressed: (){
-                      setState(() {
-                        Navigator.of(context).pop();
-                      });
-                    },
-                ),
-              ),
               const SizedBox(height: 200,),
               Positioned.fill(
                 top: 0,
@@ -81,40 +54,24 @@ class _ActivityCheckScreenState extends State<ActivityCheckScreen> {
                       const SizedBox(height: 100),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32),
-                        child: AnimatedOpacity(
-                          opacity: _opacity,
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(
+                        child:  Text(
                             "What’s making your day so ${widget.chosenMood.label.toLowerCase()}?",
                             textAlign: TextAlign.center,
                             style: style3,
                           ),
-                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32),
-                        child: AnimatedOpacity(
-                          opacity: _opacity,
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(
+                        child:  Text(
                             "Select up to 10 activities",
                             textAlign: TextAlign.center,
                             style: style1,
-                          ),
                         ),
                       ),
 
                       Expanded(
                           child:
-                          AnimatedOpacity(
-                            opacity: _opacity,
-                            duration: const Duration(milliseconds: 500),
-                            child: Container(
-                              color: Colors.transparent,
-                              child: AnimatedOpacity(
-                                opacity: _opacity,
-                                duration: const Duration(milliseconds: 500),
-                                child:  Padding(
+                           Padding(
                                   padding: const EdgeInsets.only(
                                     left: 0,
                                     right: 0,
@@ -179,11 +136,6 @@ class _ActivityCheckScreenState extends State<ActivityCheckScreen> {
                                       }
                                   ),
                                 ),
-                              ),
-
-                            ),
-                          ),
-
                       ),
                     ],
                   ),
@@ -205,16 +157,8 @@ class _ActivityCheckScreenState extends State<ActivityCheckScreen> {
                       ),
                       onPressed: () {
                         if (_isActivityChanged) {
-                          setState(() {
-                            Navigator.of(context).pushNamed(
-                                '/feelings_check_screen',
-                                arguments:
-                                FeelingsScreenArguments(
-                                    mood: widget.chosenMood,
-                                    activities: _selectedActivities.toList()
-                                )
-                            );
-                          });
+                           widget.onNext(_selectedActivities);
+
                         }
                       },
                       child: Text(
@@ -226,8 +170,6 @@ class _ActivityCheckScreenState extends State<ActivityCheckScreen> {
                 ),
               ),
             ],
-          )
-      )
     );
   }
 }

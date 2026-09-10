@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
+import 'package:mood_journal/features/mood/models/models.dart';
 import 'package:mood_journal/features/name/data/user_data.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
-import '../../mood/models/mood_model.dart';
-import '../../../ui/fonts/all_fonts.dart';
+import '../../models/mood_model.dart';
+import '../../../../ui/fonts/all_fonts.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-class MoodCheckScreen extends StatefulWidget {
-  const MoodCheckScreen({super.key});
+class MoodCheckStep extends StatefulWidget {
+  final Function(MoodModel) onNext;
+  const MoodCheckStep({super.key, required this.onNext});
 
   @override
-  State<MoodCheckScreen> createState() => _MoodCheckScreenState();
+  State<MoodCheckStep> createState() => _MoodCheckStepState();
 }
 
-class _MoodCheckScreenState extends State<MoodCheckScreen> {
+class _MoodCheckStepState extends State<MoodCheckStep> {
   AppThemeModel _appThemeModel = globalSelectedTheme;
   double _opacity = 0.0;
   MoodModel _currentMood = MoodModel.neutral;
@@ -37,28 +39,9 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GradientBackground(
-          colors: globalSelectedTheme.colors,
-          child: 
+    return
           Stack(
             children: [
-              Positioned(
-                  top: 20,
-                  right: 20 ,
-                  child: AnimatedOpacity(
-                      opacity: _opacity,
-                      duration: const Duration(milliseconds: 500),
-                      child: IconButton(
-                        icon: Icon(Icons.close, color: Colors.white.withOpacity(0.2),),
-                        onPressed: (){
-                          setState(() {
-                            Navigator.of(context).pop();
-                          });
-                        },
-                      ) ,
-                  ),
-              ),
               Positioned.fill(
                   child:
                    Column(
@@ -68,39 +51,24 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 40),
                             child:
-                              AnimatedOpacity(
-                                opacity: _opacity,
-                                duration: const Duration(milliseconds: 500),
-                                child: Text("Hey $globalUserName! What’s your vibe right now?",
+                               Text("Hey $globalUserName! What’s your vibe right now?",
                                   textAlign: TextAlign.center,
                                    style: style3
                                ) ,
-                            ),),
+                            ),
                           const SizedBox(height: 140,),
-                          AnimatedOpacity(
-                            opacity: _opacity,
-                            duration: const Duration(milliseconds: 900),
-                            child: SvgPicture.asset(
+                           SvgPicture.asset(
                                 _currentMood.assetsPath,
                                 width: 120,
                                 height: 120,
-                            ),
                           ),
                           const SizedBox(height: 20,),
-                          AnimatedOpacity(
-                            opacity: _opacity,
-                            duration: const Duration(milliseconds: 500),
-                            child: Text(
+                           Text(
                                 _currentMood.label,
                                 style: style1
-                            ),
-                          ),
+                           ),
                           const SizedBox(height: 40,),
-                          AnimatedOpacity(
-                            opacity: _opacity,
-                            duration: const Duration(milliseconds: 500),
-                            child:
-                              SfSlider(
+                          SfSlider(
                                 value: _sliderValue,
                                 min: 0,
                                 max: 4,
@@ -114,7 +82,6 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                                   });
                                 },
                               ),
-                          ),
                         ],
                       ),
                   ),
@@ -124,7 +91,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                 right: 0,
                 child: AnimatedOpacity(
                   opacity: _opacity * (_isMoodChanged ? 1.0 : 0.25),
-                  duration: const Duration(milliseconds: 10),
+                  duration: const Duration(milliseconds: 50),
                   child: Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -134,9 +101,7 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                       ),
                       onPressed: () {
                         if (_isMoodChanged) {
-                          setState(() {
-                            Navigator.of(context).pushNamed('/activity_check_screen', arguments: _currentMood);
-                          });
+                          widget.onNext(_currentMood);
                         }
                       },
                       child: Text(
@@ -148,8 +113,6 @@ class _MoodCheckScreenState extends State<MoodCheckScreen> {
                 ),
               ),
             ],
-          )
-      )
     );
   }
 }

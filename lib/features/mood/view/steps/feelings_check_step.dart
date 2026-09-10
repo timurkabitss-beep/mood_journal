@@ -6,22 +6,21 @@ import 'package:mood_journal/features/mood/models/mood_model.dart';
 import 'package:mood_journal/features/name/data/user_data.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
-import '../../mood/models/activity_model.dart';
-import '../../../ui/fonts/all_fonts.dart';
+import '../../models/activity_model.dart';
+import '../../../../ui/fonts/all_fonts.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-import '../models/feeling_model.dart';
+import '../../models/feeling_model.dart';
 
-class FeelingsCheckScreen extends StatefulWidget {
-  final MoodModel chosenMood;
-  final List<ActivityModel> chosenActivities;
-  const FeelingsCheckScreen({super.key, required this.chosenMood, required this.chosenActivities});
+class FeelingsCheckStep extends StatefulWidget {
+  final Function(List<FeelingModel>) onNext;
+  const FeelingsCheckStep({super.key, required this.onNext});
 
   @override
-  State<FeelingsCheckScreen> createState() => _FeelingsCheckScreenState();
+  State<FeelingsCheckStep> createState() => _FeelingsCheckStepState();
 }
 
-class _FeelingsCheckScreenState extends State<FeelingsCheckScreen> {
+class _FeelingsCheckStepState extends State<FeelingsCheckStep> {
   AppThemeModel _appThemeModel = globalSelectedTheme;
   double _opacity = 0.0;
   final List<FeelingModel> _selectedFeelings = [];
@@ -39,36 +38,8 @@ class _FeelingsCheckScreenState extends State<FeelingsCheckScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: GradientBackground(
-            colors: globalSelectedTheme.colors,
-            child:
-            Stack(
+    return Stack(
               children: [
-                Positioned(
-                  top: 20,
-                  right: 20 ,
-                  child: IconButton(
-                      icon: Icon(Icons.close, color: Colors.white.withOpacity(0.2),),
-                      onPressed: (){
-                        setState(() {
-                          Navigator.of(context).pushNamed('/dashboard');
-                        });
-                      },
-                  ),
-                ),
-                Positioned(
-                  top: 20,
-                  left: 20 ,
-                  child: IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white.withOpacity(0.2),),
-                      onPressed: (){
-                        setState(() {
-                          Navigator.of(context).pop();
-                        });
-                      },
-                    ) ,
-                ),
                 const SizedBox(height: 200,),
                 Positioned.fill(
                   top: 0,
@@ -81,40 +52,24 @@ class _FeelingsCheckScreenState extends State<FeelingsCheckScreen> {
                       const SizedBox(height: 100),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32),
-                        child: AnimatedOpacity(
-                          opacity: _opacity,
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(
+                        child:  Text(
                             "And how are you feeling inside?",
                             textAlign: TextAlign.center,
                             style: style3,
                           ),
-                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32),
-                        child: AnimatedOpacity(
-                          opacity: _opacity,
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(
+                        child: Text(
                             "Select your emotions",
                             textAlign: TextAlign.center,
                             style: style1,
                           ),
-                        ),
                       ),
 
                       Expanded(
                         child:
-                        AnimatedOpacity(
-                          opacity: _opacity,
-                          duration: const Duration(milliseconds: 500),
-                          child: Container(
-                            color: Colors.transparent,
-                            child: AnimatedOpacity(
-                              opacity: _opacity,
-                              duration: const Duration(milliseconds: 500),
-                              child:  Padding(
+                            Padding(
                                 padding: const EdgeInsets.only(
                                   left: 0,
                                   right: 0,
@@ -179,12 +134,7 @@ class _FeelingsCheckScreenState extends State<FeelingsCheckScreen> {
                                     }
                                 ),
                               ),
-                            ),
-
-                          ),
-                        ),
-
-                      ),
+                         ),
                     ],
                   ),
                 ),
@@ -205,17 +155,7 @@ class _FeelingsCheckScreenState extends State<FeelingsCheckScreen> {
                         ),
                         onPressed: () {
                           if (_isFeelingsChanged) {
-                            final newMood = MoodEntryModel(
-                                date: DateTime.now(),
-                                mood: widget.chosenMood,
-                                activities: widget.chosenActivities,
-                                feelings: _selectedFeelings.toList(),
-                                title: "",
-                                notes: ""
-                            );
-                            setState(() {
-                              Navigator.of(context).pushNamed('/mood_summary_screen', arguments: newMood);
-                            });
+                            widget.onNext(_selectedFeelings);
                           }
                         },
                         child: Text(
@@ -227,8 +167,6 @@ class _FeelingsCheckScreenState extends State<FeelingsCheckScreen> {
                   ),
                 ),
               ],
-            )
-        )
-    );
+            );
   }
 }
