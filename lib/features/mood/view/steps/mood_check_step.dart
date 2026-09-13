@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
-import 'package:mood_journal/features/name/data/user_data.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
+import '../../../welcome/data/user_data.dart';
 import '../../models/mood_model.dart';
 import '../../../../ui/fonts/all_fonts.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -91,7 +91,7 @@ class _MoodCheckStepState extends State<MoodCheckStep> {
                 right: 0,
                 child: AnimatedOpacity(
                   opacity: _opacity * (_isMoodChanged ? 1.0 : 0.25),
-                  duration: const Duration(milliseconds: 50),
+                  duration: const Duration(milliseconds: 10),
                   child: Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(

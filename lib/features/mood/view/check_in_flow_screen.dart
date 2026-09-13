@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
 import 'package:mood_journal/features/mood/view/steps/feelings_check_step.dart';
 import 'package:mood_journal/features/mood/view/view.dart';
-import 'package:mood_journal/features/name/data/user_data.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
-import 'package:mood_journal/ui/theme/app_theme_model.dart';
-import '../../mood/models/activity_model.dart';
-import '../../../ui/fonts/all_fonts.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
-import 'package:intl/intl.dart';
-
+import '../../welcome/data/user_data.dart';
 import 'steps/activity_check_step.dart';
 import 'steps/mood_check_step.dart';
 

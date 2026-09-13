@@ -15,8 +15,7 @@ void main() async {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       theme: basicTheme,
-      routes: routes,
-      onGenerateRoute: AppRoutes.onGenerateRoute
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     ),
   );
 }

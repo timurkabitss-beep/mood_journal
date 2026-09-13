@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
-
-import '../../name/data/user_data.dart';
+import '../../welcome/data/user_data.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});

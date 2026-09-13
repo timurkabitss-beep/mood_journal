@@ -3,9 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
-import 'package:mood_journal/features/name/data/user_data.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
+import '../../../welcome/data/user_data.dart';
 import '../../models/activity_model.dart';
 import '../../../../ui/fonts/all_fonts.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -81,7 +81,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
 
                          if (widget.chosenActivities.isNotEmpty) ...[
                           const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            padding: EdgeInsets.symmetric(horizontal: 3265),
                             child: Align(
                              alignment: Alignment.centerLeft,
                              child: Text(
@@ -96,7 +96,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                              SingleChildScrollView(
                                  scrollDirection: Axis.horizontal,
                                  physics: const BouncingScrollPhysics(),
-                                 padding: const EdgeInsets.symmetric(horizontal: 16),
+                                 padding: const EdgeInsets.symmetric(horizontal: 32),
                                  child: Row(
                                    spacing: 10,
                                    children: widget.chosenActivities.map((activity) {
@@ -131,7 +131,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                          ],
                          if (widget.chosenFeelings.isNotEmpty) ...[
                           const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            padding: EdgeInsets.symmetric(horizontal: 32),
                             child: Align(
                              alignment: Alignment.centerLeft,
                              child: Text(
@@ -145,7 +145,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                            child:
                            SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                padding: const EdgeInsets.symmetric(horizontal: 32),
                                 physics: const BouncingScrollPhysics(),
                                 child: Row(
                                   spacing: 10,
@@ -177,10 +177,10 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                                 ),
                               ),
                           ),
-                         const SizedBox(height: 100),
+                         const SizedBox(height: 80),
                          ],
                          Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
                           child:
                           TextField(
                            controller: _titlecontroller,
@@ -201,7 +201,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                          ),
                          const SizedBox(height: 30),
                          Padding(
-                         padding:const EdgeInsets.symmetric(horizontal: 16),
+                         padding:const EdgeInsets.symmetric(horizontal: 32),
                          child:
                          TextField(
                            controller: _notescontroller,

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
-import '../data/user_data.dart';
+import '../../../welcome/data/user_data.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 
-class NameInputScreen extends StatefulWidget {
-  const NameInputScreen({super.key});
+
+class NameInputStep extends StatefulWidget {
+  final Function(String) onNext;
+  const NameInputStep({super.key, required this.onNext});
 
   @override
-  State<NameInputScreen> createState() => _NameInputScreenState();
+  State<NameInputStep> createState() => _NameInputStepState();
 }
 
-class _NameInputScreenState extends State<NameInputScreen> {
+class _NameInputStepState extends State<NameInputStep> {
   bool isName = false;
   double _opacity = 0.0;
   final TextEditingController _controller = TextEditingController();
@@ -50,29 +52,12 @@ class _NameInputScreenState extends State<NameInputScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: GradientBackground(
-          child: Stack(
+    return Stack(
             children: [
-              Positioned(
-                  top: 20,
-                  left: 20,
-                  child:
-                  AnimatedOpacity(
-                      opacity: _opacity,
-                      duration: const Duration(milliseconds: 400),
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back, color: Colors.white.withOpacity(0.2),),
-                        onPressed: (){
-                           Navigator.of(context).pop();
-                        },
-                     ),
-                 ),
-              ),
               Positioned.fill(
-                child:
-                Padding(
+                child: SingleChildScrollView(
+                 child:
+                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child:
                   Column(
@@ -116,7 +101,7 @@ class _NameInputScreenState extends State<NameInputScreen> {
                         ElevatedButton(
                           onPressed: isName ? (){
                               globalUserName = _controller.text.trim();
-                              Navigator.of(context).pushNamed('/background');
+                              widget.onNext(globalUserName);
                           } : null ,
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(220, 54),
@@ -126,11 +111,10 @@ class _NameInputScreenState extends State<NameInputScreen> {
                       ),
                      ],
                     ),
-                  ),
+                 ),
                 ),
-            ],
-          )
-      ),
-    );
-  }
+              )
+          ],
+       );
+    }
 }
