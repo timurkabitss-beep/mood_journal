@@ -81,7 +81,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
 
                          if (widget.chosenActivities.isNotEmpty) ...[
                           const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 3265),
+                            padding: EdgeInsets.symmetric(horizontal: 32),
                             child: Align(
                              alignment: Alignment.centerLeft,
                              child: Text(

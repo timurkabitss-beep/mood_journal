@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
+import 'package:provider/provider.dart';
 import '../../../welcome/data/user_data.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 
 
 class NameInputStep extends StatefulWidget {
-  final Function(String) onNext;
+  final VoidCallback onNext;
   const NameInputStep({super.key, required this.onNext});
 
   @override
@@ -100,8 +102,9 @@ class _NameInputStepState extends State<NameInputStep> {
                         child:
                         ElevatedButton(
                           onPressed: isName ? (){
-                              globalUserName = _controller.text.trim();
-                              widget.onNext(globalUserName);
+                              final name = _controller.text.trim();
+                              context.read<OnboardingState>().setName(name);
+                              widget.onNext();
                           } : null ,
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(220, 54),

@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
 import 'package:mood_journal/ui/theme/theme.dart';
+import 'package:provider/provider.dart';
 import '../../../../ui/fonts/all_fonts.dart';
 
 
 class BackgroundChoiceStep extends StatefulWidget {
-  final String userName;
-  // Колбэк, который на каждый тап по кругу будет менять цвет градиента в родителе
-  final Function(AppThemeModel) onThemeChanged;
-  // Финальный колбэк, который сработает при нажатии на SAVE
-  final VoidCallback onSave;
 
   const BackgroundChoiceStep({
     super.key,
-    required this.userName,
-    required this.onThemeChanged,
-    required this.onSave,
   });
 
   @override
@@ -23,17 +17,13 @@ class BackgroundChoiceStep extends StatefulWidget {
 }
 
 class _BackgroundChoiceStepState extends State<BackgroundChoiceStep> {
-  // На старте берем первую тему из списка
-  late AppThemeModel _selectedTheme;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedTheme = backThemes[0];
-  }
 
   @override
   Widget build(BuildContext context) {
+
+    final onboardProvider = context.watch<OnboardingState>();
+    final currentTheme = onboardProvider.selectedTheme;
+
     return Positioned.fill(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -42,7 +32,7 @@ class _BackgroundChoiceStepState extends State<BackgroundChoiceStep> {
           children: [
             const SizedBox(height: 100),
             Text(
-              "Topics, ${widget.userName}!\n Which topic do you like?",
+              "Topics, ${onboardProvider.userName}!\n Which topic do you like?",
               textAlign: TextAlign.center,
               style: style3.copyWith(color: Colors.white),
             ),
@@ -56,15 +46,11 @@ class _BackgroundChoiceStepState extends State<BackgroundChoiceStep> {
               physics: const BouncingScrollPhysics(),
               child: Row(
                 children: backThemes.map((theme) {
-                  final isSelected = theme.id == _selectedTheme.id;
+                  final isSelected = theme.id == currentTheme.id;
 
                   return GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _selectedTheme = theme;
-                      });
-                      // Мгновенно отдаем тему наверх родительскому градиенту!
-                      widget.onThemeChanged(theme);
+                      context.read<OnboardingState>().setTheme(theme);
                     },
                     child: AnimatedContainer(
                       height: 90,
@@ -102,13 +88,19 @@ class _BackgroundChoiceStepState extends State<BackgroundChoiceStep> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: _selectedTheme.colors[0],
+                foregroundColor: currentTheme.colors[0],
                 minimumSize: const Size(220, 54),
               ),
-              onPressed: widget.onSave, // Отдаем триггер финала родителю
+              onPressed: () async {
+                // Данные уже в Provider из-за setTheme()
+                // Просто переходим
+                if(mounted){
+                  Navigator.of(context).pushNamedAndRemoveUntil('/dashboard', (route) => false);
+                }
+              }, // Отдаем триггер финала родителю и тут же переход
               child: Text(
                 "SAVE",
-                style: style5.copyWith(color: _selectedTheme.colors[0]),
+                style: style5.copyWith(color: currentTheme.colors[0]),
               ),
             )
           ],

@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
 import "package:mood_journal/features/welcome/data/user_data.dart";
+import "package:mood_journal/features/welcome/state/onboarding_state.dart";
 import "package:mood_journal/features/welcome/view/steps/background_choice_screen.dart";
 import "package:mood_journal/features/welcome/view/steps/hello_step.dart";
 import "package:mood_journal/features/welcome/view/steps/name_input_screen.dart";
 import "package:mood_journal/ui/backgroundtheme/gradient_background.dart";
 import "package:mood_journal/ui/theme/theme.dart";
+import "package:provider/provider.dart";
 
 import "../../../ui/theme/app_theme_model.dart";
 
@@ -19,10 +21,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final PageController _pageController = PageController();
   int _currentStep = 0;
 
-  AppThemeModel _currentBackgroundTheme = backThemes[0];
-
-
-  String _userName = ' ';
 
   @override
   void dispose(){
@@ -39,9 +37,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentTheme = context.watch<OnboardingState>().selectedTheme;
+
     return Scaffold(
       body: GradientBackground(
-          colors: _currentBackgroundTheme.colors,
+          colors: currentTheme.colors,
           child: Stack(
             children: [
               Positioned.fill(
@@ -61,27 +61,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           }
                       ),
                       NameInputStep(
-                        onNext: (name) {
-                          _userName = name;
+                        onNext: () {
                           _moveToNextPage(); // Листаем дальше
                         },
                       ),
-                      BackgroundChoiceStep(
-                          userName: _userName,
-                          onThemeChanged: (newTheme){
-                            setState(() {
-                              _currentBackgroundTheme = newTheme;
-                            });
-                          },
-                          onSave: () async {
-                            globalUserName = _userName;
-                            globalSelectedTheme = _currentBackgroundTheme;
-
-                            if(mounted){
-                              Navigator.of(context).pushNamedAndRemoveUntil('/dashboard', (route) => false);
-                            }
-                          }
-                      )
+                      BackgroundChoiceStep()
                     ],
                   )
               ),

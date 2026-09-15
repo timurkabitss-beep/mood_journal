@@ -27,6 +27,9 @@ dependencies:
   flutter_svg: ^2.0.10
   lucide_icons: ^0.257.0
 
+  # ---Передача данных ---
+  provider: ^6.1.5
+
 
 
   # --- Работа с сетью (REST API) ---

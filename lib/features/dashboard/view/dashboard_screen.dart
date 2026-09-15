@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
+import 'package:provider/provider.dart';
 import '../../welcome/data/user_data.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -12,7 +14,6 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   double _opacity = 0.0;
-  AppThemeModel _appThemeModel = globalSelectedTheme;
   bool _isFirstLaunch = true;
 
 
@@ -20,9 +21,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState(){
     Future.delayed(Duration(milliseconds:500), (){
-      setState(() {
+      if (mounted){
+        setState(() {
         _opacity = 1.0;
-      });
+        });
+      }
     }
     );
   }
@@ -30,6 +33,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final onboarding = context.watch<OnboardingState>();
+    final currentTheme = onboarding.selectedTheme;
+    final userName = onboarding.userName;
+
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.transparent,
@@ -75,8 +82,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               children: [
                                 Text(
                                   _isFirstLaunch
-                                      ? "Let's make this beautiful, $globalUserName!"
-                                      : "How are you doing today, $globalUserName?",
+                                      ? "Let's make this beautiful, $userName!"
+                                      : "How are you doing today, $userName?",
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Color(0xFF2E3E5C),
@@ -117,11 +124,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         gradient: LinearGradient(
                                             begin: Alignment.centerLeft,
                                             end: Alignment.centerRight,
-                                            colors: _appThemeModel.colors
+                                            colors: currentTheme.colors
                                         ),
                                         boxShadow: [
                                           BoxShadow(
-                                              color: _appThemeModel.colors[0].withOpacity(0.3),
+                                              color: currentTheme.colors[0].withOpacity(0.3),
                                               blurRadius: 16,
                                               offset: Offset(0, 6)
                                           ),
@@ -223,11 +230,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
-                                colors: _appThemeModel.colors
+                                colors: currentTheme.colors
                             ),
                             boxShadow: [
                               BoxShadow(
-                                  color: _appThemeModel.colors[0].withOpacity(0.15),
+                                  color: currentTheme.colors[0].withOpacity(0.15),
                                   blurRadius: 14,
                                   offset: Offset(0, 6)
                               ),
