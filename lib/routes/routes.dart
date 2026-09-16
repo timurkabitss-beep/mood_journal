@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/features/dashboard/view/view.dart';
-import 'package:mood_journal/features/mood/models/feelings_screen_arguments.dart';
-import 'package:mood_journal/features/mood/models/models.dart';
 import 'package:mood_journal/features/mood/view/check_in_flow_screen.dart';
-import 'package:mood_journal/features/mood/view/view.dart';
 import 'package:mood_journal/features/welcome/view/welcome_screen.dart';
-
-
 
 class AppRoutes {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings){
@@ -56,8 +51,5 @@ class AppRoutes {
         },
       );
     }
-
-
-
-  }
+   }
 }

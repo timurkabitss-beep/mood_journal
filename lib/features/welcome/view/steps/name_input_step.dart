@@ -3,7 +3,7 @@ import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 import 'package:provider/provider.dart';
-import '../../../welcome/data/user_data.dart';
+
 import 'package:mood_journal/ui/fonts/font.dart';
 
 

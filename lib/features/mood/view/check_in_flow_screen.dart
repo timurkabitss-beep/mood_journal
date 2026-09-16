@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
+import 'package:provider/provider.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
 import 'package:mood_journal/features/mood/view/steps/feelings_check_step.dart';
 import 'package:mood_journal/features/mood/view/view.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
-import '../../welcome/data/user_data.dart';
+import '../../../core/database/mood_repository.dart';
 import 'steps/activity_check_step.dart';
 import 'steps/mood_check_step.dart';
 
@@ -32,9 +34,12 @@ class _CheckInFlowScreenState extends State<CheckInFlowScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    final currentTheme = context.watch<OnboardingState>().selectedTheme;
+    final themeColors = currentTheme.colors;
+
     return Scaffold(
       body: GradientBackground(
-        colors: globalSelectedTheme.colors,
+        colors: currentTheme.colors,
         child: Stack(
           children: [
             Positioned.fill(
@@ -83,9 +88,25 @@ class _CheckInFlowScreenState extends State<CheckInFlowScreen> {
                       }
                   ),
                   MoodSummaryStep(
+                    chosenMood: _chosenMood ?? MoodModel.neutral,
+                    chosenActivities: _selectedActivities,
+                    chosenFeelings: _selectedFeelings,
+                    onComplete: (title, notes) async {  //  новый callback
+                      final entry = MoodEntryModel(
+                          date: DateTime.now(),
+                          mood: _chosenMood ?? MoodModel.neutral,
+                          activities: _selectedActivities,
+                          feelings: _selectedFeelings,
+                          title: title,
+                          notes: notes
+                      );
 
-                      chosenActivities: _selectedActivities,
-                      chosenFeelings: _selectedFeelings
+                      await MoodRepository.instance.saveEntry(entry);
+                      if (mounted) {
+                        Navigator.of(context)
+                            .pushNamedAndRemoveUntil('/mood_history', (route) => false);
+                      }
+                    },
                   )
                 ],
               ),

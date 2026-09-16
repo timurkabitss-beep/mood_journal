@@ -3,9 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
+import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
-import '../../../welcome/data/user_data.dart';
+import 'package:provider/provider.dart';
 import '../../models/activity_model.dart';
 import '../../../../ui/fonts/all_fonts.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -13,13 +14,16 @@ import 'package:intl/intl.dart';
 
 
 class MoodSummaryStep extends StatefulWidget {
-
+  final MoodModel chosenMood;
   final List<ActivityModel> chosenActivities;
   final List<FeelingModel> chosenFeelings;
+  final void Function(String title, String notes) onComplete;
   const MoodSummaryStep({
     super.key,
+    required this.chosenMood,
     required this.chosenActivities,
-    required this.chosenFeelings
+    required this.chosenFeelings,
+    required this.onComplete
   });
 
   @override
@@ -52,9 +56,12 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    final themeColors = globalSelectedTheme.colors;
+    final currentTheme = context.watch<OnboardingState>().selectedTheme;
+    final themeColors = currentTheme.colors;
     return
           Stack(
            children: [
@@ -73,7 +80,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                           child:
                            Text(
                            DateFormat(
-                               'MMMM: d,  hh:mm a').format(_currentDate),
+                               'MMMM d,  hh:mm a').format(_currentDate),
                            style: style1.copyWith(color: Colors.white),
                            ),
                           ),
@@ -239,13 +246,17 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         minimumSize: const Size(220, 54),
-                        foregroundColor: globalSelectedTheme.colors[0].withOpacity(0.2),
+                        foregroundColor: themeColors[0].withOpacity(0.2),
                       ),
                       onPressed: () {
-                        },
+                        widget.onComplete(
+                          _titlecontroller.text.trim(),
+                          _notescontroller.text.trim(),
+                        );
+                      },
                       child: Text(
                         "COMPLETE CHECK-IN",
-                        style: style5.copyWith(color: globalSelectedTheme.colors[0]),
+                        style: style5.copyWith(color: themeColors[0]),
                       ),
                     ),
                   ),

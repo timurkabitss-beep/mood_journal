@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
-import 'package:mood_journal/features/mood/models/mood_model.dart';
-import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
-import 'package:mood_journal/ui/theme/app_theme_model.dart';
-import '../../../welcome/data/user_data.dart';
-import '../../models/activity_model.dart';
+import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
+import 'package:provider/provider.dart';
 import '../../../../ui/fonts/all_fonts.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../models/feeling_model.dart';
 
@@ -21,7 +16,7 @@ class FeelingsCheckStep extends StatefulWidget {
 }
 
 class _FeelingsCheckStepState extends State<FeelingsCheckStep> {
-  AppThemeModel _appThemeModel = globalSelectedTheme;
+
   double _opacity = 0.0;
   final List<FeelingModel> _selectedFeelings = [];
   bool _isFeelingsChanged = false;
@@ -38,6 +33,9 @@ class _FeelingsCheckStepState extends State<FeelingsCheckStep> {
 
   @override
   Widget build(BuildContext context) {
+    final onboardProvider = context.watch<OnboardingState>();
+    final currentTheme = onboardProvider.selectedTheme;
+
     return Stack(
               children: [
                 const SizedBox(height: 200,),
@@ -114,7 +112,7 @@ class _FeelingsCheckStepState extends State<FeelingsCheckStep> {
                                                 feeling.assetPath,
                                                 colorFilter:
                                                 ColorFilter.mode(
-                                                  isSelected ? globalSelectedTheme.colors[0] : Colors.white,
+                                                  isSelected ? currentTheme.colors[0] : Colors.white,
                                                   BlendMode.srcIn,
                                                 ),
                                                 width: 32,
@@ -124,7 +122,7 @@ class _FeelingsCheckStepState extends State<FeelingsCheckStep> {
                                                 feeling.label,
                                                 textAlign: TextAlign.center,
                                                 style: style5.copyWith(
-                                                  color: isSelected ? globalSelectedTheme.colors[0] : Colors.white.withOpacity(0.7),
+                                                  color: isSelected ? currentTheme.colors[0] : Colors.white.withOpacity(0.7),
                                                 ),
                                               ),
                                             ],
@@ -151,7 +149,7 @@ class _FeelingsCheckStepState extends State<FeelingsCheckStep> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           minimumSize: const Size(220, 54),
-                          foregroundColor: globalSelectedTheme.colors[0].withOpacity(0.2),
+                          foregroundColor: currentTheme.colors[0].withOpacity(0.2),
                         ),
                         onPressed: () {
                           if (_isFeelingsChanged) {
@@ -160,7 +158,7 @@ class _FeelingsCheckStepState extends State<FeelingsCheckStep> {
                         },
                         child: Text(
                           "CONTINUE",
-                          style: style5.copyWith(color: globalSelectedTheme.colors[0]),
+                          style: style5.copyWith(color: currentTheme.colors[0]),
                         ),
                       ),
                     ),

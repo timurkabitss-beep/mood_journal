@@ -84,7 +84,6 @@ class _BackgroundChoiceStepState extends State<BackgroundChoiceStep> {
 
             const SizedBox(height: 240),
 
-            // ФИНАЛЬНАЯ КНОПКА SAVE
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
@@ -92,12 +91,10 @@ class _BackgroundChoiceStepState extends State<BackgroundChoiceStep> {
                 minimumSize: const Size(220, 54),
               ),
               onPressed: () async {
-                // Данные уже в Provider из-за setTheme()
-                // Просто переходим
                 if(mounted){
                   Navigator.of(context).pushNamedAndRemoveUntil('/dashboard', (route) => false);
                 }
-              }, // Отдаем триггер финала родителю и тут же переход
+              },
               child: Text(
                 "SAVE",
                 style: style5.copyWith(color: currentTheme.colors[0]),

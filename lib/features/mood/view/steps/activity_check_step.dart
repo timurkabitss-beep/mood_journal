@@ -3,9 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/feelings_screen_arguments.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
+import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
-import '../../../welcome/data/user_data.dart';
+import 'package:provider/provider.dart';
 import '../../models/activity_model.dart';
 import '../../../../ui/fonts/all_fonts.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -20,7 +21,6 @@ class ActivityCheckStep extends StatefulWidget {
 }
 
 class _ActivityCheckStepState extends State<ActivityCheckStep> {
-  AppThemeModel _appThemeModel = globalSelectedTheme;
   double _opacity = 0.0;
   final List<ActivityModel> _selectedActivities = [];
   bool _isActivityChanged = false;
@@ -39,6 +39,8 @@ class _ActivityCheckStepState extends State<ActivityCheckStep> {
 
   @override
   Widget build(BuildContext context) {
+    final onboardProvider = context.watch<OnboardingState>();
+    final currentTheme = onboardProvider.selectedTheme;
     return
           Stack(
             children: [
@@ -116,7 +118,7 @@ class _ActivityCheckStepState extends State<ActivityCheckStep> {
                                                   activity.assetPath,
                                                   colorFilter:
                                                   ColorFilter.mode(
-                                                    isSelected ? globalSelectedTheme.colors[0] : Colors.white,
+                                                    isSelected ? currentTheme.colors[0] : Colors.white,
                                                     BlendMode.srcIn,
                                                   ),
                                                   width: 32,
@@ -126,7 +128,7 @@ class _ActivityCheckStepState extends State<ActivityCheckStep> {
                                                   activity.label,
                                                   textAlign: TextAlign.center,
                                                   style: style5.copyWith(
-                                                    color: isSelected ? globalSelectedTheme.colors[0] : Colors.white.withOpacity(0.7),
+                                                    color: isSelected ? currentTheme.colors[0] : Colors.white.withOpacity(0.7),
                                                   ),
                                                 ),
                                               ],
@@ -153,7 +155,7 @@ class _ActivityCheckStepState extends State<ActivityCheckStep> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         minimumSize: const Size(220, 54),
-                        foregroundColor: globalSelectedTheme.colors[0].withOpacity(0.2),
+                        foregroundColor: currentTheme.colors[0].withOpacity(0.2),
                       ),
                       onPressed: () {
                         if (_isActivityChanged) {
@@ -163,7 +165,7 @@ class _ActivityCheckStepState extends State<ActivityCheckStep> {
                       },
                       child: Text(
                         "CONTINUE",
-                        style: style5.copyWith(color: globalSelectedTheme.colors[0]),
+                        style: style5.copyWith(color: currentTheme.colors[0]),
                       ),
                     ),
                   ),

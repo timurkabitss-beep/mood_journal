@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
-import 'package:mood_journal/ui/theme/app_theme_model.dart';
-import '../../../welcome/data/user_data.dart';
+import 'package:provider/provider.dart';
+import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
 import '../../models/mood_model.dart';
 import '../../../../ui/fonts/all_fonts.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -18,7 +18,7 @@ class MoodCheckStep extends StatefulWidget {
 }
 
 class _MoodCheckStepState extends State<MoodCheckStep> {
-  AppThemeModel _appThemeModel = globalSelectedTheme;
+
   double _opacity = 0.0;
   MoodModel _currentMood = MoodModel.neutral;
   double _sliderValue = 2.0;
@@ -39,6 +39,10 @@ class _MoodCheckStepState extends State<MoodCheckStep> {
 
   @override
   Widget build(BuildContext context) {
+    final onboardProvider = context.watch<OnboardingState>();
+    final currentTheme = onboardProvider.selectedTheme;
+    final userName = onboardProvider.userName;
+
     return
           Stack(
             children: [
@@ -51,7 +55,7 @@ class _MoodCheckStepState extends State<MoodCheckStep> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 40),
                             child:
-                               Text("Hey $globalUserName! What’s your vibe right now?",
+                               Text("Hey $userName! What’s your vibe right now?",
                                   textAlign: TextAlign.center,
                                    style: style3
                                ) ,
@@ -97,7 +101,7 @@ class _MoodCheckStepState extends State<MoodCheckStep> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         minimumSize: const Size(220, 54),
-                        foregroundColor: globalSelectedTheme.colors[0].withOpacity(0.2),
+                        foregroundColor: currentTheme.colors[0].withOpacity(0.2),
                       ),
                       onPressed: () {
                         if (_isMoodChanged) {
@@ -106,7 +110,7 @@ class _MoodCheckStepState extends State<MoodCheckStep> {
                       },
                       child: Text(
                         "CONTINUE",
-                        style: style5.copyWith(color: globalSelectedTheme.colors[0]),
+                        style: style5.copyWith(color: currentTheme.colors[0]),
                       ),
                     ),
                   ),
