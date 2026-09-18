@@ -92,7 +92,7 @@ class _BackgroundChoiceStepState extends State<BackgroundChoiceStep> {
               ),
               onPressed: () async {
                 if(mounted){
-                  Navigator.of(context).pushNamedAndRemoveUntil('/dashboard', (route) => false);
+                  Navigator.of(context).pushNamedAndRemoveUntil('/first_dashboard', (route) => false);
                 }
               },
               child: Text(

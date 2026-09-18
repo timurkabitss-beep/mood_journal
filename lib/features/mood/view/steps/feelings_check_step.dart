@@ -142,8 +142,8 @@ class _FeelingsCheckStepState extends State<FeelingsCheckStep> {
                   left: 0,
                   right: 0,
                   child: AnimatedOpacity(
-                    opacity: _opacity * (_isFeelingsChanged ? 1.0 : 0.25),
-                    duration: const Duration(milliseconds: 10),
+                    opacity: _isFeelingsChanged ? 1.0 : 0.25,
+                    duration: const Duration(milliseconds: 0),
                     child: Center(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(

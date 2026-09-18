@@ -148,8 +148,8 @@ class _ActivityCheckStepState extends State<ActivityCheckStep> {
                 left: 0,
                 right: 0,
                 child: AnimatedOpacity(
-                  opacity: _opacity * (_isActivityChanged ? 1.0 : 0.25),
-                  duration: const Duration(milliseconds: 10),
+                  opacity: _isActivityChanged ? 1.0 : 0.25,
+                  duration: const Duration(milliseconds: 0),
                   child: Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -160,7 +160,6 @@ class _ActivityCheckStepState extends State<ActivityCheckStep> {
                       onPressed: () {
                         if (_isActivityChanged) {
                            widget.onNext(_selectedActivities);
-
                         }
                       },
                       child: Text(

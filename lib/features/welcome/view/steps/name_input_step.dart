@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
-import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 import 'package:provider/provider.dart';
-
-import 'package:mood_journal/ui/fonts/font.dart';
 
 
 class NameInputStep extends StatefulWidget {
@@ -97,15 +94,17 @@ class _NameInputStepState extends State<NameInputStep> {
                       ),
                       const SizedBox(height: 250,),
                       AnimatedOpacity(
-                        opacity: _opacity,
+                        opacity: isName ? 1.0 : 0.25,
                         duration: const Duration(milliseconds: 400),
                         child:
                         ElevatedButton(
-                          onPressed: isName ? (){
-                              final name = _controller.text.trim();
-                              context.read<OnboardingState>().setName(name);
-                              widget.onNext();
-                          } : null ,
+                          onPressed: (){
+                              if(isName){
+                                final name = _controller.text.trim();
+                                context.read<OnboardingState>().setName(name);
+                                widget.onNext();
+                              }
+                          },
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(220, 54),
                           ),

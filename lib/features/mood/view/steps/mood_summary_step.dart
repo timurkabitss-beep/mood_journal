@@ -32,6 +32,7 @@ class MoodSummaryStep extends StatefulWidget {
 
 class _MoodSummaryStepState extends State<MoodSummaryStep> {
   double _opacity = 0.0;
+
   final TextEditingController _titlecontroller = TextEditingController();
   final TextEditingController _notescontroller = TextEditingController();
   final DateTime _currentDate = DateTime.now();
@@ -238,10 +239,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                 bottom: 70,
                 left: 0,
                 right: 0,
-                child: AnimatedOpacity(
-                  opacity: _opacity,
-                  duration: const Duration(milliseconds: 10),
-                  child: Center(
+                child: Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -253,6 +251,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                           _titlecontroller.text.trim(),
                           _notescontroller.text.trim(),
                         );
+                        Navigator.of(context).pushNamed('/second_dashboard');
                       },
                       child: Text(
                         "COMPLETE CHECK-IN",
@@ -261,7 +260,6 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                     ),
                   ),
                 ),
-              ),
            ]
     );
   }

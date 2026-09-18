@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/core/repositories/implementations/first_dashboard_repository.dart';
 import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
-import 'package:mood_journal/ui/theme/app_theme_model.dart';
 import 'package:provider/provider.dart';
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+class FirstDashboardScreen extends StatefulWidget {
+  const FirstDashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<FirstDashboardScreen> createState() => _FirstDashboardScreenState();
 }
 
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _FirstDashboardScreenState extends State<FirstDashboardScreen> {
   double _opacity = 0.0;
   bool _isFirstLaunch = true;
 
@@ -25,16 +25,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _opacity = 1.0;
         });
       }
-    }
-    );
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
     final onboarding = context.watch<OnboardingState>();
     final currentTheme = onboarding.selectedTheme;
     final userName = onboarding.userName;
+
+    final repo = FirstDashboardRepository(
+        userName: userName,
+        themeColor: currentTheme.colors,
+    );
+    final state = repo.loadDashboardState(isFirstLaunch: _isFirstLaunch);
 
     return Scaffold(
       extendBody: true,
@@ -80,9 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  _isFirstLaunch
-                                      ? "Let's make this beautiful, $userName!"
-                                      : "How are you doing today, $userName?",
+                                  state.firstText,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Color(0xFF2E3E5C),
@@ -95,9 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 const SizedBox(height: 36),
 
                                 Text(
-                                  _isFirstLaunch
-                                      ? "Your mindful journey starts right now. I'm here to listen to your thoughts every single day."
-                                      : "Take a moment to check in with yourself. Tap the button below to add your first mood entry!",
+                                  state.secondText,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Colors.black45,
@@ -218,7 +218,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Center(
                       child: GestureDetector(
                         onTap: (){
-                          Navigator.of(context).pushNamed('/check_in_flow_screen');
+                          Navigator.of(context).pushNamed(state.targetRoute);
                         },
                         child: 
                         Container(
@@ -229,11 +229,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
-                                colors: currentTheme.colors
+                                colors: state.themeColors
                             ),
                             boxShadow: [
                               BoxShadow(
-                                  color: currentTheme.colors[0].withOpacity(0.15),
+                                  color: state.themeColors[0].withOpacity(0.15),
                                   blurRadius: 14,
                                   offset: Offset(0, 6)
                               ),
