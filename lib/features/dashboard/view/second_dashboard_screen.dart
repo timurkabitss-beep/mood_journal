@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/core/repositories/implementations/first_dashboard_repository.dart';
+import 'package:mood_journal/core/repositories/implementations/second_dashboard_repository.dart';
 import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
 import 'package:provider/provider.dart';
 
@@ -31,11 +31,12 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
     final currentTheme = onboarding.selectedTheme;
     final userName = onboarding.userName;
 
-    final repo = FirstDashboardRepository(
+    final repo = SecondDashboardRepository(
       userName: userName,
       themeColor: currentTheme.colors,
     );
     final state = repo.loadDashboardState(isFirstLaunch: _isFirstLaunch);
+
 
     return Scaffold(
       extendBody: true,
@@ -56,18 +57,27 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
                 AnimatedAlign(
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOutCubic,
-                  alignment: _isFirstLaunch ? const Alignment(0.0, -0.2): const Alignment(0.0, 0.45),
+                  alignment: _isFirstLaunch ? const Alignment(0.0, -0.2): const Alignment(0.0, 0.65),
                   child:
                   AnimatedOpacity(
-                    opacity: _opacity,
-                    duration: const Duration(milliseconds: 500),
-                    child:
-                    Container(
+                      opacity: _opacity,
+                      duration: const Duration(milliseconds: 500),
+                      child:
+                      AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOutCubic,
                       width: double.maxFinite,
                       padding: const EdgeInsets.all(28),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(28),
+                        borderRadius: _isFirstLaunch
+                            ? BorderRadius.circular(28)
+                            : BorderRadius.only(
+                             topLeft: const Radius.circular(28),
+                             topRight: const Radius.circular(28),
+                             bottomLeft: const Radius.circular(28),
+                             bottomRight: Radius.circular(5),
+                        ),
                         boxShadow: [
                           BoxShadow(
                               color: Colors.black.withOpacity(0.08),
@@ -92,8 +102,7 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
                           ),
 
                           const SizedBox(height: 36),
-
-                          Text(
+                          Text.rich(
                             state.secondText,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
@@ -103,6 +112,7 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
                               height: 1.4,
                             ),
                           ),
+
                           if (_isFirstLaunch) ...[
                             const SizedBox(height: 32,),
                             GestureDetector(
@@ -133,7 +143,7 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
                                 child:
                                 const Center(
                                   child: Text(
-                                    "WRITE ON",
+                                    "AMAZING",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
@@ -154,6 +164,7 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
               AnimatedPositioned(
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOutCubic,
+                  bottom: 0,
                   left: 0,
                   right: 0,
                   child: ClipRRect(
@@ -196,7 +207,7 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
                               IconButton(
                                 icon: const Icon(Icons.emoji_people_outlined, color: Colors.black38, size: 30,),
                                 onPressed: (){
-
+                                    Navigator.of(context).pushNamed(state.targetRoute);
                                 },
                               )
                             ],
@@ -208,35 +219,29 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOutCubic,
-                bottom: _isFirstLaunch ? -80 : 20,
+                bottom: 20,
                 left: 0,
                 right: 0,
                 child: Center(
-                  child: GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).pushNamed(state.targetRoute);
-                    },
-                    child:
-                    Container(
-                      width: 70,
-                      height: 65,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(28),
-                        gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: state.themeColors
+                  child: Container(
+                    width: 70,
+                    height: 65,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28),
+                      color: Colors.grey.shade400,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                              color: state.themeColors[0].withOpacity(0.15),
-                              blurRadius: 14,
-                              offset: Offset(0, 6)
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                          child:  Icon(Icons.add, color: Colors.white, size: 30,)
+                      ],
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 30,
                       ),
                     ),
                   ),

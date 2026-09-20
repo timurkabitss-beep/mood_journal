@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:mood_journal/core/repositories/dashboard_state.dart';
-
+import 'package:flutter/material.dart';
 import '../abstract_dashboard_repository.dart';
-// TODO изменить текст и данные
-class SecondDashboardRepository {
+
+class SecondDashboardRepository implements AbstractDashboardRepository{
   final String userName;
   final List<Color> themeColor;
 
@@ -20,12 +20,25 @@ class SecondDashboardRepository {
         userName: userName,
         themeColors: themeColor,
         firstText: isFirstLaunch
-            ? "Okay, $userName, !"
-            : "How are you doing today, $userName?",
+            ? "Beautiful work, $userName! Keep that energy flowing!"
+            : "Ready to make it official? Time to create your account!",
         secondText: isFirstLaunch
-            ? "Your mindful journey starts right now. I'm here to listen to your thoughts every single day."
-            : "Take a moment to check in with yourself. Tap the button below to add your first mood entry!",
-        targetRoute: '/check_in_flow_screen'
+            ? const TextSpan(
+            text: "Your emotions have a home here. Swing by whenever you need to pause, reflect, or just let it all out. I've got you.")
+            : TextSpan(
+          text: "You'll get cloud backups, device syncing, and your journal stays safe no matter what. Ready? Hit that ",
+          children: [
+            const TextSpan(
+              text: "profile icon",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            const TextSpan(text: " down there to get started."),
+          ],
+        ),
+        targetRoute: '/registration_screen'
     );
   }
 }

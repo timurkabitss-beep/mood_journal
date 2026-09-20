@@ -59,7 +59,7 @@ class _FirstDashboardScreenState extends State<FirstDashboardScreen> {
                     AnimatedAlign(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOutCubic,
-                      alignment: _isFirstLaunch ? const Alignment(0.0, -0.2): const Alignment(0.0, 0.45),
+                      alignment: _isFirstLaunch ? const Alignment(0.0, -0.2): const Alignment(0.0, 0.6),
                       child:
                         AnimatedOpacity(
                           opacity: _opacity,
@@ -96,7 +96,7 @@ class _FirstDashboardScreenState extends State<FirstDashboardScreen> {
 
                                 const SizedBox(height: 36),
 
-                                Text(
+                                Text.rich(
                                   state.secondText,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
