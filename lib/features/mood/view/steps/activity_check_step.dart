@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
-import 'package:mood_journal/features/mood/models/feelings_screen_arguments.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
 import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
-import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
-import 'package:mood_journal/ui/theme/app_theme_model.dart';
 import 'package:provider/provider.dart';
-import '../../models/activity_model.dart';
 import '../../../../ui/fonts/all_fonts.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class ActivityCheckStep extends StatefulWidget {
   final MoodModel chosenMood;

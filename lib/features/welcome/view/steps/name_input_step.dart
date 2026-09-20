@@ -57,7 +57,7 @@ class _NameInputStepState extends State<NameInputStep> {
                 child: SingleChildScrollView(
                  child:
                  Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
                   child:
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -81,10 +81,10 @@ class _NameInputStepState extends State<NameInputStep> {
                             style: TextStyle(color: Colors.white, fontSize: 22),
                             decoration: InputDecoration(
                                 hintText: "Your nickname...",
-                                hintStyle: style4,
+                                hintStyle: style1,
                                 filled: true,
                                 fillColor: Colors.white.withOpacity(0.15),
-                                contentPadding: const EdgeInsets.symmetric(vertical: 22),
+                                contentPadding: const EdgeInsets.symmetric(vertical: 20),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(16),
                                     borderSide: BorderSide.none

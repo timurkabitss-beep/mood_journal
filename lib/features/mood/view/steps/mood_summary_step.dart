@@ -33,15 +33,15 @@ class MoodSummaryStep extends StatefulWidget {
 class _MoodSummaryStepState extends State<MoodSummaryStep> {
   double _opacity = 0.0;
 
-  final TextEditingController _titlecontroller = TextEditingController();
-  final TextEditingController _notescontroller = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
   final DateTime _currentDate = DateTime.now();
 
 
   @override
   void dispose(){
-    _titlecontroller.dispose();
-    _notescontroller.dispose();
+    _titleController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -191,7 +191,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                           child:
                           TextField(
-                           controller: _titlecontroller,
+                           controller: _titleController,
                            textAlign: TextAlign.left,
                            style: style1.copyWith(color: Colors.white),
                            decoration: InputDecoration(
@@ -212,7 +212,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                          padding:const EdgeInsets.symmetric(horizontal: 32),
                          child:
                          TextField(
-                           controller: _notescontroller,
+                           controller: _notesController,
                            textAlign: TextAlign.left,
                            minLines: 3,
                            maxLines: null,
@@ -248,8 +248,8 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                       ),
                       onPressed: () {
                         widget.onComplete(
-                          _titlecontroller.text.trim(),
-                          _notescontroller.text.trim(),
+                          _titleController.text.trim(),
+                          _notesController.text.trim(),
                         );
                         Navigator.of(context).pushNamed('/second_dashboard');
                       },
