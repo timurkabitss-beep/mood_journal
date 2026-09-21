@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
+import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 import 'package:provider/provider.dart';
 
@@ -15,31 +15,31 @@ class _LoginCheckStepState extends State<LoginCheckStep> {
   bool _isEmailValid = false;
   bool _isEmailMatch = false;
   double _opacity = 0.0;
-  final TextEditingController _textController1 = TextEditingController();
-  final TextEditingController _textController2 = TextEditingController();
+  final TextEditingController _emailController1 = TextEditingController();
+  final TextEditingController _emailController2 = TextEditingController();
 
   @override
   void dispose(){
-    _textController1.dispose();
-    _textController2.dispose();
+    _emailController1.dispose();
+    _emailController2.dispose();
     super.dispose();
   }
 
   @override
   void initState(){
     super.initState();
-    Future.delayed(Duration(milliseconds: 700),(){
+    Future.delayed(Duration(milliseconds: 300),(){
       setState(() {
         _opacity = 1.0;
       });
     });
-    _textController1.addListener(_validateEmails);
-    _textController2.addListener(_validateEmails);
+    _emailController1.addListener(_validateEmails);
+    _emailController2.addListener(_validateEmails);
   }
 
   void _validateEmails(){
-    final email1 = _textController1.text.trim();
-    final email2 = _textController2.text.trim();
+    final email1 = _emailController1.text.trim();
+    final email2 = _emailController2.text.trim();
 
     final emailRegExp = RegExp(
         r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
@@ -59,7 +59,7 @@ class _LoginCheckStepState extends State<LoginCheckStep> {
 
   @override
   Widget build(BuildContext context) {
-    final onboardProvider = context.watch<OnboardingState>();
+    final onboardProvider = context.watch<AppState>();
     final currentTheme = onboardProvider.selectedTheme;
     final bool isButtonActive = _isEmailValid && _isEmailMatch;
 
@@ -83,6 +83,14 @@ class _LoginCheckStepState extends State<LoginCheckStep> {
                   style: style3,
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child:  Text(
+                  "Enter your email address.",
+                  textAlign: TextAlign.center,
+                  style: style1,
+                ),
+              ),
               const SizedBox(height: 160,),
               Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -91,7 +99,7 @@ class _LoginCheckStepState extends State<LoginCheckStep> {
                 opacity: _opacity,
                 duration: const Duration(milliseconds: 400),
                 child: TextField(
-                  controller: _textController1,
+                  controller: _emailController1,
                   textAlign: TextAlign.left,
                   style: TextStyle(color: Colors.white, fontSize: 22),
                   decoration: InputDecoration(
@@ -116,7 +124,7 @@ class _LoginCheckStepState extends State<LoginCheckStep> {
                   opacity: _opacity,
                   duration: const Duration(milliseconds: 400),
                   child: TextField(
-                    controller: _textController2,
+                    controller: _emailController2,
                     textAlign: TextAlign.left,
                     style: TextStyle(color: Colors.white, fontSize: 22),
                     decoration: InputDecoration(
@@ -153,6 +161,8 @@ class _LoginCheckStepState extends State<LoginCheckStep> {
                 ),
                 onPressed: () {
                   if(isButtonActive){
+                    final email = _emailController2.text.trim();
+                    context.read<AppState>().setEmail(email);
                     widget.onNext();
                   }
                 },

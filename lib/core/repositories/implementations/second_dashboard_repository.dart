@@ -29,7 +29,7 @@ class SecondDashboardRepository implements AbstractDashboardRepository{
           text: "You'll get cloud backups, device syncing, and your journal stays safe no matter what. Ready? Hit that ",
           children: [
             const TextSpan(
-              text: "profile icon",
+              text: "human icon",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,

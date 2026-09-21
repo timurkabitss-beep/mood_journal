@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
+import 'package:mood_journal/core/state/global_state.dart';
 import 'package:provider/provider.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
@@ -34,7 +34,7 @@ class _CheckInFlowScreenState extends State<CheckInFlowScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    final currentTheme = context.watch<OnboardingState>().selectedTheme;
+    final currentTheme = context.watch<AppState>().selectedTheme;
     final themeColors = currentTheme.colors;
 
     return Scaffold(

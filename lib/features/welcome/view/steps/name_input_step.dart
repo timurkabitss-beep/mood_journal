@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
+import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 import 'package:provider/provider.dart';
 
@@ -101,7 +101,7 @@ class _NameInputStepState extends State<NameInputStep> {
                           onPressed: (){
                               if(isName){
                                 final name = _controller.text.trim();
-                                context.read<OnboardingState>().setName(name);
+                                context.read<AppState>().setName(name);
                                 widget.onNext();
                               }
                           },

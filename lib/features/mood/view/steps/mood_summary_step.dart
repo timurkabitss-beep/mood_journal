@@ -3,13 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/models.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
-import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
-import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
-import 'package:mood_journal/ui/theme/app_theme_model.dart';
+import 'package:mood_journal/core/state/global_state.dart';
 import 'package:provider/provider.dart';
-import '../../models/activity_model.dart';
 import '../../../../ui/fonts/all_fonts.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:intl/intl.dart';
 
 
@@ -61,7 +57,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
 
   @override
   Widget build(BuildContext context) {
-    final currentTheme = context.watch<OnboardingState>().selectedTheme;
+    final currentTheme = context.watch<AppState>().selectedTheme;
     final themeColors = currentTheme.colors;
     return
           Stack(
@@ -187,7 +183,11 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                           ),
                          const SizedBox(height: 80),
                          ],
-                         Padding(
+                         AnimatedOpacity(
+                          opacity: _opacity,
+                          duration: const Duration(milliseconds: 400),
+                          child:
+                          Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                           child:
                           TextField(
@@ -207,7 +207,12 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                              )
                            ),
                          ),
+                         ),
                          const SizedBox(height: 30),
+                         AnimatedOpacity(
+                         opacity: _opacity,
+                         duration: const Duration(milliseconds: 400),
+                         child:
                          Padding(
                          padding:const EdgeInsets.symmetric(horizontal: 32),
                          child:
@@ -229,6 +234,7 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                                )
                            ),
                          ),
+                         )
                          )
                        ],
                      )

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
+import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
-import 'package:mood_journal/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 import '../../../../ui/fonts/all_fonts.dart';
 
@@ -21,7 +20,7 @@ class _BackgroundChoiceStepState extends State<BackgroundChoiceStep> {
   @override
   Widget build(BuildContext context) {
 
-    final onboardProvider = context.watch<OnboardingState>();
+    final onboardProvider = context.watch<AppState>();
     final currentTheme = onboardProvider.selectedTheme;
 
     return Positioned.fill(
@@ -50,7 +49,7 @@ class _BackgroundChoiceStepState extends State<BackgroundChoiceStep> {
 
                   return GestureDetector(
                     onTap: () {
-                      context.read<OnboardingState>().setTheme(theme);
+                      context.read<AppState>().setTheme(theme);
                     },
                     child: AnimatedContainer(
                       height: 90,

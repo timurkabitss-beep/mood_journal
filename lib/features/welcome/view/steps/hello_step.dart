@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
-import '../../../../ui/backgroundtheme/gradient_background.dart';
+import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 
 

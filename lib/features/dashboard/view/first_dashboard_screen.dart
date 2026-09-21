@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/repositories/implementations/first_dashboard_repository.dart';
-import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
+import 'package:mood_journal/core/state/global_state.dart';
 import 'package:provider/provider.dart';
 
 class FirstDashboardScreen extends StatefulWidget {
@@ -30,7 +30,7 @@ class _FirstDashboardScreenState extends State<FirstDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final onboarding = context.watch<OnboardingState>();
+    final onboarding = context.watch<AppState>();
     final currentTheme = onboarding.selectedTheme;
     final userName = onboarding.userName;
 

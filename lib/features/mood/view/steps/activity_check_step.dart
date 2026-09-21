@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_journal/features/mood/models/activity_model.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
-import 'package:mood_journal/features/welcome/state/onboarding_state.dart';
+import 'package:mood_journal/core/state/global_state.dart';
 import 'package:provider/provider.dart';
 import '../../../../ui/fonts/all_fonts.dart';
 
@@ -34,7 +34,7 @@ class _ActivityCheckStepState extends State<ActivityCheckStep> {
 
   @override
   Widget build(BuildContext context) {
-    final onboardProvider = context.watch<OnboardingState>();
+    final onboardProvider = context.watch<AppState>();
     final currentTheme = onboardProvider.selectedTheme;
     return
           Stack(

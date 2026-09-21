@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:mood_journal/ui/theme/app_theme_model.dart';
 
 class UserSettingsRepository {
   static const _boxName = "user_settings";

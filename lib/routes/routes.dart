@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard_screen.dart';
 import 'package:mood_journal/features/dashboard/view/view.dart';
 import 'package:mood_journal/features/entrance/registration/view/registration_screen.dart';
 import 'package:mood_journal/features/mood/view/check_in_flow_screen.dart';
@@ -81,6 +82,26 @@ class AppRoutes {
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 600),
         pageBuilder: (context, animation, secondaryAnimation) => const RegistrationScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final fadeAnimation = CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeIn,
+            reverseCurve: Curves.easeOut,
+          );
+
+          return FadeTransition(
+            opacity: fadeAnimation,
+            child: child,
+          );
+        },
+      );
+    }
+    else if (settings.name == '/main_dashboard_screen') {
+      return PageRouteBuilder(
+        opaque: false,
+        transitionDuration: const Duration(milliseconds: 400),
+        reverseTransitionDuration: const Duration(milliseconds: 600),
+        pageBuilder: (context, animation, secondaryAnimation) => const MainDashboardScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           final fadeAnimation = CurvedAnimation(
             parent: animation,
