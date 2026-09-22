@@ -9,7 +9,7 @@ class SecondDashboardScreen extends StatefulWidget {
   @override
   State<SecondDashboardScreen> createState() => _SecondDashboardScreenState();
 }
-// TODO ИЗМЕНИТЬ ЛОГИКУ КНОПКИ И НАЗВАНИЕ КНОПКИ А ТАКЖЕ ИЗМЕНИТЬ ВИДЖЕТЫ И ПЕРЕХОДЫ
+
 class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
   double _opacity = 0.0;
   bool _isFirstLaunch = true;

@@ -3,14 +3,14 @@ import 'package:mood_journal/features/dashboard/view/main_dashboard_screen.dart'
 import 'package:mood_journal/features/dashboard/view/view.dart';
 import 'package:mood_journal/features/entrance/registration/view/registration_screen.dart';
 import 'package:mood_journal/features/mood/view/check_in_flow_screen.dart';
-import 'package:mood_journal/features/welcome/view/welcome_screen.dart';
 import '../features/dashboard/view/second_dashboard_screen.dart';
+import 'package:mood_journal/core/widgets/auth_gate.dart';
 
 class AppRoutes {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings){
     if (settings.name == '/') {
       return MaterialPageRoute(
-        builder: (context) => const WelcomeScreen(), // Твой диспетчер шагов онбординга
+        builder: (context) => const AuthGate(),
       );
     }
     else if (settings.name == '/first_dashboard') {

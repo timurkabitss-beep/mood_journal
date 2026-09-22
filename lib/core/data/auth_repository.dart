@@ -47,27 +47,46 @@ class AuthRepository {
 
 
   Future<bool> verifyCredentials(String email, String password) async {
-    final storedEmail = await _storage.read(key: "user_email");
+    try {
+      // Достаем ВСЕ сохраненные данные
+      final storedEmail = await _storage.read(key: "user_email");
+      final storedHash = await _storage.read(key: "user_password");
+      final storedSaltHex = await _storage.read(key: "user_password_salt");
 
-    final storedHash = await _storage.read(key: "user_password");
-    final storedSaltHex = await _storage.read(key: "user_password_salt");
+      //  Если хоть чего-то нет - сразу false
+      if (storedEmail == null || storedHash == null || storedSaltHex == null) {
+        print("❌ ОШИБКА: Данные не найдены в хранилище");
+        return false;
+      }
 
-    if(storedEmail == null || storedHash == null || storedSaltHex == null){
+      //Проверяем, совпадает ли email
+      if (storedEmail.trim().toLowerCase() != email.trim().toLowerCase()) {
+        print("❌ ОШИБКА: Email не совпадает. Введен: $email, Сохранен: $storedEmail");
+        return false;
+      }
+
+      // Восстанавливаем соль и хешируем введенный пароль
+      final saltBytes = Uint8List.fromList(hex.decode(storedSaltHex));
+      final passwordBytes = utf8.encode(password);
+
+      final pbkdf2 = PBKDF2KeyDerivator(HMac(SHA256Digest(), 64));
+      final params = Pbkdf2Parameters(saltBytes, 100000, 32);
+      pbkdf2.init(params);
+
+      final computedHashBytes = pbkdf2.process(passwordBytes);
+      final computedHash = hex.encode(computedHashBytes);
+
+      // Сравниваем хеши
+      final isValid = computedHash == storedHash;
+      print(" Проверка пароля: ${isValid ? 'УСПЕХ' : 'ПРОВАЛ'}");
+      print("   Введенный хеш: $computedHash");
+      print("   Сохраненный хеш: $storedHash");
+
+      return isValid;
+
+    } catch (e) {
+      print(" Ошибка в verifyCredentials: $e");
       return false;
     }
-
-    final saltBytes = Uint8List.fromList(hex.decode(storedSaltHex));
-    final passwordBytes = utf8.encode(password);
-
-    // Хешируем введенный пароль с той же солью и теми же параметрами (100k итераций)
-    final pbkdf2 = PBKDF2KeyDerivator(HMac(SHA256Digest(), 64));
-    final params = Pbkdf2Parameters(saltBytes, 100000, 32);
-    pbkdf2.init(params);
-
-    final computedHashBytes = pbkdf2.process(passwordBytes);
-    final computedHash = hex.encode(computedHashBytes);
-
-    //Сравниваем хеши. Если совпадают — пароль верный!
-    return computedHash == storedHash;
   }
 }

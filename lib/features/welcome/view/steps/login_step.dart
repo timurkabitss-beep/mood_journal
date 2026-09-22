@@ -167,9 +167,11 @@ class _LoginStepState extends State<LoginStep> {
                     if (!mounted) return;
 
                     if (isValid) {
+                      print("🎉 Успешный вход!");
                       context.read<AppState>().setEmail(email);
                       widget.onLoginSuccess();
                     } else {
+                      print("🚫 Неверный email или пароль");
                       setState(() {
                         _isLoading = false;
                       });
