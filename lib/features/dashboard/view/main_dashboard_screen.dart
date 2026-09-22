@@ -20,6 +20,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
 
   @override
   void initState(){
+    super.initState();
     Future.delayed(Duration(milliseconds:500), (){
       if (mounted){
         setState(() {
@@ -28,47 +29,62 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
       }
     });
   }
+
   @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
+    super.dispose(); // Вызов super.dispose() перенесен в самый конец метода
   }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final backgroundHeight = screenHeight * 0.33;
+    final currentTheme = context.watch<AppState>().selectedTheme;
+
+
+    // Получаем безопасный отступ снизу
+    final double bottomPadding = MediaQuery.of(context).padding.bottom;
+
+    // Вычисляем базовую высоту панели меню без учета системной полосы жестов
+    const double baseMenuHeight = 70.0;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: Stack(
         children: [
           AnimatedBuilder(
-              animation: _scrollController,
-              builder: (context, child) {
-                final scrollOffset = _scrollController.hasClients
-                    ? _scrollController.offset
-                    : 0.0;
-                final parallaxOffset = scrollOffset * _parallaxFactor;
+            animation: _scrollController,
+            builder: (context, child) {
+              final scrollOffset = _scrollController.hasClients
+                  ? _scrollController.offset
+                  : 0.0;
+              final parallaxOffset = scrollOffset * _parallaxFactor;
 
-                return Positioned(
-                    top: -parallaxOffset,
-                    left: 0,
-                    right: 0,
-                    height: backgroundHeight + parallaxOffset,
-                    child: child!
-                );
-              },
-              child: const DashboardBackground(),
+              return Positioned(
+                  top: -parallaxOffset,
+                  left: 0,
+                  right: 0,
+                  height: backgroundHeight + parallaxOffset,
+                  child: child!
+              );
+            },
+            child: const DashboardBackground(),
           ),
+
           Positioned.fill(
             child: SingleChildScrollView(
-              controller: _scrollController, // Привязываем контроллер!
-              padding: const EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 100),
+              controller: _scrollController,
+              padding: EdgeInsets.only(
+                top: 60 + MediaQuery.of(context).padding.top,
+                left: 20,
+                right: 20,
+                bottom: baseMenuHeight + bottomPadding + 20,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Заглушки (потом заменим на реальные виджеты)
+                  const SizedBox(height: 40), // Уменьшили, так как верхний padding уже учтен выше
                   const Text("Today", style: TextStyle(color: Colors.white70, fontSize: 16)),
                   const SizedBox(height: 4),
                   const Text("Tuesday, September 22", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
@@ -81,14 +97,101 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                   const SizedBox(height: 16),
                   Container(height: 140, color: Colors.white), // Карточка 2
 
-                  const SizedBox(height: 400), // Просто чтобы было куда скроллить
+                  const SizedBox(height: 400),
                 ],
               ),
             ),
           ),
-        ],
-      )
 
+          // 3. НИЖНЕЕ МЕНЮ (ИСПРАВЛЕНО НА КЛАССИЧЕСКИЙ CONTAINER)
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOutCubic,
+            bottom: 0,
+            left: 0,
+            right: 0,
+
+            height: 90 + bottomPadding,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+              child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.only(
+                  left: 24.0,
+                  right: 24.0,
+                  bottom: bottomPadding,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.wb_sunny_outlined, color: Colors.black38, size: 30),
+                      onPressed: () {},
+                    ),
+                    const SizedBox(width: 20),
+                    IconButton(
+                      icon: const Icon(Icons.format_quote_outlined, color: Colors.black38, size: 30),
+                      onPressed: () {},
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.show_chart_rounded, color: Colors.black38, size: 30),
+                      onPressed: () {},
+                    ),
+                    const SizedBox(width: 20),
+                    IconButton(
+                      icon: const Icon(Icons.emoji_people_outlined, color: Colors.black38, size: 30),
+                      onPressed: () {},
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOutCubic,
+            // Размещаем кнопку так, чтобы её центр идеально совпадал с центром ряда иконок
+            bottom: bottomPadding + (65 - 65) / 2 + 30, // Приподнимаем её чуть выше иконок
+            left: 0,
+            right: 0,
+            child: Center(
+              child: GestureDetector(
+               onTap: (){
+                 Navigator.of(context).pushNamed("/check_in_flow_screen");
+               },
+               child: Container(
+                width: 70,
+                height: 65,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(28),
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: currentTheme.colors
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ),
+          ),
+         )
+        ],
+      ),
     );
   }
 }
