@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/core/repositories/implementations/main_dashboard_repository.dart';
 import 'package:mood_journal/core/state/global_state.dart';
+import 'package:mood_journal/features/dashboard/widgets/week_calendar_card.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/widgets/dashboard_background.dart';
@@ -33,7 +33,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
-    super.dispose(); // Вызов super.dispose() перенесен в самый конец метода
+    super.dispose();
   }
 
   @override
@@ -84,15 +84,8 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 40), // Уменьшили, так как верхний padding уже учтен выше
-                  const Text("Today", style: TextStyle(color: Colors.white70, fontSize: 16)),
-                  const SizedBox(height: 4),
-                  const Text("Tuesday, September 22", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
-
-                  const SizedBox(height: 24),
-                  Container(height: 80, color: Colors.white.withOpacity(0.2)), // Календарь
-
-                  const SizedBox(height: 32),
+                  WeekCalendarCard(),
+                  const SizedBox(height: 70),
                   Container(height: 140, color: Colors.white), // Карточка 1
                   const SizedBox(height: 16),
                   Container(height: 140, color: Colors.white), // Карточка 2
@@ -103,7 +96,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
             ),
           ),
 
-          // 3. НИЖНЕЕ МЕНЮ (ИСПРАВЛЕНО НА КЛАССИЧЕСКИЙ CONTAINER)
+          //НИЖНЕЕ МЕНЮ
           AnimatedPositioned(
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOutCubic,
@@ -152,8 +145,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
           AnimatedPositioned(
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOutCubic,
-            // Размещаем кнопку так, чтобы её центр идеально совпадал с центром ряда иконок
-            bottom: bottomPadding + (65 - 65) / 2 + 30, // Приподнимаем её чуть выше иконок
+            bottom: bottomPadding + (65 - 65) / 2 + 30,
             left: 0,
             right: 0,
             child: Center(
