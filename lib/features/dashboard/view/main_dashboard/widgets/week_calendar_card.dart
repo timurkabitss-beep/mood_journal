@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mood_journal/features/dashboard/widgets/day_widget_card.dart';
+import 'widgets.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 
 class WeekCalendarCard extends StatefulWidget {
@@ -27,7 +27,7 @@ class _WeekCalendarCardState extends State<WeekCalendarCard> {
     if (difference == 1) return 'Tomorrow';
     if (difference == -1) return 'Yesterday';
 
-    return DateFormat('EEEE').format(date); // Полное название дня (например, "Monday")
+    return DateFormat('EEEE').format(date);
   }
 
   @override

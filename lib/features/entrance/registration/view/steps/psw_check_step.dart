@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 import 'package:provider/provider.dart';
-import 'package:mood_journal/core/data/auth_repository.dart'; // (или твой путь)
+import 'package:mood_journal/core/data/repositories/auth_repository.dart'; // (или твой путь)
 class PswCheckStep extends StatefulWidget {
   const PswCheckStep({super.key,});
 

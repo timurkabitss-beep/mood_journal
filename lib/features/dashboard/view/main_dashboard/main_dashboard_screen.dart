@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/global_state.dart';
-import 'package:mood_journal/features/dashboard/widgets/week_calendar_card.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/widgets/dashboard_background.dart';
+import '../../../../core/widgets/dashboard_background.dart';
 
 class MainDashboardScreen extends StatefulWidget {
   const MainDashboardScreen({super.key});
@@ -16,7 +16,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   double _opacity = 0.0;
 
   final ScrollController _scrollController = ScrollController();
-  final double _parallaxFactor = 0.65;
+  final double _parallaxFactor = 0.3;
 
   @override
   void initState(){
@@ -65,7 +65,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                   top: -parallaxOffset,
                   left: 0,
                   right: 0,
-                  height: backgroundHeight + parallaxOffset,
+                  height: backgroundHeight - parallaxOffset,
                   child: child!
               );
             },
@@ -86,11 +86,16 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                 children: [
                   WeekCalendarCard(),
                   const SizedBox(height: 70),
-                  Container(height: 140, color: Colors.white), // Карточка 1
-                  const SizedBox(height: 16),
-                  Container(height: 140, color: Colors.white), // Карточка 2
+                  DailyTaskCard(), // Карточка 1
+                  const SizedBox(height: 20),
+                  ChallengeCard(),
+                  const SizedBox(height: 20),
+                  //TODO придумай еще одну карту
+                  //DailyTaskCard(),
+                  // Карточка 2
 
-                  const SizedBox(height: 400),
+
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
@@ -134,7 +139,9 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                     const SizedBox(width: 20),
                     IconButton(
                       icon: const Icon(Icons.emoji_people_outlined, color: Colors.black38, size: 30),
-                      onPressed: () {},
+                      onPressed: () {
+
+                      },
                     )
                   ],
                 ),

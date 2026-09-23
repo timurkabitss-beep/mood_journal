@@ -3,7 +3,7 @@ import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/data/auth_repository.dart';
+import '../../../../core/data/repositories/auth_repository.dart';
 
 class LoginStep extends StatefulWidget {
   final VoidCallback onLoginSuccess;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/core/data/auth_repository.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard_screen.dart';
+import 'package:mood_journal/core/data/repositories/auth_repository.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/main_dashboard_screen.dart';
 import 'package:mood_journal/features/welcome/view/welcome_screen.dart';
 import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 

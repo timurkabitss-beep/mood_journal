@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard_screen.dart';
-import 'package:mood_journal/features/dashboard/view/view.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/main_dashboard_screen.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/new_screen.dart';
+import 'package:mood_journal/features/dashboard/view/secondary_dashboard/first_dashboard_screen.dart';
 import 'package:mood_journal/features/entrance/registration/view/registration_screen.dart';
 import 'package:mood_journal/features/mood/view/check_in_flow_screen.dart';
-import '../features/dashboard/view/second_dashboard_screen.dart';
+import '../features/dashboard/view/secondary_dashboard/second_dashboard_screen.dart';
 import 'package:mood_journal/core/widgets/auth_gate.dart';
 
 class AppRoutes {
@@ -102,6 +103,26 @@ class AppRoutes {
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 600),
         pageBuilder: (context, animation, secondaryAnimation) => const MainDashboardScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final fadeAnimation = CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeIn,
+            reverseCurve: Curves.easeOut,
+          );
+
+          return FadeTransition(
+            opacity: fadeAnimation,
+            child: child,
+          );
+        },
+      );
+    }
+    else if (settings.name == '/new_screen') {
+      return PageRouteBuilder(
+        opaque: false,
+        transitionDuration: const Duration(milliseconds: 400),
+        reverseTransitionDuration: const Duration(milliseconds: 600),
+        pageBuilder: (context, animation, secondaryAnimation) => const NewScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           final fadeAnimation = CurvedAnimation(
             parent: animation,
