@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/widgets/dashboard_background.dart';
+import '../../../../../core/widgets/dashboard_background.dart';
 
-class MainDashboardScreen extends StatefulWidget {
-  const MainDashboardScreen({super.key});
+class MainStep extends StatefulWidget {
+  const MainStep({super.key});
 
   @override
-  State<MainDashboardScreen> createState() => _MainDashboardScreenState();
+  State<MainStep> createState() => _MainStepState();
 }
 
-class _MainDashboardScreenState extends State<MainDashboardScreen> {
+class _MainStepState extends State<MainStep> {
   final ScrollController _scrollController = ScrollController();
   final double _parallaxFactor = 0.3;
 
-  // Храним выбранную дату (по умолчанию сегодня)
   DateTime _selectedDate = DateTime.now();
 
   @override
@@ -132,7 +131,6 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
             ),
           ),
 
-          // --- СЛОЙ 4: КНОПКА "+" ---
           AnimatedPositioned(
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOutCubic,
