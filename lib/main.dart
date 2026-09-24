@@ -7,19 +7,23 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await init();
+  await init(); // Инициализация Hive
+
+  // Создаем AppState и загружаем сохраненные данные
+  final appState = AppState();
+  await appState.loadFromStorage();
+
   runApp(
     MultiProvider(
-        providers: [
-            ChangeNotifierProvider(create: ((context) => AppState())),
-
-        ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialRoute: '/',
-          theme: basicTheme,
-          onGenerateRoute: AppRoutes.onGenerateRoute,
-        ),
-    )
+      providers: [
+        ChangeNotifierProvider.value(value: appState),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        theme: basicTheme,
+        onGenerateRoute: AppRoutes.onGenerateRoute,
+      ),
+    ),
   );
 }

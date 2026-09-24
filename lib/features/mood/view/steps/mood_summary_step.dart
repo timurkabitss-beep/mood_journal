@@ -13,7 +13,7 @@ class MoodSummaryStep extends StatefulWidget {
   final MoodModel chosenMood;
   final List<ActivityModel> chosenActivities;
   final List<FeelingModel> chosenFeelings;
-  final void Function(String title, String notes) onComplete;
+  final Future<void> Function(String title, String notes) onComplete;
   const MoodSummaryStep({
     super.key,
     required this.chosenMood,
@@ -252,12 +252,11 @@ class _MoodSummaryStepState extends State<MoodSummaryStep> {
                         minimumSize: const Size(220, 54),
                         foregroundColor: themeColors[0].withOpacity(0.2),
                       ),
-                      onPressed: () {
-                        widget.onComplete(
+                      onPressed: () async {
+                        await widget.onComplete(
                           _titleController.text.trim(),
                           _notesController.text.trim(),
                         );
-                        Navigator.of(context).pushNamed('/second_dashboard');
                       },
                       child: Text(
                         "COMPLETE CHECK-IN",

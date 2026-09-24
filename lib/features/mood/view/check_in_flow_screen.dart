@@ -12,7 +12,8 @@ import 'steps/activity_check_step.dart';
 import 'steps/mood_check_step.dart';
 
 class CheckInFlowScreen extends StatefulWidget {
-  const CheckInFlowScreen({super.key,});
+  final bool isOnboarding;
+  const CheckInFlowScreen({super.key, required this.isOnboarding});
 
   @override
   State<CheckInFlowScreen> createState() => _CheckInFlowScreenState();
@@ -29,7 +30,7 @@ class _CheckInFlowScreenState extends State<CheckInFlowScreen> {
 
   @override
   void dispose() {
-    _pageController.dispose(); // Обязательно освобождаем память
+    _pageController.dispose();
     super.dispose();
   }
   @override
@@ -103,8 +104,13 @@ class _CheckInFlowScreenState extends State<CheckInFlowScreen> {
 
                       await MoodRepository.instance.saveEntry(entry);
                       if (mounted) {
-                        Navigator.of(context)
-                            .pushNamedAndRemoveUntil('/mood_history', (route) => false);
+                        if(widget.isOnboarding){
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/second_dashboard',
+                                  (route) => false,);
+                        } else{
+                          Navigator.of(context).pop();
+                        }
                       }
                     },
                   )

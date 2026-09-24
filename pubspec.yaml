@@ -36,7 +36,9 @@ dependencies:
   #---convert---
   convert: ^3.1.2
 
-
+  shared_preferences: ^2.5.5
+  fade_indexed_stack: ^0.2.2
+  easy_animated_indexed_stack: ^0.1.0
   # --- Работа с сетью (REST API) ---
   dio: ^5.4.3                # Мощный клиент для сетевых запросов и цитат дня
 

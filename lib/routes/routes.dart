@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard/main_dashboard_screen.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/main_dashboard_screen.dart';
 import 'package:mood_journal/features/dashboard/view/secondary_dashboard/first_dashboard_screen.dart';
 import 'package:mood_journal/features/entrance/registration/view/registration_screen.dart';
 import 'package:mood_journal/features/mood/view/check_in_flow_screen.dart';
@@ -56,11 +56,12 @@ class AppRoutes {
 
 
     else if (settings.name == '/check_in_flow_screen') {
+      final isOnboarding = settings.arguments as bool? ?? false;
       return PageRouteBuilder(
         opaque: false,
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: (context, animation, secondaryAnimation) => const CheckInFlowScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) =>  CheckInFlowScreen(isOnboarding: isOnboarding),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           final fadeAnimation = CurvedAnimation(
             parent: animation,
