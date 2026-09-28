@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:mood_journal/features/mood/models/mood_entry_model.dart';
 
-import 'hive_box.dart';
+import '../hive_box.dart';
 
 /// Прослойка между UI и Hive.
 /// Виджеты не знают про Hive — только про этот класс.

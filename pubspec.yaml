@@ -72,4 +72,6 @@ flutter:
      - assets/svg/mood_svg/
      - assets/svg/activity_svg/
      - assets/svg/feelings_svg/
+     - assets/data/
+     - assets/images/
 

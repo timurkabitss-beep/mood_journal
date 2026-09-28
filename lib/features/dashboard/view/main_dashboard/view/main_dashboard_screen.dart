@@ -17,8 +17,8 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
 
   final List<Widget> _steps =  [
     const MainStep(),
-    const Center(child: Text('Quotes Step', style: TextStyle(color: Colors.white70))), // 1: Цитаты
-    const AnalyticsStep(),// 2: Статистика
+    const QuotesStep(), //Цитаты
+    const AnalyticsStep(),// Статистика
     const Center(child: Text('Profile Step', style: TextStyle(color: Colors.white70))),// 3: Профиль
   ];
 
