@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/global_state.dart';
+import 'package:mood_journal/core/state/quotes_state.dart';
 import 'package:mood_journal/routes/routes.dart';
 import 'package:mood_journal/ui/theme/theme.dart';
 import 'package:mood_journal/core/database/hive_initializer.dart';
@@ -13,10 +14,14 @@ void main() async {
   final appState = AppState();
   await appState.loadFromStorage();
 
+  final quotesState = QuotesState();
+  await quotesState.loadQuotes();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: appState),
+        ChangeNotifierProvider.value(value: quotesState),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

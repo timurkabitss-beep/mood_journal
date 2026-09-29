@@ -30,4 +30,9 @@ class QuotesRepository {
     }
   }
 
+  List<QuotesTextModel> getAllQuotes(){
+    return _box.values.toList();
+  }
+
+
 }
