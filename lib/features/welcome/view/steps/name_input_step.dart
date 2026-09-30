@@ -51,6 +51,9 @@ class _NameInputStepState extends State<NameInputStep> {
 
   @override
   Widget build(BuildContext context) {
+
+    final onboardProvider = context.watch<AppState>();
+    final currentTheme = onboardProvider.selectedTheme;
     return Stack(
             children: [
               Positioned.fill(
@@ -108,7 +111,7 @@ class _NameInputStepState extends State<NameInputStep> {
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(220, 54),
                           ),
-                          child: Text("CONTINUE", style: style5),
+                          child: Text("CONTINUE", style: style5.copyWith(color: currentTheme.colors[0])),
                         ),
                       ),
                      ],

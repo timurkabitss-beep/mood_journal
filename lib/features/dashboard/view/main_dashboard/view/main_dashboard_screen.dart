@@ -18,7 +18,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
     const MainStep(),
     const QuotesStep(), //Цитаты
     const AnalyticsStep(),// Статистика
-    const Center(child: Text('Profile Step', style: TextStyle(color: Colors.white70))),// 3: Профиль
+    const ProfileStep()//Профиль
   ];
 
   void _onItemTapped(int index){

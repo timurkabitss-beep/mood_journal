@@ -67,7 +67,7 @@ class QuoteCard extends StatelessWidget {
                         isFuture ?  '' : 'Quote of the day',
                         style: TextStyle(
                             fontSize: 15,
-                            color: Color(0xFF3A2A05),
+                            color: Color(0xFF5E4D38),
                         )
                       )
                     ],

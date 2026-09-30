@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
@@ -15,10 +16,11 @@ class _PswCheckStepState extends State<PswCheckStep> {
   bool _isPswMatch = false;
   double _opacity = 0.0;
   String _passwordError = '';
+  bool _isLoading = false;
 
   final TextEditingController _passwordController1 = TextEditingController();
   final TextEditingController _passwordController2 = TextEditingController();
-
+  final AuthRepository _authRepo = AuthRepository();
   @override
   void dispose(){
     _passwordController1.dispose();
@@ -79,6 +81,74 @@ class _PswCheckStepState extends State<PswCheckStep> {
     }
   }
 
+  //func fo firebase
+  Future<void> _handleRegistration() async{
+    if (!_isPswValid || !_isPswMatch) return;
+    setState(() {
+      _isLoading = true;
+      _passwordError = '';
+    });
+    try{
+      final email = context.read<AppState>().userEmail;
+      final password = _passwordController1.text;
+
+      await _authRepo.register(email, password);
+
+      if(mounted){
+        Navigator.of(context).pushNamedAndRemoveUntil('/main_dashboard_screen', (route) => false);
+      }
+
+    }
+    on FirebaseAuthException catch (e) {
+      // Обрабатываем специфичные ошибки Firebase
+      String errorMessage = 'Registration failed. Please try again.';
+
+      if (e.code == 'weak-password') {
+        errorMessage = 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        errorMessage = 'An account already exists for this email.';
+      } else if (e.code == 'invalid-email') {
+        errorMessage = 'The email address is badly formatted.';
+      } else if (e.code == 'network-request-failed') {
+        errorMessage = 'No internet connection. Please check your network.';
+      } else {
+        errorMessage = e.message ?? errorMessage;
+      }
+
+      if (mounted) {
+        setState(() {
+          _passwordError = errorMessage; // Показываем ошибку прямо под полем пароля
+        });
+
+        // Дополнительно показываем SnackBar для заметности
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red.shade400,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          ),
+        );
+      }
+    }
+    catch(e){
+      if(mounted){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('An unexpected error occured.'),
+            backgroundColor: Colors.red.shade400,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } finally{
+      if(mounted){
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
 
   @override
@@ -175,7 +245,7 @@ class _PswCheckStepState extends State<PswCheckStep> {
           right: 0,
           child: AnimatedOpacity(
             opacity: isButtonActive ? 1.0 : 0.25,
-            duration: const Duration(milliseconds: 0),
+            duration: const Duration(milliseconds: 300), // Плавное изменение
             child: Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -183,36 +253,17 @@ class _PswCheckStepState extends State<PswCheckStep> {
                   minimumSize: const Size(220, 54),
                   foregroundColor: currentTheme.colors[0].withOpacity(0.2),
                 ),
-                onPressed: () async {
-                  if(isButtonActive){
-                    final authRepo = AuthRepository();
-
-                    final isAlreadyRegistered = await authRepo.isUserRegistered();
-
-                    if (isAlreadyRegistered) {
-                      // Прерываем выполнение и показываем красивую ошибку
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('An account is already registered on this device!'),
-                          backgroundColor: Colors.red.shade400,
-                          behavior: SnackBarBehavior.floating, // Чтобы красиво смотрелось поверх UI
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                        ),
-                      );
-                      return; // Выходим из функции, сохранение не произойдет
-                    }
-
-
-                    final email = context.read<AppState>().userEmail;
-                    final password = _passwordController1.text;
-
-                    await authRepo.saveCredentials(email, password);
-                    if (mounted){
-                      Navigator.of(context).pushNamedAndRemoveUntil('/main_dashboard_screen', (route) => false);
-                    }
-                  }
-                },
-                child: Text(
+                onPressed: isButtonActive ? _handleRegistration : null,
+                child: _isLoading
+                    ? const SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black54),
+                  ),
+                )
+                    : Text(
                   "FINISH IT",
                   style: style5.copyWith(color: currentTheme.colors[0]),
                 ),
