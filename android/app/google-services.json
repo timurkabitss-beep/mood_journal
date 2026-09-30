@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "410107154802",
+    "project_id": "moodora-app-4d42e",
+    "storage_bucket": "moodora-app-4d42e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410107154802:android:a228dc6641d509da5a0deb",
+        "android_client_info": {
+          "package_name": "com.example.mood_journal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr--4mXQcM6lgcZI2gcXs-pNunL117Xr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
