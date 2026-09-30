@@ -7,11 +7,19 @@ class AppState extends ChangeNotifier {
   AppThemeModel _selectedTheme = backThemes[0];
   String _userEmail = "";
   bool _isLoaded = false;
+  int _currentIndex = 0;
 
   String get userName => _userName;
   String get userEmail => _userEmail;
   AppThemeModel get selectedTheme => _selectedTheme;
   bool get isLoaded => _isLoaded;
+  int get currentIndex => _currentIndex;
+
+
+  void setCurrentIndex(int index){
+    _currentIndex = index;
+    notifyListeners();
+  }
 
   // Загрузка данных из хранилища
   Future<void> loadFromStorage() async {

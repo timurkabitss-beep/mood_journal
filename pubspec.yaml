@@ -48,6 +48,7 @@ dependencies:
   syncfusion_flutter_sliders: ^34.2.5 #ползунок настроения
   flutter_secure_storage: ^11.2.0
   pointycastle: ^4.0.0
+
   # --- Бэкенд Firebase (Раскомментируй, когда начнешь этап с Firebase) ---
   # firebase_core: ^3.0.0
   # firebase_auth: ^5.0.0

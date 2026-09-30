@@ -13,7 +13,6 @@ class MainDashboardScreen extends StatefulWidget {
 }
 
 class _MainDashboardScreenState extends State<MainDashboardScreen> {
-  int _currentIndex = 0;
 
   final List<Widget> _steps =  [
     const MainStep(),
@@ -23,14 +22,13 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   ];
 
   void _onItemTapped(int index){
-    setState(() {
-      _currentIndex = index;
-    });
+    context.read<AppState>().setCurrentIndex(index);
   }
 
   @override
   Widget build(BuildContext context) {
     final currentTheme = context.watch<AppState>().selectedTheme;
+    final currentIndex = context.watch<AppState>().currentIndex;
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
     // Вычисляем базовую высоту панели меню без учета системной полосы жестов
     const double baseMenuHeight = 70.0;
@@ -42,7 +40,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
           Positioned.fill(
             child: EasyAnimatedIndexedStack(
               duration: Duration(milliseconds: 500),
-              index: _currentIndex,
+              index: currentIndex,
               curve:  Curves.easeInOutCubic,
               children: _steps,
             )
@@ -65,13 +63,13 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _buildMenuIcon(Icons.wb_sunny_outlined, 0),
+                    _buildMenuIcon(Icons.wb_sunny_outlined, 0, currentIndex),
                     const SizedBox(width: 20),
-                    _buildMenuIcon(Icons.format_quote_outlined, 1),
+                    _buildMenuIcon(Icons.format_quote_outlined, 1, currentIndex),
                     const Spacer(),
-                    _buildMenuIcon(Icons.show_chart_rounded, 2),
+                    _buildMenuIcon(Icons.show_chart_rounded, 2, currentIndex),
                     const SizedBox(width: 20),
-                    _buildMenuIcon(Icons.emoji_people_outlined, 3),
+                    _buildMenuIcon(Icons.emoji_people_outlined, 3, currentIndex),
                   ],
                 ),
               ),
@@ -117,8 +115,8 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
       ),
     );
   }
-  Widget _buildMenuIcon(IconData icon, int index) {
-    final bool isSelected = _currentIndex == index;
+  Widget _buildMenuIcon(IconData icon, int index, int currentIndex) {
+    final bool isSelected = currentIndex == index;
 
     return IconButton(
       icon: Icon(

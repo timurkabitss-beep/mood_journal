@@ -13,7 +13,7 @@ class QuotesRepository {
   Future<void> initLocalQuotes() async{
     if (_box.isEmpty){
       try{
-        final jsonData = await rootBundle.loadString("assets/data/quotes_500_with_ids.json");
+        final jsonData = await rootBundle.loadString("assets/data/quotes_1000.json");
         final decodedData = jsonDecode(jsonData);
         List<QuotesTextModel> forModels = [];
 

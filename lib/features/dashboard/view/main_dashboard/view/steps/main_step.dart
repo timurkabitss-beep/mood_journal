@@ -73,6 +73,8 @@ class _MainStepState extends State<MainStep> {
                   DailyTaskCard(selectedDate: _selectedDate),
                   const SizedBox(height: 20),
                   ChallengeCard(selectedDate: _selectedDate),
+                  const SizedBox(height: 20,),
+                  QuoteCard(selectedDate: _selectedDate,),
                   const SizedBox(height: 300),
                 ],
               ),

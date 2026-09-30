@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/core/state/global_state.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard/view/models/quotes_text_model.dart';
+import 'package:mood_journal/core/state/quotes_state.dart';
 import 'package:provider/provider.dart';
 
 class QuotesStep extends StatefulWidget {
@@ -11,11 +10,11 @@ class QuotesStep extends StatefulWidget {
 }
 
 class _QuotesStepState extends State<QuotesStep> {
-  final ScrollController _scrollController = ScrollController();
+  final PageController _pageController = PageController();
 
   @override
-  void dispose(){
-    _scrollController.dispose();
+  void dispose() {
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -23,30 +22,76 @@ class _QuotesStepState extends State<QuotesStep> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        // Слой 1: Фон
         Positioned.fill(
-            child: Image.asset("assets/images/image_for_quotes_step.png", fit: BoxFit.cover,)
+          child: Image.asset(
+            'assets/images/image_for_quotes_step.png',
+            fit: BoxFit.cover,
+          ),
         ),
+
+        // Слой 2: Затемнение
         Positioned.fill(
           child: Container(
-            color: Colors.black.withOpacity(0.3),
-          )
+            color: Colors.black.withOpacity(0.4),
+          ),
         ),
+
+        // Слой 3: Контент с постраничным скроллом
         Positioned.fill(
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics()
-            ),
-            padding: EdgeInsets.only(
-              top: 400 ,
-              left: 20,
-              right: 20,
+          child: SafeArea(
+            child: Consumer<QuotesState>(
+              builder: (context, state, child) {
+                if (!state.isLoaded) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: Colors.white),
+                  );
+                }
+
+                return PageView.builder(
+                  controller: _pageController,
+                  scrollDirection: Axis.vertical, // Вертикальный скролл
+                  itemCount: state.quotesList.length,
+                  itemBuilder: (context, index) {
+                    final quote = state.quotesList[index];
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 40,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            quote.textQuotes,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              height: 1.4,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 24),
+                          Text(
+                            quote.authorQuotes ?? 'Неизвестный автор',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
-        )
+        ),
       ],
     );
   }
-
-
 }
