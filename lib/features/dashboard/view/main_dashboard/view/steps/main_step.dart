@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard/widgets/widgets.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/widgets/main_step_widgets/widgets.dart';
 import '../../../../../../core/widgets/dashboard_background.dart';
 
 class MainStep extends StatefulWidget {
@@ -52,7 +52,7 @@ class _MainStepState extends State<MainStep> {
               controller: _scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(
-                top: 60 + MediaQuery.of(context).padding.top,
+                top: 40 + MediaQuery.of(context).padding.top,
                 left: 20,
                 right: 20,
                 bottom: baseMenuHeight + bottomPadding + 40,

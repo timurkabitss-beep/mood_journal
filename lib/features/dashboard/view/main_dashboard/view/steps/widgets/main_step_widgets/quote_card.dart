@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/database/repositories/quotes_repository.dart';
-import 'package:mood_journal/core/state/quotes_state.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/models/quotes_text_model.dart';
 import 'package:provider/provider.dart';
-import '../../../../../core/state/global_state.dart';
+import '../../../../../../../../core/state/global_state.dart';
 
 class QuoteCard extends StatelessWidget {
   final DateTime selectedDate;
