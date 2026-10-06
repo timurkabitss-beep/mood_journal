@@ -49,6 +49,9 @@ dependencies:
   flutter_secure_storage: ^11.2.0
   pointycastle: ^4.0.0
 
+  package_info_plus: ^10.2.2
+  url_launcher: ^6.3.3
+
   # --- Бэкенд Firebase ) ---
   firebase_core: ^4.15.0
   firebase_auth: ^6.7.0

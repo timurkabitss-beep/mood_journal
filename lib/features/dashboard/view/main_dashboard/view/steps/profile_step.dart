@@ -122,9 +122,9 @@ class _ProfileStepState extends State<ProfileStep> {
               children: [
                 const SettingsCard(),
                 const SizedBox(height: 20),
-                const InformationAppCard(),
-                const SizedBox(height: 20),
                 const JournalRecordCard(),
+                const SizedBox(height: 20),
+                const InformationAppCard(),
                 const SizedBox(height: 80),
                 const ContactsCard(),
                 const SizedBox(height: 20),

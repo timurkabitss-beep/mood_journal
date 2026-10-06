@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/modal/app_info_modal.dart';
 import 'package:provider/provider.dart';
 
 class InformationAppCard extends StatelessWidget {
@@ -8,7 +9,15 @@ class InformationAppCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-
+        showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28))
+            ) ,
+            builder: (context) => const AppInfoModal(),
+        );
       },
       child: Container(
         height: 100,

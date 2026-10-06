@@ -16,6 +16,14 @@ class _MainStepState extends State<MainStep> {
   DateTime _selectedDate = DateTime.now();
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+      _selectedDate = DateTime.now();
+    });
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();

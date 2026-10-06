@@ -96,7 +96,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
         height: 180,
         width: double.maxFinite,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(28),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
