@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../../core/state/global_state.dart';
+
 class SettingsCard extends StatelessWidget {
   const SettingsCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final setCurrentIndex = context.read<AppState>().setCurrentIndex;
     return GestureDetector(
       onTap: (){
-
+        setCurrentIndex(4);
       },
       child: Container(
         height: 100,

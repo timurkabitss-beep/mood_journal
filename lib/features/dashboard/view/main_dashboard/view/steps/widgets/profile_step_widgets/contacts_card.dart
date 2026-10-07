@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../../../core/state/global_state.dart';
 
+//TODO СОЗДАЙ ПОЧТУ И ПРОПИШИ В ПУТЬ
 class ContactsCard extends StatelessWidget {
   const ContactsCard({super.key});
 
@@ -10,8 +11,14 @@ class ContactsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentTheme = context.watch<AppState>().selectedTheme.colors[0];
     return GestureDetector(
-      onTap: (){
-
+      onTap: () async{
+        final Uri emailUri = Uri(
+          scheme: 'mailto',
+          path: '',
+          queryParameters: {
+            'subject': 'Вопрос по приложению Moodora',
+          }
+        );
       },
       child: Container(
         height: 70,

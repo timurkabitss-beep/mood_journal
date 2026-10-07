@@ -97,16 +97,16 @@ class _AppInfoModalState extends State<AppInfoModal> {
     );
   }
   Widget _buildInfoRow(IconData icon, String title, {VoidCallback? onTap}) {
-    return InkWell( // <-- Обернули в InkWell
+    return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12), // Скругляем эффект нажатия
-      child: Padding( // <-- Добавили Padding, чтобы эффект волны не прилипал к краям
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Row(
           children: [
             Icon(icon, color: Colors.grey.shade600, size: 20),
             const SizedBox(width: 12),
-            Expanded( // <-- Добавили Expanded, чтобы текст не вылезал за экран
+            Expanded(
               child: Text(
                 title,
                 style: const TextStyle(fontSize: 16, color: Colors.black87),
