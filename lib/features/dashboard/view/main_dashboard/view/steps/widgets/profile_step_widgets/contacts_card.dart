@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../../../core/state/global_state.dart';
 
-//TODO СОЗДАЙ ПОЧТУ И ПРОПИШИ В ПУТЬ
 class ContactsCard extends StatelessWidget {
   const ContactsCard({super.key});
 
@@ -14,9 +13,9 @@ class ContactsCard extends StatelessWidget {
       onTap: () async{
         final Uri emailUri = Uri(
           scheme: 'mailto',
-          path: '',
+          path: 'moodora.help@outlook.com',
           queryParameters: {
-            'subject': 'Вопрос по приложению Moodora',
+            'subject': 'Question about the Moodora app',
           }
         );
       },

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/core/state/global_state.dart';
+import 'package:mood_journal/ui/theme/app_theme_model.dart';
+import 'package:provider/provider.dart';
 
-
-//TODO допиши скролл а также логику изменения цвета и кнопка сохранения
 class ThemeColorChoiceWidget extends StatefulWidget {
   const ThemeColorChoiceWidget({super.key});
 
@@ -12,11 +13,17 @@ class ThemeColorChoiceWidget extends StatefulWidget {
 class _ThemeColorChoiceWidgetState extends State<ThemeColorChoiceWidget> {
   @override
   Widget build(BuildContext context) {
-    return  Container(
-      height: 200,
+    final currentTheme = context.watch<AppState>().selectedTheme;
+    return  AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      height: 250,
       width: double.maxFinite,
       decoration: BoxDecoration(
-          color: Colors.white,
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: currentTheme.colors
+          ),
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
@@ -25,6 +32,62 @@ class _ThemeColorChoiceWidgetState extends State<ThemeColorChoiceWidget> {
                 offset: const Offset(0,4)
             )
           ]
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Choose your theme",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 30,),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.hardEdge,
+            physics: const BouncingScrollPhysics(),
+            child: Row(
+              children: backThemes.map((theme){
+                final isSelected = theme.id == currentTheme.id;
+                return GestureDetector(
+                  onTap: (){
+                    context.read<AppState>().setTheme(theme);
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 100),
+                    height: 90,
+                    width: 90,
+                    margin: const EdgeInsets.symmetric(horizontal: 14),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient:  LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: theme.colors,
+                      ),
+                      border: Border.all(
+                        color: isSelected ? Colors.white : Colors.transparent,
+                        width: 5
+                      ),
+                    ),
+                    child: Center(
+                      child: isSelected ?  Icon(Icons.check, color: Colors.white) : null,
+                    ),
+                  )
+                );
+
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
