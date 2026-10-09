@@ -3,6 +3,8 @@ import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../../ui/fonts/all_fonts.dart';
+
 class ThemeColorChoiceWidget extends StatefulWidget {
   const ThemeColorChoiceWidget({super.key});
 
@@ -37,15 +39,12 @@ class _ThemeColorChoiceWidgetState extends State<ThemeColorChoiceWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text(
+              const SizedBox(width: 20),
+              Text(
                 "Choose your theme",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: settings_widgets_style,
               ),
             ],
           ),

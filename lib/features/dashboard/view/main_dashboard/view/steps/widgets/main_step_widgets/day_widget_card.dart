@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../../../ui/fonts/all_fonts.dart';
+
 
 
 class DayWidgetCard extends StatelessWidget {
@@ -28,9 +30,9 @@ class DayWidgetCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(dayLabel, style: TextStyle(color: Colors.white70, fontSize: 12)),
+            Text(dayLabel, style: week_calebdar_day_label),
             SizedBox(height: 4),
-            Text(numDate, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(numDate, style:  week_calebdar_num_label),
           ],
         ) ,
     );

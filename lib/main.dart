@@ -8,6 +8,8 @@ import 'package:mood_journal/ui/theme/theme.dart';
 import 'package:mood_journal/core/database/hive_initializer.dart';
 import 'package:provider/provider.dart';
 
+import 'core/database/repositories/quotes_repository.dart';
+
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +26,7 @@ void main() async {
 
   final quotesState = QuotesState();
   await quotesState.loadQuotes();
+  await QuotesRepository.instance.initLocalQuotes();
 
   runApp(
     MultiProvider(

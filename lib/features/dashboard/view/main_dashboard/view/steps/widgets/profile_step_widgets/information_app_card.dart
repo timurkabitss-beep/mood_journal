@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/modal/app_info_modal.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../../ui/fonts/all_fonts.dart';
+
 class InformationAppCard extends StatelessWidget {
   const InformationAppCard({super.key});
 
@@ -40,7 +42,7 @@ class InformationAppCard extends StatelessWidget {
               const SizedBox( width: 20,),
               _widget(Icons.info_outline),
               const SizedBox(  width: 20,),
-              Text("Information", style: TextStyle(fontSize: 18, color: Colors.grey.shade600),)
+              Text("Information", style: style_for_cards_name)
             ],
           ),
         ),

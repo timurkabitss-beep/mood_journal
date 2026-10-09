@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/ui/theme/app_theme_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AppState extends ChangeNotifier {
   String _userName = "";
@@ -27,6 +28,17 @@ class AppState extends ChangeNotifier {
 
     _userName = prefs.getString('user_name') ?? "";
     _userEmail = prefs.getString('user_email') ?? "";
+
+    if (_userName.isEmpty || _userEmail.isEmpty) {
+      final firebaseUser = FirebaseAuth.instance.currentUser;
+      if (firebaseUser != null) {
+        _userName = firebaseUser.displayName ?? "User";
+        _userEmail = firebaseUser.email ?? "";
+
+        // И сразу сохраняем в SharedPreferences, чтобы в следующий раз не дергать Firebase
+        await _saveToStorage();
+      }
+    }
 
     final savedThemeId = prefs.getString('selected_theme_id');
     if (savedThemeId != null) {

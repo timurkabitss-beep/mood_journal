@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/database/repositories/quotes_repository.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/models/quotes_text_model.dart';
+import 'package:mood_journal/ui/fonts/all_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../../../core/state/global_state.dart';
 
@@ -64,10 +65,7 @@ class QuoteCard extends StatelessWidget {
                     children: [
                       Text(
                         isFuture ?  '' : 'Quote of the day',
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Color(0xFF5E4D38),
-                        )
+                        style: status_quote
                       )
                     ],
                   )
@@ -100,12 +98,7 @@ class QuoteCard extends StatelessWidget {
                         isFuture
                             ? 'The quote has not been selected yet\n please come back later'
                             : currentQuote.textQuotes,
-                        style: TextStyle(
-                          color: const Color(0xFF5E4D38),
-                          fontSize: isFuture ? 16 : 16,
-                          fontWeight: FontWeight.w600,
-                          height: 1.4,
-                        ),
+                        style: quote_card_text,
                         textAlign: TextAlign.center,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -119,13 +112,8 @@ class QuoteCard extends StatelessWidget {
                         bottom: 16,
                         right: 24,
                         child: Text(
-                          '— ${currentQuote.authorQuotes ?? 'Неизвестный автор'}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontStyle: FontStyle.italic,
-                          color: Color(0xFF5E4D38),
-                          fontWeight: FontWeight.w500,
-                          ),
+                          '— ${currentQuote.authorQuotes ?? 'Unknown author'}',
+                        style: quote_card_author,
                         ),
                       ),
                   ],

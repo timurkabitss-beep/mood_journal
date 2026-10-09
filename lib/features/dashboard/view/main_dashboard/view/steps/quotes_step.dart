@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/quotes_state.dart';
+import 'package:mood_journal/ui/fonts/all_fonts.dart';
 import 'package:provider/provider.dart';
 
 class QuotesStep extends StatefulWidget {
@@ -75,12 +76,8 @@ class _QuotesStepState extends State<QuotesStep> {
                           ),
                           const SizedBox(height: 24),
                           Text(
-                            quote.authorQuotes ?? 'Неизвестный автор',
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 16,
-                              fontStyle: FontStyle.italic,
-                            ),
+                            quote.authorQuotes ?? 'Unknown author',
+                            style: quotes_author,
                           ),
                         ],
                       ),

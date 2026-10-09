@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/data/mock_tasks.dart';
 
+import '../../../../../../../../ui/fonts/all_fonts.dart';
+
 class DailyTaskCard extends StatelessWidget {
   final DateTime selectedDate;
 
@@ -61,12 +63,8 @@ class DailyTaskCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      isFuture ? 'Locked' : 'Daily Task',
-                      style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600
-                      ),
+                      'Daily Task',
+                      style: daily_task_access
                     ),
                   ],
                 ),
@@ -94,12 +92,7 @@ class DailyTaskCard extends StatelessWidget {
                   child: Text(
                     currentTask,
                     key: ValueKey(selectedDate.toIso8601String()),
-                    style: const TextStyle(
-                      color: Colors.black87,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      height: 1.4,
-                    ),
+                    style: daily_task_text,
                     textAlign: TextAlign.center,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -119,7 +112,7 @@ class DailyTaskCard extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   decoration: BoxDecoration(
-                    color: isFuture ? Colors.grey.shade300 : Colors.grey.shade200,
+                    color: isFuture ? Colors.grey.shade200 : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -127,11 +120,7 @@ class DailyTaskCard extends StatelessWidget {
                     children: [
                       Text(
                         isFuture ? 'Locked' : 'Open',
-                        style: TextStyle(
-                          color: isFuture ? Colors.grey.shade500 : Colors.grey.shade700,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: daily_task_access
                       ),
                       const SizedBox(width: 6),
                       Icon(

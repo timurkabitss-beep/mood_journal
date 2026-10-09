@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../../../../../ui/fonts/all_fonts.dart';
 import 'day_widget_card.dart';
 
 class WeekCalendarCard extends StatelessWidget {
@@ -46,9 +47,9 @@ class WeekCalendarCard extends StatelessWidget {
             key: ValueKey(headerFullDate),
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(headerLabel, style: const TextStyle(color: Colors.white70, fontSize: 16)),
+              Text(headerLabel, style: style_day_date),
               const SizedBox(height: 4),
-              Text(headerFullDate, style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
+              Text(headerFullDate, style: style_full_date),
             ],
           ),
         ),

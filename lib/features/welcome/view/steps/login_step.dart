@@ -67,7 +67,14 @@ class _LoginStepState extends State<LoginStep> {
 
       // Успешный вход!
       print("🎉 Успешный вход!");
-      context.read<AppState>().setEmail(email); // Сохраняем для UI, если нужно
+      context.read<AppState>().setEmail(email);
+      final appState = context.read<AppState>();
+      if (appState.userName.isEmpty) {
+        // 3. Если имени нет, берем из Firebase или ставим заглушку
+        final firebaseUser = FirebaseAuth.instance.currentUser;
+        final name = firebaseUser?.displayName ?? "User";
+        appState.setName(name);
+      }
       widget.onLoginSuccess(); // Передаем управление наверх
 
     } on FirebaseAuthException catch (e) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/ui/fonts/all_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../../core/state/global_state.dart';
@@ -34,7 +35,7 @@ class SettingsCard extends StatelessWidget {
               const SizedBox(  width: 20,),
               _widget(Icons.settings),
               const SizedBox(  width: 20,),
-              Text("Settings", style: TextStyle(fontSize: 18, color: Colors.grey.shade600),)
+              Text("Settings", style: style_for_cards_name)
             ],
           ),
         ),

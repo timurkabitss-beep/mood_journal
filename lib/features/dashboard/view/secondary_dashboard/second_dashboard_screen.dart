@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/repositories/implementations/second_dashboard_repository.dart';
 import 'package:mood_journal/core/state/global_state.dart';
+import 'package:mood_journal/ui/fonts/all_fonts.dart';
 import 'package:provider/provider.dart';
 
 class SecondDashboardScreen extends StatefulWidget {
@@ -93,12 +94,7 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
                           Text(
                             state.firstText,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Color(0xFF2E3E5C),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              height: 1.3,
-                            ),
+                            style: first_and_second_dashboards_FTxt,
                           ),
 
                           const SizedBox(height: 36),
@@ -106,9 +102,9 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
                             state.secondText,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                              color: Colors.black45,
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                               height: 1.4,
                             ),
                           ),

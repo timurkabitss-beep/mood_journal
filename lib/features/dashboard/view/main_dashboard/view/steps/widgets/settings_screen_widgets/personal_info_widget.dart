@@ -1,29 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../../../../../core/state/global_state.dart';
 import '../../../../../../../../ui/fonts/all_fonts.dart';
 
 class PersonalInfoWidget extends StatefulWidget {
-  const PersonalInfoWidget({super.key});
+  final ValueChanged<bool> onHasChanged;
+  final Function(String newName, String newEmail) onSaveRequested;
+
+  const PersonalInfoWidget({
+    super.key,
+    required this.onHasChanged,
+    required this.onSaveRequested
+  });
 
   @override
-  State<PersonalInfoWidget> createState() => _PersonalInfoWidgetState();
+  State<PersonalInfoWidget> createState() => PersonalInfoWidgetState();
 }
 
-class _PersonalInfoWidgetState extends State<PersonalInfoWidget> {
+class PersonalInfoWidgetState extends State<PersonalInfoWidget> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
+  late String _originalName;
+  late String _originalEmail;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final appState = context.read<AppState>();
+
+    _originalName = appState.userName;
+    _originalEmail =appState.userEmail;
+
+    _nameController.text = _originalName;
+    _emailController.text = _originalEmail;
+
+    _nameController.addListener(_checkChanges);
+    _emailController.addListener(_checkChanges);
+  }
+
+  void _checkChanges(){
+    bool isDirty = _nameController.text.trim() != _originalName ||
+        _emailController.text.trim() != _originalEmail;
+    widget.onHasChanged(isDirty);
+  }
   @override
   void dispose() {
-    super.dispose();
+    _nameController.removeListener(_checkChanges);
+    _emailController.removeListener(_checkChanges);
     _nameController.dispose();
     _emailController.dispose();
+    super.dispose();
+  }
+
+  void confirmSave(){
+    widget.onSaveRequested(_nameController.text.trim(), _emailController.text.trim());
+
+    setState(() {
+      _originalName = _nameController.text.trim();
+      _originalEmail = _emailController.text.trim();
+    });
+    widget.onHasChanged(false);
   }
 
   @override
   Widget build(BuildContext context) {
     return  Container(
-      height: 200,
+      height: 280,
       width: double.maxFinite,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -44,50 +89,60 @@ class _PersonalInfoWidgetState extends State<PersonalInfoWidget> {
               left: 20,
               right: 20,
           ),
-            child: TextField(
-              controller: _nameController,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.black87, fontSize: 22), // Тёмный текст
-              cursorColor: Colors.black, // Видимый курсор
-              decoration: InputDecoration(
-                hintText: "What should I call you?",
-                hintStyle: TextStyle(color: Colors.grey.shade500), // Серая подсказка
-                filled: true,
-                fillColor: Colors.grey.shade100, // Лёгкий серый фон поля
-                contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
+            child: Column(
+              children: [
+                Row(
+                 mainAxisAlignment: MainAxisAlignment.start,
+                 children: [
+                 Text("Name",
+                     style: settings_widgets_style.copyWith(color: Colors.grey)
+                   ),
+                 ]
                 ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20,),
-          Padding(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-            ),
-            child: TextField(
-              controller: _nameController,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.black87, fontSize: 22), // Тёмный текст
-              cursorColor: Colors.black, // Видимый курсор
-              decoration: InputDecoration(
-                hintText: "What should I call you?",
-                hintStyle: TextStyle(color: Colors.grey.shade500), // Серая подсказка
-                filled: true,
-                fillColor: Colors.grey.shade100, // Лёгкий серый фон поля
-                contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
+                TextField(
+                  controller: _nameController,
+                  textAlign: TextAlign.center,
+                  style: style_cursor, // Тёмный текст
+                  cursorColor: Colors.black, // Видимый курсор
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Colors.grey.shade500), // Серая подсказка
+                    filled: true,
+                    fillColor: Colors.grey.shade100, // Лёгкий серый фон поля
+                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
                 ),
-              ),
-            ),
+                const SizedBox(height: 20,),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text("Email",
+                        style: settings_widgets_style.copyWith(color: Colors.grey)
+                      )
+                    ]
+                ),
+                TextField(
+                  controller: _emailController,
+                  textAlign: TextAlign.center,
+                  style: style_cursor, // Тёмный текст
+                  cursorColor: Colors.black, // Видимый курсор
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Colors.grey.shade500), // Серая подсказка
+                    filled: true,
+                    fillColor: Colors.grey.shade100, // Лёгкий серый фон поля
+                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ]
+            )
           ),
-
-
         ],
       ),
     );

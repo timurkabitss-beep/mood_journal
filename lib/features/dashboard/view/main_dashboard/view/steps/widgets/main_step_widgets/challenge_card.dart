@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/global_state.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../../ui/fonts/all_fonts.dart';
+
 class ChallengeCard extends StatefulWidget {
   final DateTime selectedDate;
 
@@ -191,20 +193,12 @@ class _ChallengeCardState extends State<ChallengeCard> {
             children: [
               Text(
                 'Daily',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: style_day_date
               ),
               const SizedBox(height: 4),
               Text(
                 'Challenge',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: challenge_card_label
               ),
             ],
           ),

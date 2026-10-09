@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../../../core/state/global_state.dart';
+import '../../../../../../../../ui/fonts/all_fonts.dart';
 
 class ContactsCard extends StatelessWidget {
   const ContactsCard({super.key});
@@ -40,7 +41,7 @@ class ContactsCard extends StatelessWidget {
               const SizedBox(  width: 20,),
               _widget(Icons.messenger_outline_sharp, currentTheme),
               const SizedBox(  width: 20,),
-              Text("Contact support", style: TextStyle(fontSize: 18, color: Colors.black),)
+              Text("Contact support", style: style_for_cards_name)
             ],
           ),
         ),

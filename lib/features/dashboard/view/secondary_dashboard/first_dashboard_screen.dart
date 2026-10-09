@@ -3,6 +3,8 @@ import 'package:mood_journal/core/repositories/implementations/first_dashboard_r
 import 'package:mood_journal/core/state/global_state.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../ui/fonts/all_fonts.dart';
+
 class FirstDashboardScreen extends StatefulWidget {
   const FirstDashboardScreen({super.key});
 
@@ -84,23 +86,13 @@ class _FirstDashboardScreenState extends State<FirstDashboardScreen> {
                           Text(
                             state.firstText,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Color(0xFF2E3E5C),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              height: 1.3,
-                            ),
+                            style: first_and_second_dashboards_FTxt,
                           ),
                           const SizedBox(height: 36),
                           Text.rich(
                             state.secondText,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.black45,
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
-                              height: 1.4,
-                            ),
+                            style: daily_task_text,
                           ),
                           if (_isFirstLaunch) ...[
                             const SizedBox(height: 32),

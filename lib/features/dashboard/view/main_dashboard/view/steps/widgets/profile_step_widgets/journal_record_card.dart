@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../../ui/fonts/all_fonts.dart';
+
 class JournalRecordCard extends StatelessWidget {
   const JournalRecordCard({super.key});
 
@@ -31,7 +33,7 @@ class JournalRecordCard extends StatelessWidget {
               const SizedBox(  width: 20,),
               _widget(Icons.book_outlined),
               const SizedBox(  width: 20,),
-              Text("Your Journal", style: TextStyle(fontSize: 18, color: Colors.grey.shade600),)
+              Text("Your Journal", style: style_for_cards_name)
             ],
           ),
         ),
