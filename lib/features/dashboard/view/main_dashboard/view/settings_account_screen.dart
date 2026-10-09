@@ -14,7 +14,6 @@ class SettingsAccountScreen extends StatefulWidget {
 
 class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
   final ScrollController _scrollController = ScrollController();
-
   // Флаг для отображения кнопки сохранения
   bool _showSaveButton = false;
 
@@ -41,23 +40,37 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
 
     showDialog(
       context: context,
+      animationStyle: AnimationStyle(
+        duration: Duration(milliseconds: 300),
+        reverseDuration: Duration(milliseconds: 200),
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeIn,
+      ),
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
-        title: const Text("Подтверждение изменений"),
+        title: const Text(
+          "Confirmation of the change",
+          textAlign: TextAlign.center,
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text("Для сохранения новых данных введите пароль от вашего аккаунта:"),
+            const Text(
+              "To save the new data, enter your account password:",
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: passwordController,
               textAlign: TextAlign.center,
-              style: style_cursor, // Тёмный текст
-              cursorColor: Colors.black, // Видимый курсор
+              obscureText: true,
+              style: style_cursor,
+              cursorColor: Colors.black,
               decoration: InputDecoration(
-                hintStyle: TextStyle(color: Colors.grey.shade500), // Серая подсказка
+                hintStyle: TextStyle(color: Colors.grey.shade500),
                 filled: true,
-                fillColor: Colors.grey.shade100, // Лёгкий серый фон поля
+                fillColor: Colors.grey.shade100,
                 contentPadding: const EdgeInsets.symmetric(vertical: 20),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -67,48 +80,61 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
             ),
           ],
         ),
+        actionsAlignment: MainAxisAlignment.center,
         actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Отмена"),
+          SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green
+
+                  ),
+                  onPressed: () {
+                    // PLACEHOLDER: replace with a real password check from your AppState or Firebase
+                    final isCorrect = passwordController.text == "12345";
+
+                    if (isCorrect) {
+                      Navigator.pop(context); // Close the dialog
+
+                      // Call the child widget method so it updates its "original" values
+                      // and hides the save button
+                      _personalInfoKey.currentState?.confirmSave();
+
+                      // You can add real saving to AppState here if confirmSave doesn't do it
+                      // context.read<AppState>().updateUserProfile(newName, newEmail);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Data updated successfully!"),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Incorrect password"),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  child: Text("SAVE", style: style5.copyWith(color: Colors.white)),
+                ),
+                const SizedBox(height: 20,),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("CANCEL", style: style5.copyWith(color: Colors.white),),
+                ),
+              ],
             ),
-              ElevatedButton(
-                onPressed: () {
-                  // ЗАГЛУШКА: Замени это на реальную проверку пароля из твоего AppState или Firebase
-                  final isCorrect = passwordController.text == "12345";
-
-                  if (isCorrect) {
-                    Navigator.pop(context); // Закрываем диалог
-
-                    // Вызываем метод дочернего виджета, чтобы он обновил свои "оригинальные" значения
-                    // и скрыл кнопку сохранения
-                    _personalInfoKey.currentState?.confirmSave();
-
-                    // Здесь можно добавить реальное сохранение в AppState, если confirmSave этого не делает
-                    // context.read<AppState>().updateUserProfile(newName, newEmail);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Данные успешно обновлены!"),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Неверный пароль"),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                child: const Text("Сохранить"),
-              ),
-            ],
-          )
+          ),
         ],
       ),
     );
@@ -138,7 +164,6 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // 4. ПЕРЕДАЕМ ВСЕ НЕОБХОДИМЫЕ ПАРАМЕТРЫ И КЛЮЧ
                   PersonalInfoWidget(
                     key: _personalInfoKey,
                     onHasChanged: _onDataChanged,
@@ -151,7 +176,6 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
             ),
           ),
 
-          // Кнопка "Назад" (слева)
           Positioned(
             top: 90,
             left: 20,
@@ -176,7 +200,6 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
             ),
           ),
 
-          // 5. Кнопка "Сохранить" (справа) - появляется ТОЛЬКО если _showSaveButton == true
           if (_showSaveButton)
             Positioned(
               top: 90,

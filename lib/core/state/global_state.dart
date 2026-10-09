@@ -22,24 +22,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Загрузка данных из хранилища
   Future<void> loadFromStorage() async {
     final prefs = await SharedPreferences.getInstance();
 
-    _userName = prefs.getString('user_name') ?? "";
-    _userEmail = prefs.getString('user_email') ?? "";
-
-    if (_userName.isEmpty || _userEmail.isEmpty) {
-      final firebaseUser = FirebaseAuth.instance.currentUser;
-      if (firebaseUser != null) {
-        _userName = firebaseUser.displayName ?? "User";
-        _userEmail = firebaseUser.email ?? "";
-
-        // И сразу сохраняем в SharedPreferences, чтобы в следующий раз не дергать Firebase
-        await _saveToStorage();
-      }
-    }
-
+    // 1. СНАЧАЛА загружаем тему, чтобы она не затерлась
     final savedThemeId = prefs.getString('selected_theme_id');
     if (savedThemeId != null) {
       _selectedTheme = backThemes.firstWhere(
@@ -47,6 +33,22 @@ class AppState extends ChangeNotifier {
         orElse: () => backThemes[0],
       );
     }
+
+    // 2. Загружаем данные пользователя
+    _userName = prefs.getString('user_name') ?? "";
+    _userEmail = prefs.getString('user_email') ?? "";
+
+    // 3. Если пользователя нет, дополняем из Firebase
+    if (_userName.isEmpty || _userEmail.isEmpty) {
+      final firebaseUser = FirebaseAuth.instance.currentUser;
+      if (firebaseUser != null) {
+        _userName = firebaseUser.displayName ?? "User";
+        _userEmail = firebaseUser.email ?? "";
+      }
+    }
+
+    // 4. Только ТЕПЕРЬ сохраняем всё (тема уже правильная, пользователь заполнен)
+    await _saveToStorage();
 
     _isLoaded = true;
     notifyListeners();
