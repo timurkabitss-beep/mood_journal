@@ -12,7 +12,6 @@ class ProfileStep extends StatefulWidget {
 }
 
 class _ProfileStepState extends State<ProfileStep> {
-  final AuthRepository _authRepo = AuthRepository();
   bool _isLoggingOut = false;
 
   Future<void> _handleLogout() async {
@@ -20,7 +19,7 @@ class _ProfileStepState extends State<ProfileStep> {
       _isLoggingOut = true;
     });
     try {
-      await _authRepo.logout();
+     await AuthRepository.instance.logout();
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

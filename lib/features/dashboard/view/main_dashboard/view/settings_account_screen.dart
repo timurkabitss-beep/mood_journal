@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mood_journal/core/data/repositories/auth_repository.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/state/global_state.dart';
 import '../../../../../features/dashboard/view/main_dashboard/view/steps/widgets/settings_screen_widgets/personal_info_widget.dart';
 import '../../../../../features/dashboard/view/main_dashboard/view/steps/widgets/settings_screen_widgets/theme_color_choice_widget.dart';
 import '../../../../../ui/fonts/all_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+//TODO допишилогику удаления аккаунта - диалоговое окно или модальное с подтверждением пароля.
 class SettingsAccountScreen extends StatefulWidget {
   const SettingsAccountScreen({super.key});
 
@@ -31,11 +34,13 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
     });
   }
 
- void _onSaveRequested(String newName, String newEmail) {
+  void _onSaveRequested(String newName, String newEmail) {
     _showPasswordDialog(newName, newEmail);
   }
 
   void _showPasswordDialog(String newName, String newEmail) {
+
+
     final passwordController = TextEditingController();
 
     showDialog(
@@ -93,32 +98,41 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                     backgroundColor: Colors.green
 
                   ),
-                  onPressed: () {
-                    // PLACEHOLDER: replace with a real password check from your AppState or Firebase
-                    final isCorrect = passwordController.text == "12345";
+                  onPressed: ()  async {
+                    try{
+                      final result = await AuthRepository.instance.reauthenticate(passwordController.text);
 
-                    if (isCorrect) {
-                      Navigator.pop(context); // Close the dialog
 
-                      // Call the child widget method so it updates its "original" values
-                      // and hides the save button
+                      Navigator.pop(context);
+                      context.read<AppState>().setName(newName);
+                      context.read<AppState>().setEmail(newEmail);
+
                       _personalInfoKey.currentState?.confirmSave();
 
-                      // You can add real saving to AppState here if confirmSave doesn't do it
-                      // context.read<AppState>().updateUserProfile(newName, newEmail);
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Data updated successfully!"),
-                          backgroundColor: Colors.green,
-                        ),
+                      SnackBar(
+                         content: Text("Data updated succesfully!"),
+                         backgroundColor: Colors.green,
+                         ),
                       );
-                    } else {
+
+
+                    } on FirebaseAuthException catch (e){
+                       String errorMessage = "Incorrect password";
+                       if(e.code == 'wrong-password'){
+                         errorMessage = "Incorrect password. Please try again.";
+                       } else if (e.code == 'requires-recent-login') {
+                         errorMessage = "Please log out and log back in to make this change.";
+                       } else{
+                         errorMessage = e.message ?? "Authentication failed";
+                       }
+                    } catch (e){
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Incorrect password"),
-                          backgroundColor: Colors.red,
-                        ),
+                          SnackBar(
+                              content: Text("Unexpected error"),
+                              backgroundColor: Colors.red,
+                          )
                       );
                     }
                   },
@@ -142,6 +156,7 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentTheme = context.watch<AppState>().selectedTheme;
     final setCurrentIndex = context.read<AppState>().setCurrentIndex;
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
     const double baseMenuHeight = 70.0;
@@ -161,7 +176,7 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                 bottom: baseMenuHeight + bottomPadding + 40,
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   PersonalInfoWidget(
@@ -171,6 +186,26 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                   ),
                   const SizedBox(height: 20),
                   const ThemeColorChoiceWidget(),
+                  const SizedBox(height: 50),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await AuthRepository.instance.logout();
+                    },
+                    child: Text("SIGN OUT", style: style5.copyWith(color: currentTheme.colors[0] )
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red
+                    ),
+                    onPressed: () async {
+                      await AuthRepository.instance.logout();
+                    },
+                    child: Text("DELETE ACCOUNT", style: style5.copyWith(color: Colors.white ),
+                    ),
+                  )
                 ],
               ),
             ),

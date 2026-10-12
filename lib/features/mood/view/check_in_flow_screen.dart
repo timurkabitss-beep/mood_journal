@@ -103,15 +103,12 @@ class _CheckInFlowScreenState extends State<CheckInFlowScreen> {
                       );
 
                       await MoodRepository.instance.saveEntry(entry);
-                      if (mounted) {
-                        if(widget.isOnboarding){
+
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/second_dashboard',
                                   (route) => false,);
-                        } else{
-                          Navigator.of(context).pop();
-                        }
-                      }
+
+
                     },
                   )
                 ],

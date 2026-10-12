@@ -20,7 +20,7 @@ class _PswCheckStepState extends State<PswCheckStep> {
 
   final TextEditingController _passwordController1 = TextEditingController();
   final TextEditingController _passwordController2 = TextEditingController();
-  final AuthRepository _authRepo = AuthRepository();
+
   @override
   void dispose(){
     _passwordController1.dispose();
@@ -92,7 +92,16 @@ class _PswCheckStepState extends State<PswCheckStep> {
       final email = context.read<AppState>().userEmail;
       final password = _passwordController1.text;
 
-      await _authRepo.register(email, password);
+      await AuthRepository.instance.register(email, password);
+
+      final user = FirebaseAuth.instance.currentUser;
+      final savedName = context.read<AppState>().userName;
+      if (user != null && savedName.isNotEmpty && savedName != "User") {
+        await user.updateDisplayName(savedName);
+      }
+
+      // Гарантируем, что email тоже записан в AppState
+      context.read<AppState>().setEmail(email);
 
       if(mounted){
         Navigator.of(context).pushNamedAndRemoveUntil('/main_dashboard_screen', (route) => false);
@@ -120,7 +129,6 @@ class _PswCheckStepState extends State<PswCheckStep> {
           _passwordError = errorMessage; // Показываем ошибку прямо под полем пароля
         });
 
-        // Дополнительно показываем SnackBar для заметности
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),

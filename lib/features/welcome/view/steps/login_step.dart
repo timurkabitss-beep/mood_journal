@@ -21,7 +21,7 @@ class _LoginStepState extends State<LoginStep> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthRepository _authRepo = AuthRepository();
+
 
   @override
   void dispose(){
@@ -61,7 +61,7 @@ class _LoginStepState extends State<LoginStep> {
 
     try {
       // Пытаемся войти. Если успешно, код пойдет дальше, если нет — прыгнет в catch
-      await _authRepo.login(email, password);
+      await AuthRepository.instance.login(email, password);
 
       if (!mounted) return;
 
