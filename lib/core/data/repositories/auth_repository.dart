@@ -31,8 +31,18 @@ class AuthRepository {
   Future<void> logout() async {
     await _auth.signOut();
   }
-  Future<void> deleted() async{
+  Future<void> deleteAccount(String password) async{
+     final user = _auth.currentUser;
+     if(user == null || user.email == null){
+       throw Exception("User not found");
+     }
+     final credential = EmailAuthProvider.credential(
+         email: user.email!,
+         password: password
+     );
+     await user.reauthenticateWithCredential(credential);
 
+     await user.delete();
   }
   User? get currentUser => _auth.currentUser;
 

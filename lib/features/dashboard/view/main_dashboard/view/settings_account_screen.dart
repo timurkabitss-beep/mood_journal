@@ -7,7 +7,6 @@ import '../../../../../features/dashboard/view/main_dashboard/view/steps/widgets
 import '../../../../../ui/fonts/all_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-//TODO допишилогику удаления аккаунта - диалоговое окно или модальное с подтверждением пароля.
 class SettingsAccountScreen extends StatefulWidget {
   const SettingsAccountScreen({super.key});
 
@@ -17,17 +16,17 @@ class SettingsAccountScreen extends StatefulWidget {
 
 class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
   final ScrollController _scrollController = ScrollController();
-  // Флаг для отображения кнопки сохранения
   bool _showSaveButton = false;
 
   final GlobalKey<PersonalInfoWidgetState> _personalInfoKey = GlobalKey<PersonalInfoWidgetState>();
 
   @override
   void dispose() {
-    _scrollController.dispose(); ;
+    _scrollController.dispose();
     super.dispose();
   }
 
+  // Вызывается из дочернего виджета, когда текст в полях меняется
   void _onDataChanged(bool hasChanges) {
     setState(() {
       _showSaveButton = hasChanges;
@@ -35,17 +34,23 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
   }
 
   void _onSaveRequested(String newName, String newEmail) {
-    _showPasswordDialog(newName, newEmail);
+    context.read<AppState>().setName(newName);
+    context.read<AppState>().setEmail(newEmail);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Data updated successfully!"),
+        backgroundColor: Colors.green,
+      ),
+    );
   }
 
-  void _showPasswordDialog(String newName, String newEmail) {
-
-
+  void _showDeleteAccountDialog() {
     final passwordController = TextEditingController();
 
     showDialog(
       context: context,
-      animationStyle: AnimationStyle(
+      barrierDismissible: false,
+      animationStyle: const AnimationStyle(
         duration: Duration(milliseconds: 300),
         reverseDuration: Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
@@ -53,17 +58,19 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
       ),
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
-        title: const Text(
-          "Confirmation of the change",
+        title: Text(
+          "Delete Account",
           textAlign: TextAlign.center,
+          style: style_full_date.copyWith(color: Colors.red),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              "To save the new data, enter your account password:",
+              Text(
+              "This action cannot be undone. To confirm deletion, enter your password:",
               textAlign: TextAlign.center,
+              style: style5,
             ),
             const SizedBox(height: 16),
             TextField(
@@ -73,7 +80,8 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
               style: style_cursor,
               cursorColor: Colors.black,
               decoration: InputDecoration(
-                hintStyle: TextStyle(color: Colors.grey.shade500),
+                hintText: "Your password",
+                hintStyle:style4.copyWith(color: Colors.grey.shade500),
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 contentPadding: const EdgeInsets.symmetric(vertical: 20),
@@ -95,56 +103,74 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green
-
+                    backgroundColor: Colors.red,
                   ),
-                  onPressed: ()  async {
-                    try{
-                      final result = await AuthRepository.instance.reauthenticate(passwordController.text);
-
-
-                      Navigator.pop(context);
-                      context.read<AppState>().setName(newName);
-                      context.read<AppState>().setEmail(newEmail);
-
-                      _personalInfoKey.currentState?.confirmSave();
-
-
+                  onPressed: () async {
+                    if (passwordController.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                         content: Text("Data updated succesfully!"),
-                         backgroundColor: Colors.green,
-                         ),
+                        const SnackBar(
+                          content: Text("Please enter your password"),
+                          backgroundColor: Colors.orange,
+                        ),
+                      );
+                      return;
+                    }
+
+                    try {
+                      // Пытаемся удалить аккаунт (внутри произойдет проверка пароля)
+                      await AuthRepository.instance.deleteAccount(passwordController.text);
+
+                      // Закрываем диалог
+                      Navigator.pop(context);
+
+                      // Очищаем локальное хранилище
+                      context.read<AppState>().clear();
+
+                      // Показываем сообщение об успехе
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Account deleted successfully"),
+                          backgroundColor: Colors.green,
+                        ),
                       );
 
+                      // Переходим на экран входа (убедись, что этот роут существует в твоем AppRoutes)
+                      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
 
-                    } on FirebaseAuthException catch (e){
-                       String errorMessage = "Incorrect password";
-                       if(e.code == 'wrong-password'){
-                         errorMessage = "Incorrect password. Please try again.";
-                       } else if (e.code == 'requires-recent-login') {
-                         errorMessage = "Please log out and log back in to make this change.";
-                       } else{
-                         errorMessage = e.message ?? "Authentication failed";
-                       }
-                    } catch (e){
+                    } on FirebaseAuthException catch (e) {
+                      String errorMessage = "Failed to delete account";
+                      if (e.code == 'wrong-password') {
+                        errorMessage = "Incorrect password. Please try again.";
+                      } else if (e.code == 'requires-recent-login') {
+                        errorMessage = "Please log out and log back in to delete your account.";
+                      } else {
+                        errorMessage = e.message ?? "Authentication failed";
+                      }
+
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text("Unexpected error"),
-                              backgroundColor: Colors.red,
-                          )
+                        SnackBar(
+                          content: Text(errorMessage),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Unexpected error occurred"),
+                          backgroundColor: Colors.red,
+                        ),
                       );
                     }
                   },
-                  child: Text("SAVE", style: style5.copyWith(color: Colors.white)),
+                  child: Text("DELETE", style: style5.copyWith(color: Colors.white)),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red
+                    backgroundColor: Colors.grey.shade400,
                   ),
                   onPressed: () => Navigator.pop(context),
-                  child: Text("CANCEL", style: style5.copyWith(color: Colors.white),),
+                  child: Text("CANCEL", style: style5.copyWith(color: Colors.white)),
                 ),
               ],
             ),
@@ -191,26 +217,22 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                     onPressed: () async {
                       await AuthRepository.instance.logout();
                     },
-                    child: Text("SIGN OUT", style: style5.copyWith(color: currentTheme.colors[0] )
-                    ),
+                    child: Text("SIGN OUT", style: style5.copyWith(color: currentTheme.colors[0])),
                   ),
                   const SizedBox(height: 10),
-
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red
+                      backgroundColor: Colors.red,
                     ),
-                    onPressed: () async {
-                      await AuthRepository.instance.logout();
-                    },
-                    child: Text("DELETE ACCOUNT", style: style5.copyWith(color: Colors.white ),
-                    ),
-                  )
+                    onPressed: _showDeleteAccountDialog,
+                    child: Text("DELETE ACCOUNT", style: style5.copyWith(color: Colors.white)),
+                  ),
                 ],
               ),
             ),
           ),
 
+          // Кнопка "Назад"
           Positioned(
             top: 90,
             left: 20,
@@ -235,22 +257,24 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
             ),
           ),
 
+          // Кнопка "Сохранить" (Зеленая галочка)
           if (_showSaveButton)
             Positioned(
               top: 90,
               right: 20,
               child: GestureDetector(
                 onTap: () {
-                  // Сначала снимаем фокус с полей ввода, чтобы скрыть клавиатуру
                   FocusScope.of(context).unfocus();
-                  _onSaveRequested("", ""); // Передаем пустые строки, реальные данные возьмет confirmSave
+                  // ЕДИНСТВЕННЫЙ вызов confirmSave.
+                  // Он сам обратится к _onSaveRequested, а затем скроет эту кнопку через onHasChanged(false)
+                  _personalInfoKey.currentState?.confirmSave();
                 },
                 child: Container(
                   height: 70,
                   width: 70,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(28),
-                    color: Colors.green, // Зеленый цвет для действия сохранения
+                    color: Colors.green,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.green.withOpacity(0.3),
