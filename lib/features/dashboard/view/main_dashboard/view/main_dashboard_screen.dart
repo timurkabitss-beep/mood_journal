@@ -1,6 +1,7 @@
 import 'package:easy_animated_indexed_stack/easy_animated_indexed_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/global_state.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/journal_user_screen.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/settings_account_screen.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/steps.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
     const AnalyticsStep(),// Статистика
     const ProfileStep(),//Профиль
     const SettingsAccountScreen(),//Настройки аккаунта
+    const JournalUserScreen(), //Журнал записей
   ];
 
   void _onItemTapped(int index){

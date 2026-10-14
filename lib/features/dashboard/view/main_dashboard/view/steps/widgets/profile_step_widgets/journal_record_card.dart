@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '../../../../../../../../core/state/global_state.dart';
 import '../../../../../../../../ui/fonts/all_fonts.dart';
 
 class JournalRecordCard extends StatelessWidget {
@@ -8,9 +8,10 @@ class JournalRecordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final setCurrentIndex = context.read<AppState>().setCurrentIndex;
     return GestureDetector(
       onTap: (){
-
+        setCurrentIndex(5);
       },
       child: Container(
         height: 100,

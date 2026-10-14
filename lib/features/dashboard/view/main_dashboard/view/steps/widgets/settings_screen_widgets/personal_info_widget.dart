@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../../../../core/state/global_state.dart';
 import '../../../../../../../../ui/fonts/all_fonts.dart';
 
@@ -88,7 +87,7 @@ class PersonalInfoWidgetState extends State<PersonalInfoWidget> {
               top: 20,
               left: 20,
               right: 20,
-          ),
+            ),
             child: Column(
               children: [
                 Row(
