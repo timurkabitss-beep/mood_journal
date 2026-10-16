@@ -1,100 +1,137 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/core/data/repositories/auth_repository.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/widgets/journal_screen_widgets/mood_entry_widget.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/widgets/journal_screen_widgets/widgets.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../core/database/repositories/mood_repository.dart';
 import '../../../../../core/state/global_state.dart';
 import '../../../../../ui/fonts/all_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-
-class JournalUserScreen extends StatefulWidget {
+class JournalUserScreen extends StatelessWidget {
   const JournalUserScreen({super.key});
 
-  @override
-  State<JournalUserScreen> createState() => _JournalUserScreenState();
-}
-
-class _JournalUserScreenState extends State<JournalUserScreen> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+  static const int _historyDays = 30;
+  static const double _baseMenuHeight = 70.0;
+  static const Color _background = Color(0xFFF1F6FB);
 
   @override
   Widget build(BuildContext context) {
-    final currentTheme = context.watch<AppState>().selectedTheme;
     final setCurrentIndex = context.read<AppState>().setCurrentIndex;
-    final double bottomPadding = MediaQuery.of(context).padding.bottom;
-    const double baseMenuHeight = 70.0;
+    final mediaPadding = MediaQuery.of(context).padding;
+    final repository = MoodRepository.instance;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: _background,
       body: Stack(
         children: [
-          Positioned.fill(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.only(
-                top: 130 + MediaQuery.of(context).padding.top,
-                left: 20,
-                right: 20,
-                bottom: baseMenuHeight + bottomPadding + 40,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(width: 60,),
-                      Text(
-                        "Your journal",
-                        textAlign: TextAlign.center,
-                        style: style.copyWith(color: Colors.grey.shade400),
+          // Перестраивается автоматически при любом изменении записей в Hive
+          ValueListenableBuilder(
+            valueListenable: repository.listenable(),
+            builder: (context, _, __) {
+              final entries = repository.getEntriesForLastDays(_historyDays);
+
+              return CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      top: 130 + mediaPadding.top,
+                      left: 20,
+                      right: 20,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Your journal',
+                            textAlign: TextAlign.center,
+                            style: journal_title,
+                          ),
+                          const InfoJournalWidget(),
+                          const SizedBox(height: 28),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                  InfoJournalWidget(),
-                  const SizedBox(height: 20),
-                  MoodEntryWidget(),
-
+                  if (entries.isEmpty)
+                    const SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: _EmptyState(),
+                    )
+                  else
+                    SliverPadding(
+                      padding: EdgeInsets.fromLTRB(
+                        20,
+                        0,
+                        20,
+                        _baseMenuHeight + mediaPadding.bottom + 40,
+                      ),
+                      sliver: SliverList.separated(
+                        itemCount: entries.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 28),
+                        itemBuilder: (_, i) => MoodEntryWidget(
+                          key: ValueKey(entries[i].date),
+                          entry: entries[i],
+                        ),
+                      ),
+                    ),
                 ],
-              ),
-            ),
+              );
+            },
           ),
-
           Positioned(
             top: 90,
             left: 20,
-            child: GestureDetector(
-              onTap: () => setCurrentIndex(3),
-              child: Container(
-                height: 70,
-                width: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Icon(Icons.arrow_back, color: Colors.grey, size: 30),
-              ),
-            ),
+            child: _BackButton(onTap: () => setCurrentIndex(3)),
           ),
-
         ],
-      )
+      ),
+    );
+  }
+}
+
+class _BackButton extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _BackButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 70,
+        width: 70,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF9FB3CC).withValues(alpha: 0.22),
+              blurRadius: 24,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: const Icon(Icons.arrow_back, color: Colors.grey, size: 30),
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 120),
+        child: Text(
+          'No entries in the last 30 days',
+          style: journal_empty_text,
+        ),
+      ),
     );
   }
 }

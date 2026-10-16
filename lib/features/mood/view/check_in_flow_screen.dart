@@ -92,23 +92,29 @@ class _CheckInFlowScreenState extends State<CheckInFlowScreen> {
                     chosenMood: _chosenMood ?? MoodModel.neutral,
                     chosenActivities: _selectedActivities,
                     chosenFeelings: _selectedFeelings,
-                    onComplete: (title, notes) async {  //  новый callback
+                    onComplete: (title, notes) async {
                       final entry = MoodEntryModel(
-                          date: DateTime.now(),
-                          mood: _chosenMood ?? MoodModel.neutral,
-                          activities: _selectedActivities,
-                          feelings: _selectedFeelings,
-                          title: title,
-                          notes: notes
+                        date: DateTime.now(),
+                        mood: _chosenMood ?? MoodModel.neutral,
+                        activities: _selectedActivities,
+                        feelings: _selectedFeelings,
+                        title: title,
+                        notes: notes,
                       );
 
-                      await MoodRepository.instance.saveEntry(entry);
+                      // ИСПРАВЛЕНО: используем saveOrUpdateEntry вместо saveEntry
+                      await MoodRepository.instance.saveOrUpdateEntry(entry);
 
+                      if (mounted) {
+                        if (widget.isOnboarding) {
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/second_dashboard',
-                                  (route) => false,);
-
-
+                            '/main_dashboard_screen',
+                                (route) => false,
+                          );
+                        } else {
+                          Navigator.of(context).pop();
+                        }
+                      }
                     },
                   )
                 ],
