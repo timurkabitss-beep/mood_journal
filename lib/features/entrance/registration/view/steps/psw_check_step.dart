@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/ui/fonts/font.dart';
 import 'package:provider/provider.dart';
-import 'package:mood_journal/core/data/repositories/auth_repository.dart'; // (или твой путь)
+import 'package:mood_journal/core/data/repositories/auth_repository.dart';
+
+import '../../../../../core/database/repositories/mood_repository.dart'; // (или твой путь)
 class PswCheckStep extends StatefulWidget {
-  const PswCheckStep({super.key,});
+  final String email;
+  const PswCheckStep({super.key, required this.email});
 
   @override
   State<PswCheckStep> createState() => _PswCheckStepState();
@@ -89,23 +92,21 @@ class _PswCheckStepState extends State<PswCheckStep> {
       _passwordError = '';
     });
     try{
-      final email = context.read<AppState>().userEmail;
-      final password = _passwordController1.text;
 
-      await AuthRepository.instance.register(email, password);
+      await AuthRepository.instance.register(widget.email, _passwordController1.text);
+      if (!mounted) return;
 
       final user = FirebaseAuth.instance.currentUser;
       final savedName = context.read<AppState>().userName;
       if (user != null && savedName.isNotEmpty && savedName != "User") {
         await user.updateDisplayName(savedName);
       }
+      if (!mounted) return;
 
-      // Гарантируем, что email тоже записан в AppState
-      context.read<AppState>().setEmail(email);
-
-      if(mounted){
-        Navigator.of(context).pushNamedAndRemoveUntil('/main_dashboard_screen', (route) => false);
-      }
+      context.read<AppState>().setEmail(widget.email);
+      await MoodRepository.instance.openForCurrentUser();
+      if (!mounted) return;
+      Navigator.of(context).pushNamedAndRemoveUntil('/main_dashboard_screen', (route) => false);
 
     }
     on FirebaseAuthException catch (e) {

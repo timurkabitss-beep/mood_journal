@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mood_journal/features/mood/models/mood_entry_model.dart';
-import '../../../../../../../../core/database/hive_box.dart'; // Путь к твоим константам HiveBoxes
+import '../../../../../../../../core/database/repositories/mood_repository.dart';
 import '../../../../../../../../ui/fonts/all_fonts.dart';
 
 class InfoJournalWidget extends StatelessWidget {
@@ -25,7 +25,7 @@ class InfoJournalWidget extends StatelessWidget {
       ),
       // Виджет сам слушает базу Hive и перерисовывается при изменениях
       child: ValueListenableBuilder(
-        valueListenable: Hive.box<MoodEntryModel>(HiveBoxes.moodJournalEntry).listenable(),
+        valueListenable: MoodRepository.instance.listenable(),
         builder: (context, Box<MoodEntryModel> box, _) {
           final count = box.length;
 

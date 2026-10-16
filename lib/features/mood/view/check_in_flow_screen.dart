@@ -108,7 +108,7 @@ class _CheckInFlowScreenState extends State<CheckInFlowScreen> {
                       if (mounted) {
                         if (widget.isOnboarding) {
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/main_dashboard_screen',
+                            '/second_dashboard',
                                 (route) => false,
                           );
                         } else {

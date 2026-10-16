@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/repositories/implementations/second_dashboard_repository.dart';
 import 'package:mood_journal/core/state/global_state.dart';
+import 'package:mood_journal/features/entrance/registration/view/registration_screen.dart';
 import 'package:mood_journal/ui/fonts/all_fonts.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/navigation/smooth_route.dart';
 
 class SecondDashboardScreen extends StatefulWidget {
   const SecondDashboardScreen({super.key});
@@ -202,8 +205,10 @@ class _SecondDashboardScreenState extends State<SecondDashboardScreen> {
                               const SizedBox(width: 24),
                               IconButton(
                                 icon: const Icon(Icons.emoji_people_outlined, color: Colors.black38, size: 30,),
-                                onPressed: (){
-                                    Navigator.of(context).pushNamed(state.targetRoute);
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                      smoothRoute(const RegistrationScreen()), // на какой экран ведёт targetRoute
+                                  );
                                 },
                               )
                             ],

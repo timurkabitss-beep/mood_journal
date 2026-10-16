@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/data/repositories/auth_repository.dart';
 import 'package:provider/provider.dart';
+import '../../../../../core/database/repositories/mood_repository.dart';
 import '../../../../../core/state/global_state.dart';
 import '../../../../../features/dashboard/view/main_dashboard/view/steps/widgets/settings_screen_widgets/personal_info_widget.dart';
 import '../../../../../features/dashboard/view/main_dashboard/view/steps/widgets/settings_screen_widgets/theme_color_choice_widget.dart';
@@ -215,7 +216,9 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                   const SizedBox(height: 50),
                   ElevatedButton(
                     onPressed: () async {
-                      await AuthRepository.instance.logout();
+                      await MoodRepository.instance.close();
+                      await FirebaseAuth.instance.signOut();
+                      context.read<AppState>().clear();
                     },
                     child: Text("SIGN OUT", style: style5.copyWith(color: currentTheme.colors[0])),
                   ),
@@ -236,25 +239,7 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
           Positioned(
             top: 90,
             left: 20,
-            child: GestureDetector(
-              onTap: () => setCurrentIndex(3),
-              child: Container(
-                height: 70,
-                width: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Icon(Icons.arrow_back, color: Colors.grey, size: 30),
-              ),
-            ),
+            child: _BackButton(onTap: () => setCurrentIndex(3)),
           ),
 
           // Кнопка "Сохранить" (Зеленая галочка)
@@ -288,6 +273,34 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+class _BackButton extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _BackButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 70,
+        width: 70,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF9FB3CC).withValues(alpha: 0.22),
+              blurRadius: 24,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: const Icon(Icons.arrow_back, color: Colors.grey, size: 30),
       ),
     );
   }

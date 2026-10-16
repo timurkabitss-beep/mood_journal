@@ -14,7 +14,6 @@ Future<void> init() async{
   Hive.registerAdapter(FeelingModelAdapter());
   Hive.registerAdapter(QuotesTextModelAdapter());
 
-  await Hive.openBox<MoodEntryModel>(HiveBoxes.moodJournalEntry);
   await Hive.openBox<QuotesTextModel>(HiveBoxes.quotesEntry);
   await QuotesRepository.instance.initLocalQuotes();
 }

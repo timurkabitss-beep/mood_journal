@@ -8,6 +8,7 @@ import 'package:mood_journal/ui/theme/theme.dart';
 import 'package:mood_journal/core/database/hive_initializer.dart';
 import 'package:provider/provider.dart';
 
+import 'core/database/repositories/mood_repository.dart';
 import 'core/database/repositories/quotes_repository.dart';
 
 void main() async {
@@ -23,10 +24,11 @@ void main() async {
   // Создаем AppState и загружаем сохраненные данные
   final appState = AppState();
   await appState.loadFromStorage();
+  await MoodRepository.instance.openForCurrentUser();
 
   final quotesState = QuotesState();
   await quotesState.loadQuotes();
-  await QuotesRepository.instance.initLocalQuotes();
+
 
   runApp(
     MultiProvider(

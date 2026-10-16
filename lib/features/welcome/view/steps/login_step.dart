@@ -5,6 +5,7 @@ import 'package:mood_journal/ui/fonts/font.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/data/repositories/auth_repository.dart';
+import '../../../../core/database/repositories/mood_repository.dart';
 
 class LoginStep extends StatefulWidget {
   final VoidCallback onLoginSuccess;
@@ -62,20 +63,17 @@ class _LoginStepState extends State<LoginStep> {
     try {
       // Пытаемся войти. Если успешно, код пойдет дальше, если нет — прыгнет в catch
       await AuthRepository.instance.login(email, password);
-
       if (!mounted) return;
 
-      // Успешный вход!
-      print("🎉 Успешный вход!");
-      context.read<AppState>().setEmail(email);
+      final user = FirebaseAuth.instance.currentUser;
       final appState = context.read<AppState>();
-      if (appState.userName.isEmpty) {
-        // 3. Если имени нет, берем из Firebase или ставим заглушку
-        final firebaseUser = FirebaseAuth.instance.currentUser;
-        final name = firebaseUser?.displayName ?? "User";
-        appState.setName(name);
-      }
-      widget.onLoginSuccess(); // Передаем управление наверх
+      appState.setEmail(user?.email ?? email);
+      final fbName = user?.displayName;
+      appState.setName(fbName != null && fbName.isNotEmpty ? fbName : "User");
+
+      await MoodRepository.instance.openForCurrentUser();
+      if (!mounted) return;
+      widget.onLoginSuccess();
 
     } on FirebaseAuthException catch (e) {
       // Обрабатываем конкретные ошибки Firebase

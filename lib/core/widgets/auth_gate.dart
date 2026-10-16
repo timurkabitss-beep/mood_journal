@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mood_journal/core/database/repositories/mood_repository.dart';
 import 'package:mood_journal/core/state/global_state.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/main_dashboard_screen.dart';
 import 'package:mood_journal/features/welcome/view/welcome_screen.dart';
@@ -12,40 +13,52 @@ class AuthGate extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentTheme = context.read<AppState>().selectedTheme;
 
+    Widget loader() {
+      return Scaffold(
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: currentTheme.colors,
+            ),
+          ),
+          child: Center(
+            child: CircularProgressIndicator.adaptive(
+              strokeWidth: 2.5,
+              strokeCap: StrokeCap.round,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
+          ),
+        ),
+      );
+    }
+
     // StreamBuilder слушает изменения состояния авторизации в реальном времени
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         // Пока Firebase проверяет состояние (первая загрузка)
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            body: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: currentTheme.colors,
-                ),
-              ),
-              child: Center(
-                child: CircularProgressIndicator.adaptive(
-                  strokeWidth: 2.5,
-                  strokeCap: StrokeCap.round,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              ),
-            ),
-          );
+          return loader();
         }
 
-        // Если пользователь авторизован (snapshot.hasData == true)
+        // Пользователь авторизован: сначала открываем его бокс с записями,
+        // и только потом показываем главный экран
         if (snapshot.hasData) {
-          return  MainDashboardScreen();
+          return FutureBuilder<void>(
+            future: MoodRepository.instance.openForCurrentUser(),
+            builder: (context, boxSnapshot) {
+              if (boxSnapshot.connectionState != ConnectionState.done) {
+                return loader();
+              }
+              return MainDashboardScreen();
+            },
+          );
         }
-        // Если пользователь не авторизован
-        return  WelcomeScreen();
+        return WelcomeScreen();
       },
     );
   }

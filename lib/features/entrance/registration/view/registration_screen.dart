@@ -14,7 +14,7 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final PageController _pageController = PageController();
   int _currentStep = 0;
-
+  String _email = '';
   @override
   void dispose() {
     _pageController.dispose(); // Обязательно освобождаем память
@@ -42,18 +42,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                    },
                    children: [
                      LoginCheckStep(
-                       onNext: () {
-                       setState(() {
-
-                       });
-                       _pageController.nextPage(
-                         duration: const Duration(milliseconds: 700),
-                         curve: Curves.easeInOut,
-                       );
-                     },
+                       onNext: (email) {
+                         setState(() => _email = email);
+                         _pageController.nextPage(
+                           duration: const Duration(milliseconds: 700),
+                           curve: Curves.easeInOut,
+                         );
+                       },
                      ),
-                     PswCheckStep(
-                     )
+                     PswCheckStep(email: _email),
                    ],
                  )
              ),

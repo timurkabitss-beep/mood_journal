@@ -4,6 +4,7 @@ import 'package:mood_journal/core/state/global_state.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../ui/fonts/all_fonts.dart';
+import '../../../mood/view/check_in_flow_screen.dart';
 
 class FirstDashboardScreen extends StatefulWidget {
   const FirstDashboardScreen({super.key});
@@ -92,7 +93,12 @@ class _FirstDashboardScreenState extends State<FirstDashboardScreen> {
                           Text.rich(
                             state.secondText,
                             textAlign: TextAlign.center,
-                            style: daily_task_text,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              height: 1.4,
+                            ),
                           ),
                           if (_isFirstLaunch) ...[
                             const SizedBox(height: 32),
@@ -203,9 +209,31 @@ class _FirstDashboardScreenState extends State<FirstDashboardScreen> {
                 right: 0,
                 child: Center(
                   child:GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).pushNamed("/check_in_flow_screen");
-                  },
+                    onTap: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 500),
+                          reverseTransitionDuration: const Duration(milliseconds: 500),
+                          pageBuilder: (_, __, ___) => const CheckInFlowScreen(isOnboarding: true),
+                          transitionsBuilder: (_, animation, __, child) {
+                            final curved = CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeInOutCubic,
+                            );
+                            return FadeTransition(
+                              opacity: curved,
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0, 0.08),
+                                  end: Offset.zero,
+                                ).animate(curved),
+                                child: child,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
                   child:
                   Container(
                     width: 70,

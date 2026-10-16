@@ -16,8 +16,7 @@ class AppState extends ChangeNotifier {
   bool get isLoaded => _isLoaded;
   int get currentIndex => _currentIndex;
 
-
-  void setCurrentIndex(int index){
+  void setCurrentIndex(int index) {
     _currentIndex = index;
     notifyListeners();
   }
@@ -34,16 +33,23 @@ class AppState extends ChangeNotifier {
     }
 
     _userName = prefs.getString('user_name') ?? "";
-    _userEmail = prefs.getString('user_email') ?? "";
 
-    if (_userName.isEmpty || _userEmail.isEmpty) {
-      final firebaseUser = FirebaseAuth.instance.currentUser;
-      if (firebaseUser != null) {
-        _userName = firebaseUser.displayName ?? "User";
-        _userEmail = firebaseUser.email ?? "";
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+    if (firebaseUser != null) {
+      // Пользователь залогинен: почта и имя берутся из Firebase
+      _userEmail = firebaseUser.email ?? "";
+      final fbName = firebaseUser.displayName;
+      if (fbName != null && fbName.isNotEmpty) {
+        _userName = fbName;
+      } else if (_userName.isEmpty) {
+        _userName = "User";
       }
+    } else {
+      // Не залогинен: почту с прошлых запусков не восстанавливаем
+      _userEmail = "";
     }
 
+    await prefs.remove('user_email'); // чистим старые данные
     await _saveToStorage();
 
     _isLoaded = true;
@@ -62,10 +68,10 @@ class AppState extends ChangeNotifier {
     _saveToStorage();
   }
 
+  // Почта хранится только в памяти (источник правды — Firebase)
   void setEmail(String email) {
     _userEmail = email;
     notifyListeners();
-    _saveToStorage();
   }
 
   void clear() {
@@ -76,11 +82,10 @@ class AppState extends ChangeNotifier {
     _clearStorage();
   }
 
-  // Сохранение в SharedPreferences
+  // Сохранение в SharedPreferences (почту намеренно не сохраняем)
   Future<void> _saveToStorage() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('user_name', _userName);
-    await prefs.setString('user_email', _userEmail);
     await prefs.setString('selected_theme_id', _selectedTheme.id);
   }
 

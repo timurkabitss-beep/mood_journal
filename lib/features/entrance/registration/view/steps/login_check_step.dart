@@ -4,7 +4,7 @@ import 'package:mood_journal/ui/fonts/font.dart';
 import 'package:provider/provider.dart';
 
 class LoginCheckStep extends StatefulWidget {
-  final VoidCallback onNext;
+  final void Function(String email) onNext;
   const LoginCheckStep({super.key, required this.onNext});
 
   @override
@@ -160,10 +160,8 @@ class _LoginCheckStepState extends State<LoginCheckStep> {
                   foregroundColor: currentTheme.colors[0].withOpacity(0.2),
                 ),
                 onPressed: () {
-                  if(isButtonActive){
-                    final email = _emailController2.text.trim();
-                    context.read<AppState>().setEmail(email);
-                    widget.onNext();
+                  if (isButtonActive) {
+                    widget.onNext(_emailController2.text.trim());
                   }
                 },
                 child: Text(
