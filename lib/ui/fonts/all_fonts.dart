@@ -108,7 +108,7 @@ final first_and_second_dashboards_FTxt =TextStyle(
   color: Color(0xFF2E3E5C),
   fontSize: 18,
   fontWeight: FontWeight.bold,
-  height: 1.3,
+  height: 1.4,
 );
 
 final quote_card_text = TextStyle(
@@ -162,73 +162,88 @@ final settings_widgets_style = TextStyle(
 
 final style_cursor = TextStyle(color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold);
 
-
-//Styles for JOURNAL SCREEN (+ mood_entry_widget)
-const journal_text_color = Color(0xFF3E4A63);
-const journal_muted_color = Color(0xFFA9B4C6);
-
+//Styles for JOURNAL SCREEN (+ mood_entry_widget + info_journal_widget)
 final journal_title = TextStyle(
-  color: Colors.grey.shade400,
-  fontSize: 40,
+  color: Colors.grey,
+  fontSize: 32,
   fontWeight: FontWeight.w700,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
 
-final journal_empty_text = TextStyle(
-  color: Colors.grey.shade400,
-  fontSize: 16,
-  fontWeight: FontWeight.w600,
+final journal_info_count = TextStyle(
+  color: Colors.grey,
+  fontSize: 28,
+  fontWeight: FontWeight.w700,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final journal_info_label = TextStyle(
+  color: Colors.grey.shade600,
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
 
 final journal_date_day = TextStyle(
-  color: journal_text_color,
+  color: Colors.grey.shade700,
   fontSize: 24,
-  fontWeight: FontWeight.w800,
-  height: 1.1,
+  fontWeight: FontWeight.w700,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
 
 final journal_date_month = TextStyle(
-  color: journal_muted_color,
+  color:  Colors.grey.shade700,
   fontSize: 12,
   fontWeight: FontWeight.w700,
-  letterSpacing: 0.5,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
 
 final journal_weekday = TextStyle(
-  color: journal_text_color,
-  fontSize: 24,
+  color: Colors.grey.shade700,
+  fontSize: 22,
   fontWeight: FontWeight.w700,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
 
 final journal_days_ago = TextStyle(
-  color: journal_muted_color,
+  color: Colors.grey,
   fontSize: 13,
   fontWeight: FontWeight.w700,
-  letterSpacing: 0.3,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
 
 final journal_mood_title = TextStyle(
-  color: journal_text_color,
-  fontSize: 19,
+  color: Colors.grey.shade700,
+  fontSize: 18,
   fontWeight: FontWeight.w700,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
 
 final journal_time = TextStyle(
-  color: journal_muted_color,
+  color: Colors.grey,
   fontSize: 13,
   fontWeight: FontWeight.w600,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
 
 final journal_tag = TextStyle(
-  color: journal_muted_color,
+  color: Colors.grey,
   fontSize: 13,
   fontWeight: FontWeight.w600,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final journal_empty_text = TextStyle(
+  color: Colors.grey,
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final journal_notes = TextStyle(
+  color: Colors.grey.shade600,
+  fontSize: 14,
+  fontWeight: FontWeight.w600,
+  height: 1.4,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );

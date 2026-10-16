@@ -12,7 +12,6 @@ class JournalUserScreen extends StatelessWidget {
 
   static const int _historyDays = 30;
   static const double _baseMenuHeight = 70.0;
-  static const Color _background = Color(0xFFF1F6FB);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class JournalUserScreen extends StatelessWidget {
     final repository = MoodRepository.instance;
 
     return Scaffold(
-      backgroundColor: _background,
+      backgroundColor: Colors.grey.shade200,
       body: Stack(
         children: [
           // Перестраивается автоматически при любом изменении записей в Hive

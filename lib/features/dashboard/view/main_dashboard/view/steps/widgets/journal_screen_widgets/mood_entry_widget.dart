@@ -5,12 +5,6 @@ import 'package:mood_journal/features/mood/models/mood_entry_model.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
 import 'package:mood_journal/ui/fonts/all_fonts.dart';
 
-class _C {
-  static const dateBox = Color(0xFFE6ECF4); // плашка с датой
-  static const tagBg = Color(0xFFF1F4F9); // фон тега
-  static const shadow = Color(0xFF9FB3CC); // оттенок тени
-}
-
 class MoodEntryWidget extends StatelessWidget {
   final MoodEntryModel entry;
 
@@ -33,15 +27,15 @@ class MoodEntryWidget extends StatelessWidget {
   Color _getMoodColor(MoodModel mood) {
     switch (mood) {
       case MoodModel.awesome:
-        return const Color(0xFFE3F6EA);
+        return Colors.green.shade100;
       case MoodModel.good:
-        return const Color(0xFFFFEDEE);
+        return Colors.lime.shade100;
       case MoodModel.neutral:
-        return const Color(0xFFEDF1F7);
+        return Colors.grey.shade200;
       case MoodModel.bad:
-        return const Color(0xFFFFF1E2);
+        return Colors.orange.shade100;
       case MoodModel.awful:
-        return const Color(0xFFFFE3E3);
+        return Colors.red.shade100;
     }
   }
 
@@ -65,7 +59,7 @@ class MoodEntryWidget extends StatelessWidget {
           width: 64,
           height: 80,
           decoration: BoxDecoration(
-            color: _C.dateBox,
+            color: Colors.grey.shade300,
             borderRadius: BorderRadius.circular(18),
           ),
           child: Column(
@@ -119,9 +113,9 @@ class MoodEntryWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: _C.shadow.withValues(alpha: 0.22),
-            blurRadius: 24,
-            offset: const Offset(0, 10),
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -139,9 +133,9 @@ class MoodEntryWidget extends StatelessWidget {
                   border: Border.all(color: Colors.white, width: 3),
                   boxShadow: [
                     BoxShadow(
-                      color: _C.shadow.withValues(alpha: 0.25),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
+                      color: Colors.black.withValues(alpha: 0.12),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -172,6 +166,13 @@ class MoodEntryWidget extends StatelessWidget {
               ),
             ],
           ),
+          if (entry.notes.trim().isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text(
+              entry.notes.trim(),
+              style: journal_notes,
+            ),
+          ],
           if (tags.isNotEmpty) ...[
             const SizedBox(height: 16),
             Wrap(
@@ -189,7 +190,7 @@ class MoodEntryWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: _C.tagBg,
+        color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Text(

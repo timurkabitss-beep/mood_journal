@@ -34,19 +34,11 @@ class InfoJournalWidget extends StatelessWidget {
             children: [
               Text(
                 count.toString(),
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+                style: journal_info_count,
               ),
               Text(
                 count == 1 ? 'check-in' : 'check-ins',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: journal_info_label,
               ),
             ],
           );

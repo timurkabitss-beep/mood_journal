@@ -13,6 +13,15 @@ class QuotesStep extends StatefulWidget {
 class _QuotesStepState extends State<QuotesStep> {
   final PageController _pageController = PageController();
 
+  List _shuffledQuotes = [];
+
+  List _getShuffled(List quotes) {
+    if (_shuffledQuotes.length != quotes.length) {
+      _shuffledQuotes = List.of(quotes)..shuffle();
+    }
+    return _shuffledQuotes;
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -48,13 +57,14 @@ class _QuotesStepState extends State<QuotesStep> {
                     child: CircularProgressIndicator(color: Colors.white),
                   );
                 }
+                final shuffled = _getShuffled(state.quotesList);
 
                 return PageView.builder(
                   controller: _pageController,
                   scrollDirection: Axis.vertical, // Вертикальный скролл
-                  itemCount: state.quotesList.length,
+                  itemCount: shuffled.length,
                   itemBuilder: (context, index) {
-                    final quote = state.quotesList[index];
+                    final quote = shuffled[index];
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(
