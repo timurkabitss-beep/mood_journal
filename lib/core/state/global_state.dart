@@ -16,6 +16,9 @@ class AppState extends ChangeNotifier {
   bool get isLoaded => _isLoaded;
   int get currentIndex => _currentIndex;
 
+  DateTime _selectedTaskDate = DateTime.now();
+  DateTime get selectedTaskDate => _selectedTaskDate;
+
   void setCurrentIndex(int index) {
     _currentIndex = index;
     notifyListeners();
@@ -95,5 +98,13 @@ class AppState extends ChangeNotifier {
     await prefs.remove('user_name');
     await prefs.remove('user_email');
     await prefs.remove('selected_theme_id');
+  }
+
+
+  /// Открыть экран задания за выбранный день
+  void openDailyTask(DateTime date) {
+    _selectedTaskDate = date;
+    _currentIndex = 6;
+    notifyListeners();
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mood_journal/core/database/repositories/mood_repository.dart';
 import 'package:mood_journal/core/state/global_state.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard/view/main_dashboard_screen.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/screens/main_dashboard_screen.dart';
 import 'package:mood_journal/features/welcome/view/welcome_screen.dart';
 import 'package:provider/provider.dart';
 

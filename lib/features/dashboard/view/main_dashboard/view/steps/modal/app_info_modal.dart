@@ -78,9 +78,19 @@ class _AppInfoModalState extends State<AppInfoModal> {
                   if (await canLaunchUrl(url)){
                     await launchUrl(url);
                   }
-                  else{
+                  else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Couldn't open the link"))
+                      SnackBar(
+                        content: const Text(
+                          "Couldn't open the link",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
                     );
                   }
                 }

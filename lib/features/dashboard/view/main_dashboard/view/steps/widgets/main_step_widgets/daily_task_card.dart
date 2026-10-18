@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/data/mock_tasks.dart';
-
+import 'package:provider/provider.dart';
+import '../../../../../../../../core/state/global_state.dart';
 import '../../../../../../../../ui/fonts/all_fonts.dart';
+import 'package:mood_journal/core/data/daily_task_helper.dart';
 
 class DailyTaskCard extends StatelessWidget {
   final DateTime selectedDate;
 
   const DailyTaskCard({super.key, required this.selectedDate});
 
-  String _getTaskForDate(DateTime date) {
-    final daysSinceEpoch = date.millisecondsSinceEpoch ~/ (1000 * 60 * 60 * 24);
-    final taskIndex = daysSinceEpoch % dailyTasks.length;
-    return dailyTasks[taskIndex];
-  }
+  String _getTaskForDate(DateTime date) => getTaskForDate(date);
 
   bool _isFutureDate(DateTime date) {
     final today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -24,6 +22,7 @@ class DailyTaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentTask = _getTaskForDate(selectedDate);
     final isFuture = _isFutureDate(selectedDate);
+    final setCurrentIndex = context.read<AppState>().setCurrentIndex;
 
     return AnimatedOpacity(
       opacity: isFuture ? 0.7 : 1.0,
@@ -105,9 +104,8 @@ class DailyTaskCard extends StatelessWidget {
               bottom: 16,
               right: 16,
               child: GestureDetector(
-                // Если будущее, onTap равен null (не тапается)
                 onTap: isFuture ? null : () {
-                  // Navigator.of(context).pushNamed('/task_screen');
+                  context.read<AppState>().openDailyTask(selectedDate);
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

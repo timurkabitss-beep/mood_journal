@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:mood_journal/features/mood/models/daily_answer_entry.dart';
 import 'package:mood_journal/features/mood/models/mood_entry_model.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
 import 'package:mood_journal/ui/fonts/all_fonts.dart';
 
+/// Один день в журнале: заголовок с датой + карточка настроения
+/// (если есть) + карточка выполненного задания (если есть).
 class MoodEntryWidget extends StatelessWidget {
-  final MoodEntryModel entry;
+  final DateTime date;
+  final MoodEntryModel? entry;
+  final DailyAnswerEntry? task;
 
   const MoodEntryWidget({
     super.key,
-    required this.entry,
+    required this.date,
+    this.entry,
+    this.task,
   });
 
   String _getDaysAgo(DateTime date) {
@@ -39,14 +46,37 @@ class MoodEntryWidget extends StatelessWidget {
     }
   }
 
+  BoxDecoration _cardDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(32),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.08),
+          blurRadius: 12,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final moodEntry = entry;
+    final taskEntry = task;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildHeader(),
-        const SizedBox(height: 16),
-        _buildCard(),
+        if (moodEntry != null) ...[
+          const SizedBox(height: 16),
+          _buildCard(moodEntry),
+        ],
+        if (taskEntry != null) ...[
+          const SizedBox(height: 16),
+          _buildTaskCard(taskEntry),
+        ],
       ],
     );
   }
@@ -66,12 +96,12 @@ class MoodEntryWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                DateFormat('d').format(entry.date),
+                DateFormat('d').format(date),
                 style: journal_date_day,
               ),
               const SizedBox(height: 2),
               Text(
-                DateFormat('MMM').format(entry.date).toUpperCase(),
+                DateFormat('MMM').format(date).toUpperCase(),
                 style: journal_date_month,
               ),
             ],
@@ -83,12 +113,12 @@ class MoodEntryWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                DateFormat('EEEE').format(entry.date),
+                DateFormat('EEEE').format(date),
                 style: journal_weekday,
               ),
               const SizedBox(height: 4),
               Text(
-                _getDaysAgo(entry.date),
+                _getDaysAgo(date),
                 style: journal_days_ago,
               ),
             ],
@@ -98,8 +128,8 @@ class MoodEntryWidget extends StatelessWidget {
     );
   }
 
-  // Белая карточка: настроение + теги
-  Widget _buildCard() {
+  // Белая карточка: настроение + описание + теги
+  Widget _buildCard(MoodEntryModel entry) {
     final tags = [
       ...entry.activities.map((a) => a.name),
       ...entry.feelings.map((f) => f.name),
@@ -108,17 +138,7 @@ class MoodEntryWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+      decoration: _cardDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -181,6 +201,43 @@ class MoodEntryWidget extends StatelessWidget {
               children: tags.map(_buildTag).toList(),
             ),
           ],
+        ],
+      ),
+    );
+  }
+
+  // Белая карточка: выполненное ежедневное задание
+  Widget _buildTaskCard(DailyAnswerEntry task) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: _cardDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  size: 14,
+                  color: Colors.green.shade600,
+                ),
+                const SizedBox(width: 4),
+                Text('Daily Task', style: daily_task_access),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(task.task, style: journal_task_question),
+          const SizedBox(height: 12),
+          Text(task.answer, style: journal_task_answer),
         ],
       ),
     );

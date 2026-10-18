@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard/view/main_dashboard_screen.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard/view/settings_account_screen.dart';
-import 'package:mood_journal/features/dashboard/view/secondary_dashboard/first_dashboard_screen.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/screens/main_dashboard_screen.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/screens/settings_account_screen.dart';
+import 'package:mood_journal/features/dashboard/view/secondaries_dashboards/first_dashboard_screen.dart';
 import 'package:mood_journal/features/entrance/registration/view/registration_screen.dart';
 import 'package:mood_journal/features/mood/view/check_in_flow_screen.dart';
-import '../features/dashboard/view/secondary_dashboard/second_dashboard_screen.dart';
+import '../features/dashboard/view/secondaries_dashboards/second_dashboard_screen.dart';
 import 'package:mood_journal/core/widgets/auth_gate.dart';
 
 class AppRoutes {

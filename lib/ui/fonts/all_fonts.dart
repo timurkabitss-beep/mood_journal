@@ -247,3 +247,65 @@ final journal_notes = TextStyle(
   height: 1.4,
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
+
+final journal_task_question = TextStyle(
+  color: Colors.grey.shade500,
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  height: 1.4,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final journal_task_answer = TextStyle(
+  color: Colors.grey.shade700,
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  height: 1.5,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+//Styles for DAILY TASK SCREEN
+final daily_screen_title = TextStyle(
+  color: Colors.grey.shade700,
+  fontSize: 28,
+  fontWeight: FontWeight.w700,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final daily_screen_date = TextStyle(
+  color: Colors.grey.shade500,
+  fontSize: 13,
+  fontWeight: FontWeight.w700,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final daily_question = TextStyle(
+  color: Colors.grey.shade700,
+  fontSize: 24,
+  fontWeight: FontWeight.w700,
+  height: 1.35,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final daily_answer = TextStyle(
+  color: Colors.black87,
+  fontSize: 20,
+  fontWeight: FontWeight.w600,
+  height: 1.4,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final daily_answer_hint = TextStyle(
+    color: Colors.black87,
+    fontSize: 20,
+    fontWeight: FontWeight.bold
+);
+
+final daily_save_text = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w700,
+  letterSpacing: 1.0,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+

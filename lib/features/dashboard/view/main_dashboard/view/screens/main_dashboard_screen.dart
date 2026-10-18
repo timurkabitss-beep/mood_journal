@@ -1,9 +1,11 @@
 import 'package:easy_animated_indexed_stack/easy_animated_indexed_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/state/global_state.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard/view/journal_user_screen.dart';
-import 'package:mood_journal/features/dashboard/view/main_dashboard/view/settings_account_screen.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/screens/daily_task_screen.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/screens/journal_user_screen.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/screens/settings_account_screen.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/steps.dart';
+import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/widgets/main_step_widgets/daily_task_card.dart';
 import 'package:provider/provider.dart';
 
 
@@ -23,6 +25,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
     const ProfileStep(),//Профиль
     const SettingsAccountScreen(),//Настройки аккаунта
     const JournalUserScreen(), //Журнал записей
+    const DailyTaskScreen(), //Ежедневное задание
   ];
 
   void _onItemTapped(int index){

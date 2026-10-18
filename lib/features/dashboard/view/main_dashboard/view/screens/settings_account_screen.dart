@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/core/data/repositories/auth_repository.dart';
 import 'package:provider/provider.dart';
-import '../../../../../core/database/repositories/mood_repository.dart';
-import '../../../../../core/state/global_state.dart';
-import '../../../../../features/dashboard/view/main_dashboard/view/steps/widgets/settings_screen_widgets/personal_info_widget.dart';
-import '../../../../../features/dashboard/view/main_dashboard/view/steps/widgets/settings_screen_widgets/theme_color_choice_widget.dart';
-import '../../../../../ui/fonts/all_fonts.dart';
+import '../../../../../../core/database/repositories/mood_repository.dart';
+import '../../../../../../core/state/global_state.dart';
+import '../steps/widgets/settings_screen_widgets/personal_info_widget.dart';
+import '../steps/widgets/settings_screen_widgets/theme_color_choice_widget.dart';
+import '../../../../../../ui/fonts/all_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsAccountScreen extends StatefulWidget {
@@ -220,12 +220,17 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                       await FirebaseAuth.instance.signOut();
                       context.read<AppState>().clear();
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      minimumSize: const Size(220, 54),
+                    ),
                     child: Text("SIGN OUT", style: style5.copyWith(color: currentTheme.colors[0])),
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
+                      minimumSize: const Size(220, 54),
                     ),
                     onPressed: _showDeleteAccountDialog,
                     child: Text("DELETE ACCOUNT", style: style5.copyWith(color: Colors.white)),
