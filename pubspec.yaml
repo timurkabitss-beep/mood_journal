@@ -10,6 +10,15 @@ dependencies:
   flutter:
     sdk: flutter
 
+  #ДОДЕЛАЙ ФОН С ИКОНКОЙ И ИКОНКУ ПРИЛОЖЕНИЯ
+  flutter_native_splash:
+    color: "#FFFFFF"
+    image: assets/images/splash_logo.png
+    android_12:
+      color: "#FFFFFF"
+      image: assets/images/splash_logo.png
+      icon_background_color: "#FFFFFF"
+
   # --- State Management & DI (Архитектура) ---
   flutter_bloc: ^8.1.6       # Заменили Riverpod на BLoC по твоему списку
   get_it: ^7.7.0             # Внедрение зависимостей (DI) для Clean Architecture
@@ -55,6 +64,8 @@ dependencies:
   # --- Бэкенд Firebase ) ---
   firebase_core: ^4.15.0
   firebase_auth: ^6.7.0
+  firebase_ai: ^4.0.0
+  firebase_app_check: ^0.4.9
   # cloud_firestore: ^5.0.0
   # firebase_crashlytics: ^4.0.0
   # firebase_messaging: ^15.0.0

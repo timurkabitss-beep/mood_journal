@@ -308,4 +308,82 @@ final daily_save_text = TextStyle(
   fontFamily: GoogleFonts.comfortaa().fontFamily,
 );
 
+//Styles for MOOD SUPPORT SHEET and AI REPORT
+final mood_support_title = TextStyle(
+  color: Colors.grey.shade700,
+  fontSize: 22,
+  fontWeight: FontWeight.w700,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final mood_support_text = TextStyle(
+  color: Colors.black87,
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  height: 1.5,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final mood_support_hint = TextStyle(
+  color: Colors.grey.shade500,
+  fontSize: 14,
+  fontWeight: FontWeight.w600,
+  height: 1.4,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final report_text = TextStyle(
+  color: Colors.grey.shade700,
+  fontSize: 15,
+  fontWeight: FontWeight.w600,
+  height: 1.5,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final report_section_title = TextStyle(
+  color: Colors.grey.shade500,
+  fontSize: 13,
+  fontWeight: FontWeight.w700,
+  letterSpacing: 0.5,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+//Styles for ANALYTICS (INSIGHTS) STEP
+final insights_title = TextStyle(
+  color: Colors.white,
+  fontSize: 32,
+  fontWeight: FontWeight.w700,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final insights_chip_text = TextStyle(
+  color: Colors.white,
+  fontSize: 13,
+  fontWeight: FontWeight.w700,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final insights_stat_value = TextStyle(
+  color: Colors.white,
+  fontSize: 28,
+  fontWeight: FontWeight.w700,
+  height: 1.1,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final insights_top_mood = TextStyle(
+  color: Colors.white,
+  fontSize: 18,
+  fontWeight: FontWeight.w700,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
+final insights_stat_label = TextStyle(
+  color: Colors.white70,
+  fontSize: 12,
+  fontWeight: FontWeight.w700,
+  letterSpacing: 0.5,
+  fontFamily: GoogleFonts.comfortaa().fontFamily,
+);
+
 

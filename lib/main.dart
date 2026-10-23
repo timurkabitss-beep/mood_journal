@@ -7,9 +7,11 @@ import 'package:mood_journal/routes/routes.dart';
 import 'package:mood_journal/ui/theme/theme.dart';
 import 'package:mood_journal/core/database/hive_initializer.dart';
 import 'package:provider/provider.dart';
-
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:flutter/foundation.dart';
 import 'core/database/repositories/mood_repository.dart';
 import 'core/database/repositories/quotes_repository.dart';
+
 
 void main() async {
 
@@ -18,6 +20,11 @@ void main() async {
   //firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
+  );
+  await FirebaseAppCheck.instance.activate(
+    providerAndroid: kDebugMode
+        ? const AndroidDebugProvider()
+        : const AndroidPlayIntegrityProvider(),
   );
   await init(); // Инициализация Hive
 

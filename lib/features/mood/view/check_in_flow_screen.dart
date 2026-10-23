@@ -10,6 +10,7 @@ import 'package:mood_journal/ui/backgroundtheme/gradient_background.dart';
 import '../../../core/database/repositories/mood_repository.dart';
 import 'steps/activity_check_step.dart';
 import 'steps/mood_check_step.dart';
+import 'package:mood_journal/features/mood/view/mood_support_sheet.dart';
 
 class CheckInFlowScreen extends StatefulWidget {
   final bool isOnboarding;
