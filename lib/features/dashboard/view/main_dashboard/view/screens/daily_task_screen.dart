@@ -199,7 +199,7 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
             // Заголовок и дата
             Positioned(
               top: 90,
-              left: 0,
+              left: 50,
               right: 0,
               height: 70,
               child: Center(

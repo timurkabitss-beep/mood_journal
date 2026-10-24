@@ -19,6 +19,9 @@ class AppState extends ChangeNotifier {
   DateTime _selectedTaskDate = DateTime.now();
   DateTime get selectedTaskDate => _selectedTaskDate;
 
+  DateTime _selectedChallengeDate = DateTime.now();
+  DateTime get selectedChallengeDate => _selectedChallengeDate;
+
   void setCurrentIndex(int index) {
     _currentIndex = index;
     notifyListeners();
@@ -57,6 +60,28 @@ class AppState extends ChangeNotifier {
 
     _isLoaded = true;
     notifyListeners();
+  }
+
+  /// Подтянуть имя и почту из Firebase после входа
+  Future<void> syncWithFirebaseUser() async {
+    // Не трогаем состояние прямо во время построения виджетов
+    await Future.microtask(() {});
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final fbName = user.displayName;
+    final newEmail = user.email ?? '';
+    final newName = (fbName != null && fbName.isNotEmpty)
+        ? fbName
+        : (_userName.isNotEmpty ? _userName : 'User');
+
+    if (newEmail == _userEmail && newName == _userName) return;
+
+    _userEmail = newEmail;
+    _userName = newName;
+    notifyListeners();
+    await _saveToStorage();
   }
 
   void setName(String name) {
@@ -105,6 +130,13 @@ class AppState extends ChangeNotifier {
   void openDailyTask(DateTime date) {
     _selectedTaskDate = date;
     _currentIndex = 6;
+    notifyListeners();
+  }
+
+  /// Открыть экран челленджа за выбранный день
+  void openDailyChallenge(DateTime date) {
+    _selectedChallengeDate = date;
+    _currentIndex = 7;
     notifyListeners();
   }
 }

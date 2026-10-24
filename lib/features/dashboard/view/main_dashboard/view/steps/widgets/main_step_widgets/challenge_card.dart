@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mood_journal/core/database/repositories/mood_repository.dart';
 import 'package:mood_journal/core/state/global_state.dart';
 import 'package:provider/provider.dart';
 
@@ -85,66 +86,83 @@ class _ChallengeCardState extends State<ChallengeCard> {
     return '$hours:$minutes:$seconds';
   }
 
+  void _openChallenge() {
+    context.read<AppState>().openDailyChallenge(widget.selectedDate);
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentTheme = context.watch<AppState>().selectedTheme;
     final isToday = _isToday(widget.selectedDate);
     final isPast = _isPast(widget.selectedDate);
 
-    return AnimatedOpacity(
-      opacity: isToday ? 1.0 : 0.6,
-      duration: const Duration(milliseconds: 500),
-      child: Container(
-        height: 180,
-        width: double.maxFinite,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: currentTheme.colors,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: GestureDetector(
-          onTap: isToday ? () {
-            // Navigator.of(context).pushNamed('/challenge_screen');
-          } : null,
-          child: Stack(
-            children: [
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 400),
-                switchInCurve: Curves.easeOutCubic,
-                switchOutCurve: Curves.easeInCubic,
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  final offsetAnimation = Tween<Offset>(
-                    begin: const Offset(0, 0.1),
-                    end: Offset.zero,
-                  ).animate(animation);
+    // Карточка сама обновляется, когда челлендж выполнен
+    return ValueListenableBuilder(
+      valueListenable: MoodRepository.instance.challengesListenable(),
+      builder: (context, _, __) {
+        final isDone =
+        MoodRepository.instance.isChallengeCompleted(widget.selectedDate);
 
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: FadeTransition(opacity: animation, child: child),
-                  );
-                },
-                child: _buildCardContent(isToday, isPast),
+        return AnimatedOpacity(
+          opacity: (isToday || isDone) ? 1.0 : 0.6,
+          duration: const Duration(milliseconds: 500),
+          child: Container(
+            height: 180,
+            width: double.maxFinite,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(28),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: currentTheme.colors,
               ),
-            ],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            // Material + InkWell дают нажатие с «волной» поверх градиента
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(28),
+                onTap: isToday ? _openChallenge : null,
+                child: Stack(
+                  children: [
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      switchInCurve: Curves.easeOutCubic,
+                      switchOutCurve: Curves.easeInCubic,
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        final offsetAnimation = Tween<Offset>(
+                          begin: const Offset(0, 0.1),
+                          end: Offset.zero,
+                        ).animate(animation);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: FadeTransition(opacity: animation, child: child),
+                        );
+                      },
+                      child: _buildCardContent(isToday, isPast, isDone),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildCardContent(bool isToday, bool isPast) {
+  Widget _buildCardContent(bool isToday, bool isPast, bool isDone) {
     return Stack(
-      key: ValueKey(widget.selectedDate.toIso8601String()),
+      key: ValueKey('${widget.selectedDate.toIso8601String()}-$isDone'),
       children: [
         Positioned(
           top: 16,
@@ -159,7 +177,9 @@ class _ChallengeCardState extends State<ChallengeCard> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
-                    isToday ? Icons.flag : (isPast ? Icons.close : Icons.schedule),
+                    isDone
+                        ? Icons.check
+                        : (isToday ? Icons.flag : (isPast ? Icons.close : Icons.schedule)),
                     size: 18,
                     color: Colors.white
                 ),
@@ -172,7 +192,11 @@ class _ChallengeCardState extends State<ChallengeCard> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  isToday ? 'ENDS IN ${_formatDuration(_remainingTime)}' : (isPast ? 'EXPIRED' : 'UPCOMING'),
+                  isDone
+                      ? 'COMPLETED'
+                      : (isToday
+                      ? 'ENDS IN ${_formatDuration(_remainingTime)}'
+                      : (isPast ? 'EXPIRED' : 'UPCOMING')),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -192,17 +216,32 @@ class _ChallengeCardState extends State<ChallengeCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Daily',
-                style: style_day_date
+                  'Daily',
+                  style: style_day_date
               ),
               const SizedBox(height: 4),
               Text(
-                'Challenge',
-                style: challenge_card_label
+                  'Challenge',
+                  style: challenge_card_label
               ),
             ],
           ),
         ),
+
+        // Стрелка показывает, что карточку можно открыть
+        if (isToday)
+          Positioned(
+            bottom: 20,
+            right: 16,
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.arrow_forward, size: 18, color: Colors.white),
+            ),
+          ),
       ],
     );
   }

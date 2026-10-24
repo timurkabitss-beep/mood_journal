@@ -38,9 +38,16 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
     context.read<AppState>().setName(newName);
     context.read<AppState>().setEmail(newEmail);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Data updated successfully!"),
+      SnackBar(
+        content: const Text(
+          "Data updated successfully!",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
       ),
     );
   }
@@ -109,9 +116,16 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                   onPressed: () async {
                     if (passwordController.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please enter your password"),
+                        SnackBar(
+                          content: const Text(
+                            "Please enter your password",
+                            style: TextStyle(color: Colors.white),
+                          ),
                           backgroundColor: Colors.orange,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         ),
                       );
                       return;
@@ -129,9 +143,16 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
 
                       // Показываем сообщение об успехе
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Account deleted successfully"),
+                        SnackBar(
+                          content: const Text(
+                            "Account deleted successfully",
+                            style: TextStyle(color: Colors.white),
+                          ),
                           backgroundColor: Colors.green,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         ),
                       );
 
@@ -150,15 +171,30 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(errorMessage),
+                          content: Text(
+                            errorMessage,
+                            style: const TextStyle(color: Colors.white),
+                          ),
                           backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         ),
                       );
+
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Unexpected error occurred"),
+                        SnackBar(
+                          content: const Text(
+                            "Unexpected error occurred",
+                            style: TextStyle(color: Colors.white),
+                          ),
                           backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         ),
                       );
                     }

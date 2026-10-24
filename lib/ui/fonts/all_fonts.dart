@@ -296,7 +296,7 @@ final daily_answer = TextStyle(
 );
 
 final daily_answer_hint = TextStyle(
-    color: Colors.black87,
+    color: Colors.grey.shade600,
     fontSize: 20,
     fontWeight: FontWeight.bold
 );

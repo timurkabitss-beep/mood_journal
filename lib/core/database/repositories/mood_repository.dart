@@ -11,6 +11,7 @@ class MoodRepository {
 
   Box<MoodEntryModel>? _boxInstance;
   Box? _answersBoxInstance; // ответы на ежедневные задания
+  Box? _challengesBoxInstance; // результаты ежедневных челленджей
   String? _uid;
   Future<void>? _opening;
 
@@ -34,6 +35,16 @@ class MoodRepository {
     return box;
   }
 
+  Box get _challengesBox {
+    final box = _challengesBoxInstance;
+    if (box == null || !box.isOpen) {
+      throw StateError(
+        'Challenges box is not opened. Call MoodRepository.instance.openForCurrentUser() after login.',
+      );
+    }
+    return box;
+  }
+
   /// Открыть боксы текущего пользователя (у каждого uid свои).
   /// Вызывать: при старте приложения, после входа и после регистрации.
   Future<void> openForCurrentUser() {
@@ -51,7 +62,8 @@ class MoodRepository {
 
     if (_uid == uid &&
         (_boxInstance?.isOpen ?? false) &&
-        (_answersBoxInstance?.isOpen ?? false)) {
+        (_answersBoxInstance?.isOpen ?? false) &&
+        (_challengesBoxInstance?.isOpen ?? false)) {
       return;
     }
 
@@ -60,6 +72,7 @@ class MoodRepository {
       '${HiveBoxes.moodJournalEntry}_$uid',
     );
     _answersBoxInstance = await Hive.openBox('dailyAnswers_$uid');
+    _challengesBoxInstance = await Hive.openBox('dailyChallenges_$uid');
     _uid = uid;
   }
 
@@ -72,8 +85,12 @@ class MoodRepository {
     if (_answersBoxInstance?.isOpen ?? false) {
       await _answersBoxInstance!.close();
     }
+    if (_challengesBoxInstance?.isOpen ?? false) {
+      await _challengesBoxInstance!.close();
+    }
     _boxInstance = null;
     _answersBoxInstance = null;
+    _challengesBoxInstance = null;
     _uid = null;
   }
 
@@ -179,6 +196,54 @@ class MoodRepository {
           'date': '${value['date']}',
           'task': '${value['task']}',
           'answer': '${value['answer']}',
+        });
+      }
+    }
+    result.sort((a, b) => b['date']!.compareTo(a['date']!));
+    return result;
+  }
+
+  // ---------------------- Ежедневные челленджи ----------------------
+
+  /// Отчёт о челлендже за день (или null, если ещё не выполнен)
+  String? getChallengeResult(DateTime date) {
+    final data = _challengesBox.get(_dayKey(date));
+    if (data is Map) {
+      return data['result'] as String?;
+    }
+    return null;
+  }
+
+  /// Челлендж считается выполненным, если сохранён непустой отчёт
+  bool isChallengeCompleted(DateTime date) {
+    final result = getChallengeResult(date);
+    return result != null && result.trim().isNotEmpty;
+  }
+
+  Future<void> saveChallengeResult({
+    required DateTime date,
+    required String challenge,
+    required String result,
+  }) async {
+    await _challengesBox.put(_dayKey(date), {
+      'date': date.toIso8601String(),
+      'challenge': challenge,
+      'result': result,
+    });
+  }
+
+  /// Для автообновления UI (карточка челленджа на главной)
+  ValueListenable<Box> challengesListenable() => _challengesBox.listenable();
+
+  /// Все отчёты о челленджах (свежие сверху). Пригодится для AI-анализа.
+  List<Map<String, String>> getAllChallengeResults() {
+    final result = <Map<String, String>>[];
+    for (final value in _challengesBox.values) {
+      if (value is Map) {
+        result.add({
+          'date': '${value['date']}',
+          'challenge': '${value['challenge']}',
+          'result': '${value['result']}',
         });
       }
     }
