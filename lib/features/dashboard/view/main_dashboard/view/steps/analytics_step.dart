@@ -105,10 +105,12 @@ class _AnalyticsStepState extends State<AnalyticsStep> {
           listenable: Listenable.merge([
             repo.listenable(),
             repo.dailyAnswersListenable(),
+            repo.challengesListenable(),
           ]),
           builder: (context, _) {
             final entries = repo.getEntriesForLastDays(_days);
             final tasks = repo.getDailyAnswersForLastDays(_days);
+            final challenges = repo.getChallengesForLastDays(_days);
             final enough = entries.length >= MoodReportService.minEntries;
 
             // Самое частое настроение за период
@@ -165,31 +167,47 @@ class _AnalyticsStepState extends State<AnalyticsStep> {
                       color: Colors.white.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(32),
                     ),
-                    child: Row(
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: _Stat(
-                            value: Text('${entries.length}',
-                                style: insights_stat_value),
-                            label: 'CHECK-INS',
-                          ),
-                        ),
-                        Expanded(
-                          child: _Stat(
-                            value: Text('${tasks.length}',
-                                style: insights_stat_value),
-                            label: 'TASKS DONE',
-                          ),
-                        ),
-                        Expanded(
-                          child: _Stat(
-                            value: Text(
-                              topMood,
-                              textAlign: TextAlign.center,
-                              style: insights_top_mood,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _Stat(
+                                value: Text('${entries.length}',
+                                    style: insights_stat_value),
+                                label: 'CHECK-INS',
+                              ),
                             ),
-                            label: 'TOP MOOD',
-                          ),
+                            Expanded(
+                              child: _Stat(
+                                value: Text('${tasks.length}',
+                                    style: insights_stat_value),
+                                label: 'TASKS DONE',
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _Stat(
+                                value: Text('${challenges.length}',
+                                    style: insights_stat_value),
+                                label: 'CHALLENGES DONE',
+                              ),
+                            ),
+                            Expanded(
+                              child: _Stat(
+                                value: Text(
+                                  topMood,
+                                  textAlign: TextAlign.center,
+                                  style: insights_top_mood,
+                                ),
+                                label: 'TOP MOOD',
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

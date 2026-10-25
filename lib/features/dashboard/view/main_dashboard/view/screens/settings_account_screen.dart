@@ -37,6 +37,13 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
   void _onSaveRequested(String newName, String newEmail) {
     context.read<AppState>().setName(newName);
     context.read<AppState>().setEmail(newEmail);
+
+    FirebaseAuth.instance.currentUser
+        ?.updateDisplayName(newName.trim())
+        .catchError((Object e) {
+      debugPrint('updateDisplayName error: $e');
+    });
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text(

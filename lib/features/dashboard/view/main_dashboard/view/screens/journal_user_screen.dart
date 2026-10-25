@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/widgets/journal_screen_widgets/mood_entry_widget.dart';
 import 'package:mood_journal/features/dashboard/view/main_dashboard/view/steps/widgets/journal_screen_widgets/widgets.dart';
+import 'package:mood_journal/features/mood/models/challenge_entry.dart';
 import 'package:mood_journal/features/mood/models/daily_answer_entry.dart';
 import 'package:mood_journal/features/mood/models/mood_entry_model.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +15,9 @@ class _JournalDay {
   final DateTime date;
   MoodEntryModel? mood;
   DailyAnswerEntry? task;
+  ChallengeEntry? challenge;
 
-  _JournalDay({required this.date, this.mood, this.task});
+  _JournalDay({required this.date, this.mood, this.task, this.challenge});
 }
 
 class JournalUserScreen extends StatelessWidget {
@@ -30,6 +32,7 @@ class JournalUserScreen extends StatelessWidget {
   static List<_JournalDay> _buildDays(MoodRepository repo) {
     final moods = repo.getEntriesForLastDays(_historyDays);
     final tasks = repo.getDailyAnswersForLastDays(_historyDays);
+    final challenges = repo.getChallengesForLastDays(_historyDays);
 
     final days = <String, _JournalDay>{};
 
@@ -43,6 +46,16 @@ class JournalUserScreen extends StatelessWidget {
         existing.task = task;
       } else {
         days[key] = _JournalDay(date: task.date, task: task);
+      }
+    }
+
+    for (final challenge in challenges) {
+      final key = _dayKey(challenge.date);
+      final existing = days[key];
+      if (existing != null) {
+        existing.challenge = challenge;
+      } else {
+        days[key] = _JournalDay(date: challenge.date, challenge: challenge);
       }
     }
 
@@ -64,6 +77,7 @@ class JournalUserScreen extends StatelessWidget {
             listenable: Listenable.merge([
               repository.listenable(),
               repository.dailyAnswersListenable(),
+              repository.challengesListenable(),
             ]),
             builder: (context, _) {
               final days = _buildDays(repository);
@@ -114,6 +128,7 @@ class JournalUserScreen extends StatelessWidget {
                             date: day.date,
                             entry: day.mood,
                             task: day.task,
+                            challenge: day.challenge,
                           );
                         },
                       ),

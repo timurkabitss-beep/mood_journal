@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mood_journal/features/mood/models/mood_entry_model.dart';
 import 'package:mood_journal/features/mood/models/daily_answer_entry.dart';
+import 'package:mood_journal/features/mood/models/challenge_entry.dart';
+import '../cloud_sync_service.dart';
 import '../hive_box.dart';
 
 class MoodRepository {
@@ -14,6 +19,7 @@ class MoodRepository {
   Box? _challengesBoxInstance; // результаты ежедневных челленджей
   String? _uid;
   Future<void>? _opening;
+  bool _syncing = false;
 
   Box<MoodEntryModel> get _box {
     final box = _boxInstance;
@@ -74,6 +80,9 @@ class MoodRepository {
     _answersBoxInstance = await Hive.openBox('dailyAnswers_$uid');
     _challengesBoxInstance = await Hive.openBox('dailyChallenges_$uid');
     _uid = uid;
+
+    // Синхронизация с облаком идёт в фоне и не задерживает открытие экрана
+    unawaited(_syncWithCloud(uid));
   }
 
   /// Закрыть боксы. Вызывать при выходе из аккаунта (до signOut).
@@ -94,6 +103,18 @@ class MoodRepository {
     _uid = null;
   }
 
+  /// Удалить с устройства все локальные данные текущего пользователя
+  /// (используется при удалении аккаунта)
+  Future<void> deleteLocalData() async {
+    final uid = _uid ?? FirebaseAuth.instance.currentUser?.uid;
+    await close();
+    if (uid == null) return;
+
+    await Hive.deleteBoxFromDisk('${HiveBoxes.moodJournalEntry}_$uid');
+    await Hive.deleteBoxFromDisk('dailyAnswers_$uid');
+    await Hive.deleteBoxFromDisk('dailyChallenges_$uid');
+  }
+
   /// Для автообновления UI при изменениях
   ValueListenable<Box<MoodEntryModel>> listenable() => _box.listenable();
 
@@ -106,7 +127,11 @@ class MoodRepository {
 
   /// Сохранить запись или обновить существующую за этот же день
   Future<void> saveOrUpdateEntry(MoodEntryModel entry) async {
-    await _box.put(_dayKey(entry.date), entry);
+    final key = _dayKey(entry.date);
+    await _box.put(key, entry);
+
+    final uid = _uid;
+    if (uid != null) CloudSyncService.instance.pushMood(uid, key, entry);
   }
 
   /// Все записи (свежие сверху)
@@ -159,11 +184,19 @@ class MoodRepository {
     required String task,
     required String answer,
   }) async {
-    await _answersBox.put(_dayKey(date), {
+    final key = _dayKey(date);
+    final data = {
       'date': date.toIso8601String(),
       'task': task,
       'answer': answer,
-    });
+      'clientUpdatedAt': DateTime.now().toUtc().toIso8601String(),
+    };
+    await _answersBox.put(key, data);
+
+    final uid = _uid;
+    if (uid != null) {
+      CloudSyncService.instance.push(uid, CloudSyncService.answersCol, key, data);
+    }
   }
 
   /// Ответы на задания за последние N дней (включая сегодня), свежие сверху
@@ -225,15 +258,45 @@ class MoodRepository {
     required String challenge,
     required String result,
   }) async {
-    await _challengesBox.put(_dayKey(date), {
+    final key = _dayKey(date);
+    final data = {
       'date': date.toIso8601String(),
       'challenge': challenge,
       'result': result,
-    });
+      'clientUpdatedAt': DateTime.now().toUtc().toIso8601String(),
+    };
+    await _challengesBox.put(key, data);
+
+    final uid = _uid;
+    if (uid != null) {
+      CloudSyncService.instance
+          .push(uid, CloudSyncService.challengesCol, key, data);
+    }
   }
 
   /// Для автообновления UI (карточка челленджа на главной)
   ValueListenable<Box> challengesListenable() => _challengesBox.listenable();
+
+  /// Выполненные челленджи за последние N дней (включая сегодня), свежие сверху
+  List<ChallengeEntry> getChallengesForLastDays(int days) {
+    final now = DateTime.now();
+    final from = DateTime(now.year, now.month, now.day)
+        .subtract(Duration(days: days - 1));
+
+    final result = <ChallengeEntry>[];
+    for (final value in _challengesBox.values) {
+      if (value is! Map) continue;
+      final date = DateTime.tryParse('${value['date']}');
+      if (date == null || date.isBefore(from)) continue;
+      result.add(ChallengeEntry(
+        date: date,
+        challenge: '${value['challenge']}',
+        result: '${value['result']}',
+      ));
+    }
+    result.sort((a, b) => b.date.compareTo(a.date));
+    return result;
+  }
 
   /// Все отчёты о челленджах (свежие сверху). Пригодится для AI-анализа.
   List<Map<String, String>> getAllChallengeResults() {
@@ -249,5 +312,137 @@ class MoodRepository {
     }
     result.sort((a, b) => b['date']!.compareTo(a['date']!));
     return result;
+  }
+
+  // ----------------------- Синхронизация с Firestore -----------------------
+
+  bool _isActiveFor(String uid) =>
+      _uid == uid &&
+          (_boxInstance?.isOpen ?? false) &&
+          (_answersBoxInstance?.isOpen ?? false) &&
+          (_challengesBoxInstance?.isOpen ?? false);
+
+  Future<void> _syncWithCloud(String uid) async {
+    if (_syncing) return;
+    _syncing = true;
+
+    try {
+      final cloud = CloudSyncService.instance;
+
+      // 1. Один раз отправляем то, что уже лежит на устройстве
+      if (!await cloud.isInitialUploadDone(uid)) {
+        if (!_isActiveFor(uid)) return;
+
+        for (final key in _boxInstance!.keys) {
+          final entry = _boxInstance!.get(key);
+          if (entry != null) cloud.pushMood(uid, '$key', entry);
+        }
+        for (final key in _answersBoxInstance!.keys) {
+          final value = _answersBoxInstance!.get(key);
+          if (value is Map) {
+            cloud.push(uid, CloudSyncService.answersCol, '$key',
+                Map<String, dynamic>.from(value));
+          }
+        }
+        for (final key in _challengesBoxInstance!.keys) {
+          final value = _challengesBoxInstance!.get(key);
+          if (value is Map) {
+            cloud.push(uid, CloudSyncService.challengesCol, '$key',
+                Map<String, dynamic>.from(value));
+          }
+        }
+        await cloud.markInitialUploadDone(uid);
+      }
+
+      // 2. Забираем изменения из облака (на новом устройстве это весь журнал)
+      await _pullMoods(uid);
+      await _pullMaps(
+        uid,
+        CloudSyncService.answersCol,
+            () => _answersBox,
+        const ['date', 'task', 'answer'],
+      );
+      await _pullMaps(
+        uid,
+        CloudSyncService.challengesCol,
+            () => _challengesBox,
+        const ['date', 'challenge', 'result'],
+      );
+    } catch (e) {
+      debugPrint('Cloud sync error: $e');
+    } finally {
+      _syncing = false;
+    }
+  }
+
+  Future<void> _pullMoods(String uid) async {
+    final cloud = CloudSyncService.instance;
+    final since = await cloud.lastSync(uid, CloudSyncService.moodsCol);
+    final snap = await cloud.fetchChanged(uid, CloudSyncService.moodsCol,
+        since: since);
+    if (snap == null || !_isActiveFor(uid)) return;
+
+    Timestamp? maxTs;
+    for (final doc in snap.docs) {
+      // записи, ещё не ушедшие в облако, не трогаем
+      if (doc.metadata.hasPendingWrites) continue;
+
+      final data = doc.data();
+      final ts = data['updatedAt'];
+      if (ts is Timestamp && (maxTs == null || ts.compareTo(maxTs) > 0)) {
+        maxTs = ts;
+      }
+
+      final entry = cloud.moodFromMap(data);
+      if (entry == null) continue;
+
+      // побеждает более свежая запись
+      final local = _box.get(doc.id);
+      if (local == null || entry.date.isAfter(local.date)) {
+        await _box.put(doc.id, entry);
+      }
+    }
+    if (maxTs != null) {
+      await cloud.saveLastSync(uid, CloudSyncService.moodsCol, maxTs);
+    }
+  }
+
+  Future<void> _pullMaps(
+      String uid,
+      String collection,
+      Box Function() boxGetter,
+      List<String> fields,
+      ) async {
+    final cloud = CloudSyncService.instance;
+    final since = await cloud.lastSync(uid, collection);
+    final snap = await cloud.fetchChanged(uid, collection, since: since);
+    if (snap == null || !_isActiveFor(uid)) return;
+
+    Timestamp? maxTs;
+    for (final doc in snap.docs) {
+      if (doc.metadata.hasPendingWrites) continue;
+
+      final data = doc.data();
+      final ts = data['updatedAt'];
+      if (ts is Timestamp && (maxTs == null || ts.compareTo(maxTs) > 0)) {
+        maxTs = ts;
+      }
+
+      final box = boxGetter();
+      final local = box.get(doc.id);
+      final localStamp = local is Map ? '${local['clientUpdatedAt'] ?? ''}' : '';
+      final cloudStamp = '${data['clientUpdatedAt'] ?? ''}';
+
+      // побеждает более свежая версия
+      if (local == null || cloudStamp.compareTo(localStamp) > 0) {
+        await box.put(doc.id, {
+          for (final f in fields) f: '${data[f] ?? ''}',
+          'clientUpdatedAt': cloudStamp,
+        });
+      }
+    }
+    if (maxTs != null) {
+      await cloud.saveLastSync(uid, collection, maxTs);
+    }
   }
 }

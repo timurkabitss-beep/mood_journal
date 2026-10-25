@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:mood_journal/features/mood/models/challenge_entry.dart';
 import 'package:mood_journal/features/mood/models/daily_answer_entry.dart';
 import 'package:mood_journal/features/mood/models/mood_entry_model.dart';
 import 'package:mood_journal/features/mood/models/mood_model.dart';
@@ -12,12 +13,14 @@ class MoodEntryWidget extends StatelessWidget {
   final DateTime date;
   final MoodEntryModel? entry;
   final DailyAnswerEntry? task;
+  final ChallengeEntry? challenge;
 
   const MoodEntryWidget({
     super.key,
     required this.date,
     this.entry,
     this.task,
+    this.challenge,
   });
 
   String _getDaysAgo(DateTime date) {
@@ -64,6 +67,7 @@ class MoodEntryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final moodEntry = entry;
     final taskEntry = task;
+    final challengeEntry = challenge;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,6 +80,10 @@ class MoodEntryWidget extends StatelessWidget {
         if (taskEntry != null) ...[
           const SizedBox(height: 16),
           _buildTaskCard(taskEntry),
+        ],
+        if (challengeEntry != null) ...[
+          const SizedBox(height: 16),
+          _buildChallengeCard(challengeEntry),
         ],
       ],
     );
@@ -238,6 +246,43 @@ class MoodEntryWidget extends StatelessWidget {
           Text(task.task, style: journal_task_question),
           const SizedBox(height: 12),
           Text(task.answer, style: journal_task_answer),
+        ],
+      ),
+    );
+  }
+
+  // Белая карточка: выполненный ежедневный челлендж
+  Widget _buildChallengeCard(ChallengeEntry challenge) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: _cardDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.flag,
+                  size: 14,
+                  color: Colors.green.shade600,
+                ),
+                const SizedBox(width: 4),
+                Text('Daily Challenge', style: daily_task_access),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(challenge.challenge, style: journal_task_question),
+          const SizedBox(height: 12),
+          Text(challenge.result, style: journal_task_answer),
         ],
       ),
     );

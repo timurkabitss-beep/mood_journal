@@ -108,6 +108,13 @@ Rules:
     }
   }
 
+  /// Удалить сохранённые отчёты текущего пользователя (при удалении аккаунта)
+  Future<void> clearCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_cacheKey(7));
+    await prefs.remove(_cacheKey(30));
+  }
+
   Future<void> _saveCache(MoodReport report) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_cacheKey(report.days), jsonEncode(report.toJson()));
