@@ -12,6 +12,8 @@ import 'package:flutter/foundation.dart';
 import 'core/database/repositories/mood_repository.dart';
 import 'core/database/repositories/quotes_repository.dart';
 
+const String _appCheckDebugToken = String.fromEnvironment('APP_CHECK_DEBUG_TOKEN');
+
 
 void main() async {
 
@@ -22,9 +24,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform
   );
   await FirebaseAppCheck.instance.activate(
-    providerAndroid: kDebugMode
-        ? const AndroidDebugProvider()
-        : const AndroidPlayIntegrityProvider(),
+    providerAndroid: AndroidDebugProvider(
+      debugToken: _appCheckDebugToken.isEmpty ? null : _appCheckDebugToken,
+    ),
   );
   await init(); // Инициализация Hive
 

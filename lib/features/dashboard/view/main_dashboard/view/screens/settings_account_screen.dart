@@ -7,6 +7,8 @@ import '../steps/widgets/settings_screen_widgets/personal_info_widget.dart';
 import '../steps/widgets/settings_screen_widgets/theme_color_choice_widget.dart';
 import '../../../../../../ui/fonts/all_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mood_journal/core/ai/mood_report_service.dart';
+import 'package:mood_journal/core/database/cloud_sync_service.dart';
 
 class SettingsAccountScreen extends StatefulWidget {
   const SettingsAccountScreen({super.key});
@@ -36,8 +38,9 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
 
   void _onSaveRequested(String newName, String newEmail) {
     context.read<AppState>().setName(newName);
-    context.read<AppState>().setEmail(newEmail);
 
+    // Имя сохраняем в профиле Firebase, чтобы оно не терялось
+    // после смены устройства или очистки данных
     FirebaseAuth.instance.currentUser
         ?.updateDisplayName(newName.trim())
         .catchError((Object e) {
@@ -82,7 +85,7 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-              Text(
+            Text(
               "This action cannot be undone. To confirm deletion, enter your password:",
               textAlign: TextAlign.center,
               style: style5,
@@ -121,7 +124,9 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                     backgroundColor: Colors.red,
                   ),
                   onPressed: () async {
-                    if (passwordController.text.isEmpty) {
+                    final password = passwordController.text;
+
+                    if (password.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: const Text(
@@ -138,72 +143,70 @@ class _SettingsAccountScreenState extends State<SettingsAccountScreen> {
                       return;
                     }
 
-                    try {
-                      // Пытаемся удалить аккаунт (внутри произойдет проверка пароля)
-                      await AuthRepository.instance.deleteAccount(passwordController.text);
+                    // Всё нужное берём до await: после закрытия диалога
+                    // его context уже недоступен
+                    final messenger = ScaffoldMessenger.of(this.context);
+                    final navigator = Navigator.of(this.context);
+                    final appState = this.context.read<AppState>();
 
-                      // Закрываем диалог
-                      Navigator.pop(context);
-
-                      // Очищаем локальное хранилище
-                      context.read<AppState>().clear();
-
-                      // Показываем сообщение об успехе
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text(
-                            "Account deleted successfully",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.green,
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                      );
-
-                      // Переходим на экран входа (убедись, что этот роут существует в твоем AppRoutes)
-                      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-
-                    } on FirebaseAuthException catch (e) {
-                      String errorMessage = "Failed to delete account";
-                      if (e.code == 'wrong-password') {
-                        errorMessage = "Incorrect password. Please try again.";
-                      } else if (e.code == 'requires-recent-login') {
-                        errorMessage = "Please log out and log back in to delete your account.";
-                      } else {
-                        errorMessage = e.message ?? "Authentication failed";
-                      }
-
-                      ScaffoldMessenger.of(context).showSnackBar(
+                    void showMessage(String text, Color color) {
+                      messenger.showSnackBar(
                         SnackBar(
                           content: Text(
-                            errorMessage,
+                            text,
                             style: const TextStyle(color: Colors.white),
                           ),
-                          backgroundColor: Colors.red,
+                          backgroundColor: color,
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
+                        ),
+                      );
+                    }
+
+                    try {
+                      final user = FirebaseAuth.instance.currentUser;
+                      if (user == null || user.email == null) {
+                        throw FirebaseAuthException(code: 'no-current-user');
+                      }
+
+                      // 1. Проверяем пароль ДО удаления данных
+                      await user.reauthenticateWithCredential(
+                        EmailAuthProvider.credential(
+                          email: user.email!,
+                          password: password,
                         ),
                       );
 
+                      // 2. Чистим облако, кэш отчётов и данные на устройстве
+                      await CloudSyncService.instance.deleteAllUserData();
+                      await MoodReportService.instance.clearCache();
+                      await MoodRepository.instance.deleteLocalData();
+
+                      // 3. Удаляем сам аккаунт
+                      await AuthRepository.instance.deleteAccount(password);
+
+                      navigator.pop(); // закрыть диалог
+                      appState.clear();
+                      showMessage("Account deleted successfully", Colors.green);
+                      navigator.pushNamedAndRemoveUntil('/', (route) => false);
+                    } on FirebaseAuthException catch (e) {
+                      String errorMessage;
+                      if (e.code == 'wrong-password' ||
+                          e.code == 'invalid-credential') {
+                        errorMessage = "Incorrect password. Please try again.";
+                      } else if (e.code == 'too-many-requests') {
+                        errorMessage = "Too many attempts. Please try again later.";
+                      } else if (e.code == 'requires-recent-login') {
+                        errorMessage =
+                        "Please log out and log back in to delete your account.";
+                      } else {
+                        errorMessage = e.message ?? "Failed to delete account";
+                      }
+                      showMessage(errorMessage, Colors.red);
                     } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text(
-                            "Unexpected error occurred",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.red,
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                      );
+                      showMessage("Unexpected error occurred", Colors.red);
                     }
                   },
                   child: Text("DELETE", style: style5.copyWith(color: Colors.white)),
