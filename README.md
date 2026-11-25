@@ -21,20 +21,23 @@
     * Просмотр недавних записей в дневнике
     * Открытие отдельных записей и просмотр их деталей
     * Удаление записей при необходимости
-    * ![Uploading {E5FA8FB8-1C85-432E-AC7B-4B93251CEF83}.png…]()
+    <img width="371" height="782" alt="{E5FA8FB8-1C85-432E-AC7B-4B93251CEF83}" src="https://github.com/user-attachments/assets/aa1bfb50-61fc-4d4f-b1ec-d678442ededf" />
 
-    
+
+   
 * 📊 **Аналитика настроения**
     * Визуализация истории настроения
     * Анализ активности и чувств
     * Отслеживание паттернов в ежедневном эмоциональном состоянии
     * Генерация персонализированных аналитических выводов
 
+
 * 🤖 **ИИ-инсайты о настроении**
     * Анализ паттернов настроения за определенный период времени
     * Генерация персонализированных сводок и рекомендаций
     * Сохранение ранее сгенерированных ИИ-выводов
-   <img width="401" height="818" alt="image" src="https://github.com/user-attachments/assets/c3d74f8c-ab65-48fe-bf32-1577f9e9e20b" />
+    <img width="401" height="818" alt="image" src="https://github.com/user-attachments/assets/c3d74f8c-ab65-48fe-bf32-1577f9e9e20b" />
+    <img width="366" height="774" alt="{DA556142-6420-4F3B-8752-5D6C2CFCF362}" src="https://github.com/user-attachments/assets/c4763897-4247-48d5-ac4b-cf4239117e7a" />
 
 
 * 👤 **Профиль пользователя**
@@ -43,6 +46,9 @@
     * Настройка темы приложения
     * Выход из аккаунта
     * Удаление аккаунта
+    <img width="371" height="310" alt="{80E69DFD-2904-4839-AC01-DD8EC8601E50}" src="https://github.com/user-attachments/assets/bd16402c-f98a-473f-8bd5-c1cc21a177b7" />
+    <img width="314" height="461" alt="{471BF509-C5B7-40CD-9D79-7ECB09DC5330}" src="https://github.com/user-attachments/assets/b5b43d5d-ca9d-4dcd-b3e7-4a6b98112383" />
+
 
 * 🎨 **Персонализированный интерфейс**
     * Пользовательские цвета темы
