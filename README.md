@@ -1,86 +1,83 @@
 # Moodora🌿
 
-A personal mood journal built with Flutter that helps users track their daily mood, activities, and feelings in a simple and visually engaging way.
+Персональный дневник настроения, созданный на Flutter, который помогает пользователям отслеживать свое ежедневное настроение, активность и чувства простым и визуально привлекательным способом.
 
-The project is focused on building a real-world mobile application with local data persistence, authentication, analytics, and a personalized user experience.
+Проект сосредоточен на создании полноценного мобильного приложения с локальным хранением данных, аутентификацией, аналитикой и персонализированным пользовательским опытом.
 
-## ✨ Features
+## ✨ Возможности
 
-* 📝 **Daily mood check-in**
+* 📝 **Ежедневная оценка настроения**
+    * Выбор текущего настроения
+    * Отслеживание ежедневной активности
+    * Запись чувств
+    * Добавление заголовка и личных заметок
+    <img width="386" height="795" alt="image" src="https://github.com/user-attachments/assets/99db4b68-631b-4fbc-baec-151cac6dcc0c" />
+    <img width="423" height="827" alt="image" src="https://github.com/user-attachments/assets/8d279829-6cf5-4a92-91f5-def023e0cbda" />
+    <img width="403" height="815" alt="image" src="https://github.com/user-attachments/assets/05d4388c-d966-40b6-80b8-16c3bf758f43" />
 
-    * Select your current mood
-    * Track daily activities
-    * Record feelings
-    * Add a title and personal notes
 
-* 📖 **Mood Journal**
+* 📖 **Дневник настроения**
+    * Сохранение записей о настроении и управление ими
+    * Просмотр недавних записей в дневнике
+    * Открытие отдельных записей и просмотр их деталей
+    * Удаление записей при необходимости
+    
+* 📊 **Аналитика настроения**
+    * Визуализация истории настроения
+    * Анализ активности и чувств
+    * Отслеживание паттернов в ежедневном эмоциональном состоянии
+    * Генерация персонализированных аналитических выводов
 
-    * Save and manage mood entries
-    * View recent journal entries
-    * Open individual entries and review their details
-    * Delete entries when needed
+* 🤖 **ИИ-инсайты о настроении**
+    * Анализ паттернов настроения за определенный период времени
+    * Генерация персонализированных сводок и рекомендаций
+    * Сохранение ранее сгенерированных ИИ-выводов
+   <img width="401" height="818" alt="image" src="https://github.com/user-attachments/assets/c3d74f8c-ab65-48fe-bf32-1577f9e9e20b" />
 
-* 📊 **Mood Analytics**
 
-    * Visualize mood history
-    * Analyze activities and feelings
-    * Track patterns in your daily emotional state
-    * Generate personalized insights
+* 👤 **Профиль пользователя**
+    * Управление личной информацией
+    * Изменение отображаемого имени и электронной почты
+    * Настройка темы приложения
+    * Выход из аккаунта
+    * Удаление аккаунта
 
-* 🤖 **AI Mood Insights**
+* 🎨 **Персонализированный интерфейс**
+    * Пользовательские цвета темы
+    * Плавные анимации и переходы
+    * Адаптивные макеты
+    * Пользовательские иллюстрации настроения и активности
+    <img width="402" height="808" alt="image" src="https://github.com/user-attachments/assets/06eba971-82c8-44da-9f3c-719e8d039c1a" />
 
-    * Analyze mood patterns over a period of time
-    * Generate personalized summaries and recommendations
-    * Store previous AI-generated insights
 
-* 👤 **User Profile**
+## 🛠️ Стек технологий
 
-    * Manage personal information
-    * Change display name and email
-    * Customize the application theme
-    * Log out of the account
-    * Delete the account
-
-* 🎨 **Personalized UI**
-
-    * Custom theme colors
-    * Smooth animations and transitions
-    * Responsive layouts
-    * Custom mood and activity illustrations
-
-## 🛠️ Tech Stack
-
-### Core
-
+### Основное
 * **Flutter**
 * **Dart**
 * Material 3
 
-### State Management
-
+### Управление состоянием
 * **Provider**
 * ChangeNotifier
 
-### Backend & Authentication
-
+### Бэкенд и аутентификация
 * **Firebase Authentication**
 * **Cloud Firestore**
 * **Firebase AI Logic**
 
-### Local Storage
-
+### Локальное хранилище
 * **Hive**
 
-### UI & Navigation
+### Интерфейс и навигация
+* Пользовательские виджеты
+* Пользовательские анимации
+* SVG-ассеты
+* Навигация Flutter
 
-* Custom widgets
-* Custom animations
-* SVG assets
-* Flutter navigation
+## 🏗️ Структура проекта
 
-## 🏗️ Project Structure
-
-The project is organized around features and shared application components:
+Проект организован вокруг функций и общих компонентов приложения:
 
 ```text
 lib/
@@ -101,133 +98,126 @@ lib/
 └── ui/
 ```
 
-The application separates UI, state management, data access, and reusable components to keep the codebase maintainable as new features are added.
+Приложение разделяет пользовательский интерфейс, управление состоянием, доступ к данным и переиспользуемые компоненты, чтобы кодовая база оставалась поддерживаемой по мере добавления новых функций.
 
-## 🔐 Data & Authentication
+## 🔐 Данные и аутентификация
 
-User authentication is handled through Firebase Authentication.
+Аутентификация пользователей обрабатывается через Firebase Authentication.
 
-Mood entries are stored locally using Hive, allowing the journal to remain fast and accessible without requiring a network connection for basic journal operations.
+Записи о настроении хранятся локально с помощью Hive, что позволяет дневнику оставаться быстрым и доступным без необходимости подключения к сети для базовых операций.
 
-User-specific data and cloud functionality are handled through Firebase services.
+Пользовательские данные и облачный функционал обрабатываются через сервисы Firebase.
 
-## 🤖 AI Mood Analysis
+## 🤖 ИИ-анализ настроения
 
-Mood Journal uses Firebase AI Logic to provide periodic AI-generated insights based on the user's mood history.
+Дневник настроения использует Firebase AI Logic для предоставления периодических аналитических выводов на основе истории настроения пользователя.
 
-The application prepares aggregated mood data and sends it for analysis rather than relying on a single journal entry.
+Приложение подготавливает агрегированные данные о настроении и отправляет их для анализа, а не полагается на одну отдельную запись в дневнике.
 
-The AI can identify patterns such as:
+ИИ может выявлять такие паттерны, как:
+* часто встречающиеся настроения;
+* виды активности, связанные с положительными или отрицательными изменениями настроения;
+* повторяющиеся чувства;
+* изменения настроения с течением времени;
+* персонализированные рекомендации для поддержания более здорового распорядка дня.
 
-* frequently occurring moods;
-* activities associated with positive or negative mood changes;
-* recurring feelings;
-* changes in mood over time;
-* personalized suggestions for maintaining a healthier routine.
+Информация, сгенерированная ИИ, представлена как личные аналитические выводы и не должна рассматриваться как медицинский или психологический совет.
 
-AI-generated information is presented as personal insights and should not be considered medical or psychological advice.
-
-## 📱 Application Flow
+## 📱 Логика работы приложения
 
 ```text
-Welcome
+Приветствие
    │
    ▼
-Authentication
+Аутентификация
    │
    ▼
-Dashboard
+Дашборд
    │
-   ├── Daily Check-in
-   │      ├── Mood
-   │      ├── Activities
-   │      ├── Feelings
-   │      └── Summary
+   ├── Ежедневная оценка
+   │      ├── Настроение
+   │      ├── Активность
+   │      ├── Чувства
+   │      └── Сводка
    │
-   ├── Journal
-   │      └── Recent Entries
+   ├── Дневник
+   │      └── Недавние записи
    │
-   ├── Analytics
-   │      ├── Mood Statistics
-   │      └── AI Insights
+   ├── Аналитика
+   │      ├── Статистика настроения
+   │      └── ИИ-инсайты
    │
-   └── Profile
-          ├── Personal Information
-          ├── Theme
-          ├── Settings
-          ├── Log Out
-          └── Delete Account
+   └── Профиль
+          ├── Личная информация
+          ├── Тема
+          ├── Настройки
+          ├── Выход из аккаунта
+          └── Удаление аккаунта
 ```
 
-## 🎯 Project Goals
+## 🎯 Цели проекта
 
-The main goal of the project is to build a complete Flutter mobile application while practicing real-world development patterns:
+Главная цель проекта — создать полноценное мобильное приложение на Flutter, отрабатывая паттерны разработки реального мира:
+* архитектура приложения;
+* управление состоянием;
+* локальное хранение данных;
+* аутентификация;
+* облачные сервисы;
+* асинхронное программирование;
+* аналитика;
+* интеграция ИИ;
+* переиспользуемые компоненты интерфейса;
+* обработка ошибок;
+* тестирование и поддерживаемость кода.
 
-* application architecture;
-* state management;
-* local persistence;
-* authentication;
-* cloud services;
-* asynchronous programming;
-* analytics;
-* AI integration;
-* reusable UI components;
-* error handling;
-* testing and maintainable code.
+## 🚀 Начало работы
 
-## 🚀 Getting Started
-
-### Requirements
-
+### Требования
 * Flutter SDK
 * Dart SDK
-* Android Studio or Xcode
-* Firebase project
+* Android Studio или Xcode
+* Проект Firebase
 
-### Installation
+### Установка
 
-Clone the repository:
-
+Клонируйте репозиторий:
 ```bash
 git clone https://github.com/timurkabitss-beep/mood_journal.git
 ```
 
-Navigate to the project:
-
+Перейдите в папку проекта:
 ```bash
 cd mood_journal
 ```
 
-Install dependencies:
-
+Установите зависимости:
 ```bash
 flutter pub get
 ```
 
-Run the application:
-
+Запустите приложение:
 ```bash
 flutter run
 ```
 
-### Firebase Configuration
+### Настройка Firebase
 
-The application requires a Firebase project configured for the required Firebase services.
+Приложению требуется проект Firebase, настроенный для необходимых сервисов.
 
-Create your own Firebase project and configure the Flutter application using the official FlutterFire setup process.
+Создайте свой проект Firebase и настройте приложение Flutter с использованием официального процесса настройки FlutterFire.
 
-## 📌 Project Status
+## 📌 Статус проекта
 
-🚧 **Active development**
+🚧 **Активная разработка**
 
-The application is continuously being improved with new features, architecture refinements, testing, and performance improvements.
+Приложение постоянно улучшается: добавляются новые функции, уточняется архитектура, проводится тестирование и оптимизация производительности.
 
-## 👨‍💻 Author
+## 👨‍💻 Автор
 
-**Timur**
+**Тимур**
 
 GitHub: [@timurkabitss-beep](https://github.com/timurkabitss-beep)
-
+<Проект сделан, но не оптимизирован под различные устройства, по этой причине проект не является приложением а является учебным> 
 ---
 
-Built with Flutter 💙
+Создано с помощью Flutter 💙
